@@ -21,7 +21,7 @@ import axios from '../axios';
 import {useStateValue} from '../StateProvider/StateProvider';
 import {SET_USER} from '../constants/reducer';
 
-const Login = () => {
+const Login = ({navigation}) => {
   const style = useThemedStyles(styles);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -84,7 +84,11 @@ const Login = () => {
                   styleForButton={style.btn}
                   onPress={onLoginHandler}
                 />
-                <Text style={style.noAccountText}>Don't have an account?</Text>
+                <Text
+                  style={style.noAccountText}
+                  onPress={() => navigation.navigate('Register')}>
+                  Don't have an account?
+                </Text>
               </View>
             </SafeAreaView>
           </View>
