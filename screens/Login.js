@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Image,
   ImageBackground,
@@ -26,7 +26,14 @@ const Login = ({navigation}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const [, dispatch] = useStateValue();
+  const [{user}, dispatch] = useStateValue();
+
+  useEffect(() => {
+    if (user) {
+      navigation.navigate('Newsfeed');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   const onLoginHandler = () => {
     if (username && password) {
@@ -40,6 +47,7 @@ const Login = ({navigation}) => {
             type: SET_USER,
             data: res.data.data,
           });
+          navigation.navigate('Newsfeed');
         },
         err => {
           const message = err.response.data.message;
@@ -50,6 +58,13 @@ const Login = ({navigation}) => {
           }
         },
       );
+    } else {
+      const message = 'Please fill all fields';
+      if (Platform.OS === 'android') {
+        ToastAndroid.show(message, ToastAndroid.SHORT);
+      } else {
+        AlertIOS.alert(message);
+      }
     }
   };
 
@@ -128,11 +143,11 @@ const styles = theme =>
       },
       shadowOpacity: 0.22,
       shadowRadius: 2.22,
-
       elevation: 10,
+      maxHeight: '95%',
     },
     form: {
-      marginTop: 100,
+      marginTop: 80,
     },
     input: {
       marginBottom: 54,
