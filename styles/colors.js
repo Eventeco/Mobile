@@ -1,7 +1,7 @@
-export const PRIMARY_ELEMENT_BG = '#5AD27C';
+const PRIMARY_ELEMENT_BG = '#5AD27C';
 const WHITE = '#fff';
 const BLACK = '#000';
-export const GRAY_100 = '#A99E9E';
+const GRAY_100 = '#A99E9E';
 const PRIMARY_TEXT = '#6BAA75';
 const CARD_BG = '#D6E2E9';
 

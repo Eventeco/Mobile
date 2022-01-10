@@ -1,9 +1,10 @@
 import React from 'react';
 import {StyleSheet, TextInput} from 'react-native';
+import useTheme from '../hooks/useTheme';
 import useThemedStyles from '../hooks/useThemedStyles';
-import {GRAY_100} from '../styles/colors';
 
 const Input = ({styleForInput, placeholder, value, setValue, ...others}) => {
+  const theme = useTheme();
   const themedStyle = useThemedStyles(styles);
   const inputStyle = StyleSheet.compose(themedStyle.input, styleForInput);
 
@@ -13,7 +14,7 @@ const Input = ({styleForInput, placeholder, value, setValue, ...others}) => {
       placeholder={placeholder}
       value={value}
       onChangeText={setValue}
-      placeholderTextColor={GRAY_100}
+      placeholderTextColor={theme.colors.GRAY_100}
       {...others}
     />
   );
