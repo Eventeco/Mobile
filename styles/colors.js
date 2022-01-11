@@ -3,7 +3,7 @@ const WHITE = '#fff';
 const BLACK = '#000';
 const GRAY_100 = '#A99E9E';
 const PRIMARY_TEXT = '#6BAA75';
-const CARD_BG = '#D6E2E9';
+const CARD_BG = '#F5FCFF';
 
 const common = {
   PRIMARY_ELEMENT_BG,

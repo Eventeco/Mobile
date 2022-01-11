@@ -1,7 +1,7 @@
 import React from 'react';
 import {Image, StyleSheet, View} from 'react-native';
 import useThemedStyles from '../hooks/useThemedStyles';
-import Logo from '../public/images/logo.png';
+import Logo from '../public/images/logo2.png';
 import Button from './Button';
 
 const Header = ({btnClickHandler}) => {
@@ -29,14 +29,14 @@ const styles = theme =>
     container: {
       flexDirection: 'row',
       height: 60,
-      padding: 10,
+      paddingHorizontal: 10,
       backgroundColor: theme.colors.PRIMARY_ELEMENT_BG,
       justifyContent: 'space-between',
       alignItems: 'center',
     },
     imageContainer: {
-      width: 126,
-      height: '100%',
+      width: 140,
+      height: 20,
     },
     image: {
       width: '100%',

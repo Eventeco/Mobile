@@ -32,19 +32,28 @@ const Register = ({navigation}) => {
 
   const onLoginHandler = () => {
     if (username && password && name && email) {
-      const payload = {
+      const registerPayload = {
         name,
         email,
         username,
         password,
       };
-      axios.post('/register', payload).then(
+      const loginPayload = {
+        username,
+        password,
+      };
+      axios.post('/register', registerPayload).then(
         res => {
-          dispatch({
-            type: SET_USER,
-            data: res.data.data,
-          });
-          navigation.navigate('Newsfeed');
+          axios
+            .post('/login', loginPayload)
+            .then(() => {
+              dispatch({
+                type: SET_USER,
+                data: res.data.data,
+              });
+              navigation.navigate('Newsfeed');
+            })
+            .catch(e => console.log(e.response.data));
         },
         err => {
           const message = err.response.data.message;

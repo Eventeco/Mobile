@@ -15,7 +15,7 @@ const App = () => {
 
   useEffect(() => {
     axios
-      .get('login-status')
+      .get('/login-status')
       .then(res => {
         dispatch({
           type: SET_USER,
@@ -28,7 +28,7 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Newsfeed"
+        initialRouteName="Login"
         screenOptions={{
           headerShown: false,
         }}>
