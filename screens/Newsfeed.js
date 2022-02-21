@@ -1,7 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {ImageBackground, StyleSheet, Text, View, FlatList} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import Header from '../components/Header';
 import axios from '../axios';
 import {useStateValue} from '../StateProvider/StateProvider';
 import BG from '../public/images/Background.png';
@@ -47,7 +46,6 @@ const Newsfeed = ({navigation}) => {
 
   return (
     <SafeAreaView>
-      <Header />
       <ImageBackground source={BG} style={style.bgImageContainer}>
         <View style={style.innerContainer}>
           <Text style={style.eventsText}>Events Near You :</Text>
@@ -82,6 +80,6 @@ const styles = theme =>
       color: 'black',
     },
     flatList: {
-      height: '70%',
+      height: '80%',
     },
   });

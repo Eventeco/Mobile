@@ -69,7 +69,7 @@ const styles = theme =>
     container: {
       backgroundColor: theme.colors.CARD_BG,
       marginVertical: 5,
-      borderRadius: 10,
+      borderRadius: 20,
       overflow: 'hidden',
       shadowColor: '#000',
       shadowOffset: {
@@ -78,7 +78,7 @@ const styles = theme =>
       },
       shadowOpacity: 0.22,
       shadowRadius: 2.22,
-      elevation: 3,
+      elevation: 5,
     },
     image: {
       width: '100%',
