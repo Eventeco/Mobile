@@ -3,11 +3,12 @@ import Login from './screens/Login';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Register from './screens/Register';
-import Newsfeed from './screens/Newsfeed';
+import Home from './navigation/Home';
 import axios from './axios';
 import {useStateValue} from './StateProvider/StateProvider';
 import {SET_USER} from './constants/reducer';
 import Header from './components/Header';
+import SCREENS from './constants/screens';
 
 const Stack = createNativeStackNavigator();
 
@@ -29,21 +30,21 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Login"
+        initialRouteName={SCREENS.LOGIN}
         screenOptions={{
           header: () => <Header />,
         }}>
         <Stack.Screen
-          name="Login"
+          name={SCREENS.LOGIN}
           component={Login}
           options={{headerShown: false}}
         />
         <Stack.Screen
-          name="Register"
+          name={SCREENS.REGISTER}
           component={Register}
           options={{headerShown: false}}
         />
-        <Stack.Screen name="Newsfeed" component={Newsfeed} />
+        <Stack.Screen name={SCREENS.HOME} component={Home} />
       </Stack.Navigator>
     </NavigationContainer>
   );

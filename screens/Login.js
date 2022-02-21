@@ -18,6 +18,7 @@ import Button from '../components/Button';
 import axios from '../axios';
 import {useStateValue} from '../StateProvider/StateProvider';
 import {SET_USER} from '../constants/reducer';
+import SCREENS from '../constants/screens';
 
 const Login = ({navigation}) => {
   const style = useThemedStyles(styles);
@@ -28,7 +29,7 @@ const Login = ({navigation}) => {
 
   useEffect(() => {
     if (user) {
-      navigation.navigate('Newsfeed');
+      navigation.navigate(SCREENS.HOME);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
@@ -45,7 +46,7 @@ const Login = ({navigation}) => {
             type: SET_USER,
             data: res.data.data,
           });
-          navigation.replace('Newsfeed');
+          navigation.replace(SCREENS.HOME);
         },
         err => {
           const message = err.response.data.message;
@@ -145,7 +146,7 @@ const styles = theme =>
       marginBottom: 54,
     },
     btnContainer: {
-      backgroundColor: theme.colors.PRIMARY_ELEMENT_BG,
+      backgroundColor: theme.colors.GREEN_LIGHT,
     },
     btn: {
       color: '#fff',

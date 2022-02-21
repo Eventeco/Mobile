@@ -18,6 +18,7 @@ import Button from '../components/Button';
 import axios from '../axios';
 import {useStateValue} from '../StateProvider/StateProvider';
 import {SET_USER} from '../constants/reducer';
+import SCREENS from '../constants/screens';
 
 const Register = ({navigation}) => {
   const style = useThemedStyles(styles);
@@ -49,7 +50,7 @@ const Register = ({navigation}) => {
                 type: SET_USER,
                 data: res.data.data,
               });
-              navigation.replace('Newsfeed');
+              navigation.replace(SCREENS.HOME);
             })
             .catch(e => console.log(e.response.data));
         },
@@ -161,7 +162,7 @@ const styles = theme =>
       marginBottom: 10,
     },
     btnContainer: {
-      backgroundColor: theme.colors.PRIMARY_ELEMENT_BG,
+      backgroundColor: theme.colors.GREEN_LIGHT,
       marginTop: 20,
     },
     btn: {

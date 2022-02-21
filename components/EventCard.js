@@ -67,7 +67,7 @@ export default EventCard;
 const styles = theme =>
   StyleSheet.create({
     container: {
-      backgroundColor: theme.colors.CARD_BG,
+      backgroundColor: theme.colors.WHITE_100,
       marginVertical: 5,
       borderRadius: 20,
       overflow: 'hidden',

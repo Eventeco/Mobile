@@ -7,6 +7,7 @@ import BG from '../public/images/Background.png';
 import useThemedStyles from '../hooks/useThemedStyles';
 import {useFocusEffect} from '@react-navigation/native';
 import EventCard from '../components/EventCard';
+import SCREENS from '../constants/screens';
 
 const Newsfeed = ({navigation}) => {
   const style = useThemedStyles(styles);
@@ -17,7 +18,7 @@ const Newsfeed = ({navigation}) => {
 
   useEffect(() => {
     if (!user) {
-      navigation.navigate('Login');
+      navigation.navigate(SCREENS.LOGIN);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
@@ -80,6 +81,6 @@ const styles = theme =>
       color: 'black',
     },
     flatList: {
-      height: '80%',
+      marginBottom: 40,
     },
   });
