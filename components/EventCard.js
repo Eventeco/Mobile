@@ -1,26 +1,39 @@
 import axios from '../axios';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {formatTimestamp} from '../helper';
 import useThemedStyles from '../hooks/useThemedStyles';
 import LocationIcon from '../public/icons/location.png';
 import ShareIcon from '../public/icons/share.png';
 import IssueTypeView from './IssueTypeView';
+import {useFocusEffect} from '@react-navigation/native';
 
 const EventCard = ({event}) => {
   const style = useThemedStyles(styles);
 
   const [issues, setIssues] = useState([]);
-  useEffect(() => {
-    axios
-      .get(`/addressedIssues/${event.id}`)
-      .then(res => {
-        setIssues(res.data.data);
-      })
-      .catch(err => {
-        console.log(err.response.message);
-      });
-  }, [event.id]);
+
+  useFocusEffect(
+    useCallback(() => {
+      let isActive = true;
+      const fetchIssues = async () => {
+        try {
+          const result = await axios.get(`/addressedIssues/${event.id}`);
+          if (isActive) {
+            setIssues(result.data.data);
+          }
+        } catch (e) {
+          console.log(e.response.data);
+        }
+      };
+
+      fetchIssues();
+
+      return () => {
+        isActive = false;
+      };
+    }, [event.id]),
+  );
 
   return (
     event && (

@@ -1,9 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {ImageBackground, StyleSheet, Text, View, FlatList} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Header from '../components/Header';
 import axios from '../axios';
-import {SET_USER} from '../constants/reducer';
 import {useStateValue} from '../StateProvider/StateProvider';
 import BG from '../public/images/Background.png';
 import useThemedStyles from '../hooks/useThemedStyles';
@@ -13,22 +12,9 @@ import EventCard from '../components/EventCard';
 const Newsfeed = ({navigation}) => {
   const style = useThemedStyles(styles);
 
-  const [{user}, dispatch] = useStateValue();
+  const [{user}] = useStateValue();
 
   const [events, setEvents] = useState([]);
-
-  const logoutHandler = () => {
-    axios
-      .delete('/logout')
-      .then(() => {
-        dispatch({
-          type: SET_USER,
-          data: null,
-        });
-        navigation.navigate('Login');
-      })
-      .catch(e => console.log(e.response.data));
-  };
 
   useEffect(() => {
     if (!user) {
@@ -38,7 +24,7 @@ const Newsfeed = ({navigation}) => {
   }, [user]);
 
   useFocusEffect(
-    React.useCallback(() => {
+    useCallback(() => {
       let isActive = true;
       const fetchEvents = async () => {
         try {
@@ -61,7 +47,7 @@ const Newsfeed = ({navigation}) => {
 
   return (
     <SafeAreaView>
-      <Header btnClickHandler={logoutHandler} />
+      <Header />
       <ImageBackground source={BG} style={style.bgImageContainer}>
         <View style={style.innerContainer}>
           <Text style={style.eventsText}>Events Near You :</Text>

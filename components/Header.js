@@ -3,9 +3,33 @@ import {Image, StyleSheet, View} from 'react-native';
 import useThemedStyles from '../hooks/useThemedStyles';
 import Logo from '../public/images/logo2.png';
 import Button from './Button';
+import axios from '../axios';
+import {useStateValue} from '../StateProvider/StateProvider';
+import {SET_USER} from '../constants/reducer';
+import {useNavigation} from '@react-navigation/native';
 
-const Header = ({btnClickHandler}) => {
+const Header = () => {
   const style = useThemedStyles(styles);
+
+  const navigation = useNavigation();
+
+  const [, dispatch] = useStateValue();
+
+  const logoutHandler = () => {
+    axios
+      .delete('/logout')
+      .then(() => {
+        dispatch({
+          type: SET_USER,
+          data: null,
+        });
+        navigation.reset({
+          index: 0,
+          routes: [{name: 'Login'}],
+        });
+      })
+      .catch(e => console.log(e.response.data));
+  };
 
   return (
     <View style={style.container}>
@@ -16,7 +40,7 @@ const Header = ({btnClickHandler}) => {
         title="Logout"
         styleForButtonContainer={style.btnContainer}
         styleForButton={style.btn}
-        onPress={btnClickHandler}
+        onPress={logoutHandler}
       />
     </View>
   );

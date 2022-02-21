@@ -8,9 +8,7 @@ import {
   Text,
   TouchableWithoutFeedback,
   View,
-  ToastAndroid,
-  Platform,
-  AlertIOS,
+  Alert,
 } from 'react-native';
 import Input from '../components/Input';
 import useThemedStyles from '../hooks/useThemedStyles';
@@ -47,25 +45,21 @@ const Login = ({navigation}) => {
             type: SET_USER,
             data: res.data.data,
           });
-          navigation.navigate('Newsfeed');
+          navigation.replace('Newsfeed');
         },
         err => {
           const message = err.response.data.message;
-          if (Platform.OS === 'android') {
-            ToastAndroid.show(message, ToastAndroid.SHORT);
-          } else {
-            AlertIOS.alert(message);
-          }
+          Alert.alert(message);
         },
       );
     } else {
       const message = 'Please fill all fields';
-      if (Platform.OS === 'android') {
-        ToastAndroid.show(message, ToastAndroid.SHORT);
-      } else {
-        AlertIOS.alert(message);
-      }
+      Alert.alert(message);
     }
+  };
+
+  const navigateToRegister = () => {
+    navigation.navigate('Register');
   };
 
   return (
@@ -99,9 +93,7 @@ const Login = ({navigation}) => {
                   styleForButton={style.btn}
                   onPress={onLoginHandler}
                 />
-                <Text
-                  style={style.noAccountText}
-                  onPress={() => navigation.navigate('Register')}>
+                <Text style={style.noAccountText} onPress={navigateToRegister}>
                   Don't have an account?
                 </Text>
               </View>

@@ -8,9 +8,7 @@ import {
   Text,
   TouchableWithoutFeedback,
   View,
-  ToastAndroid,
-  Platform,
-  AlertIOS,
+  Alert,
 } from 'react-native';
 import Input from '../components/Input';
 import useThemedStyles from '../hooks/useThemedStyles';
@@ -51,26 +49,18 @@ const Register = ({navigation}) => {
                 type: SET_USER,
                 data: res.data.data,
               });
-              navigation.navigate('Newsfeed');
+              navigation.replace('Newsfeed');
             })
             .catch(e => console.log(e.response.data));
         },
         err => {
           const message = err.response.data.message;
-          if (Platform.OS === 'android') {
-            ToastAndroid.show(message, ToastAndroid.SHORT);
-          } else {
-            AlertIOS.alert(message);
-          }
+          Alert.alert(message);
         },
       );
     } else {
       const message = 'Please fill all fields';
-      if (Platform.OS === 'android') {
-        ToastAndroid.show(message, ToastAndroid.SHORT);
-      } else {
-        AlertIOS.alert(message);
-      }
+      Alert.alert(message);
     }
   };
 
