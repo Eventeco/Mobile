@@ -1,27 +1,16 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {ImageBackground, StyleSheet, Text, View, FlatList} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import axios from '../axios';
-import {useStateValue} from '../StateProvider/StateProvider';
 import BG from '../public/images/Background.png';
 import useThemedStyles from '../hooks/useThemedStyles';
 import {useFocusEffect} from '@react-navigation/native';
 import EventCard from '../components/EventCard';
-import SCREENS from '../constants/screens';
 
-const Newsfeed = ({navigation}) => {
+const Newsfeed = () => {
   const style = useThemedStyles(styles);
 
-  const [{user}] = useStateValue();
-
   const [events, setEvents] = useState([]);
-
-  useEffect(() => {
-    if (!user) {
-      navigation.navigate(SCREENS.LOGIN);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
 
   useFocusEffect(
     useCallback(() => {

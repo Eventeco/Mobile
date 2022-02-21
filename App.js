@@ -13,7 +13,7 @@ import SCREENS from './constants/screens';
 const Stack = createNativeStackNavigator();
 
 const App = () => {
-  const [, dispatch] = useStateValue();
+  const [{user}, dispatch] = useStateValue();
 
   useEffect(() => {
     axios
@@ -34,17 +34,24 @@ const App = () => {
         screenOptions={{
           header: () => <Header />,
         }}>
-        <Stack.Screen
-          name={SCREENS.LOGIN}
-          component={Login}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name={SCREENS.REGISTER}
-          component={Register}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen name={SCREENS.HOME} component={Home} />
+        {!user ? (
+          <>
+            <Stack.Screen
+              name={SCREENS.LOGIN}
+              component={Login}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name={SCREENS.REGISTER}
+              component={Register}
+              options={{headerShown: false}}
+            />
+          </>
+        ) : (
+          <>
+            <Stack.Screen name={SCREENS.HOME} component={Home} />
+          </>
+        )}
       </Stack.Navigator>
     </NavigationContainer>
   );

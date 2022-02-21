@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
   Image,
   ImageBackground,
@@ -18,21 +18,13 @@ import Button from '../components/Button';
 import axios from '../axios';
 import {useStateValue} from '../StateProvider/StateProvider';
 import {SET_USER} from '../constants/reducer';
-import SCREENS from '../constants/screens';
 
 const Login = ({navigation}) => {
   const style = useThemedStyles(styles);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const [{user}, dispatch] = useStateValue();
-
-  useEffect(() => {
-    if (user) {
-      navigation.navigate(SCREENS.HOME);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  const [, dispatch] = useStateValue();
 
   const onLoginHandler = () => {
     if (username && password) {
@@ -46,7 +38,6 @@ const Login = ({navigation}) => {
             type: SET_USER,
             data: res.data.data,
           });
-          navigation.replace(SCREENS.HOME);
         },
         err => {
           const message = err.response.data.message;

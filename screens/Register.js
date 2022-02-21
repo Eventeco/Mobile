@@ -18,7 +18,6 @@ import Button from '../components/Button';
 import axios from '../axios';
 import {useStateValue} from '../StateProvider/StateProvider';
 import {SET_USER} from '../constants/reducer';
-import SCREENS from '../constants/screens';
 
 const Register = ({navigation}) => {
   const style = useThemedStyles(styles);
@@ -50,7 +49,6 @@ const Register = ({navigation}) => {
                 type: SET_USER,
                 data: res.data.data,
               });
-              navigation.replace(SCREENS.HOME);
             })
             .catch(e => console.log(e.response.data));
         },
