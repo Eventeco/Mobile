@@ -1,6 +1,5 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Newsfeed from '../screens/Newsfeed';
 import SCREENS from '../constants/screens';
 import HomeIcon from '../public/icons/home.png';
 import ProfileIcon from '../public/icons/profile.png';
@@ -11,13 +10,14 @@ import TabBarIcon from '../components/TabBarIcon';
 import TabBarAddButton from '../components/TabBarAddButton';
 import TabBarBigIcon from '../components/TabBarBigIcon';
 import AddEvent from '../screens/AddEvent';
+import NewsfeedNavigation from './NewsfeedNavigation';
 
 const Tab = createBottomTabNavigator();
 
 const navigationItems = [
   {
-    name: SCREENS.NEWSFEED,
-    component: Newsfeed,
+    name: SCREENS.NEWSFEED_NAVIGATION,
+    component: NewsfeedNavigation,
     source: HomeIcon,
   },
   {
@@ -47,11 +47,11 @@ const getScreenOptions = item => {
   }
 };
 
-const Home = () => {
+const HomeNavigation = () => {
   const styles = useTheme();
   return (
     <Tab.Navigator
-      initialRouteName={SCREENS.NEWSFEED}
+      initialRouteName={SCREENS.NEWSFEED_NAVIGATION}
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,
@@ -70,4 +70,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default HomeNavigation;

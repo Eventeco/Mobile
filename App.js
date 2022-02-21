@@ -3,7 +3,7 @@ import Login from './screens/Login';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Register from './screens/Register';
-import Home from './navigation/Home';
+import HomeNavigation from './navigation/HomeNavigation';
 import axios from './axios';
 import {useStateValue} from './StateProvider/StateProvider';
 import {SET_USER} from './constants/reducer';
@@ -48,9 +48,7 @@ const App = () => {
             />
           </>
         ) : (
-          <>
-            <Stack.Screen name={SCREENS.HOME} component={Home} />
-          </>
+          <Stack.Screen name={SCREENS.HOME} component={HomeNavigation} />
         )}
       </Stack.Navigator>
     </NavigationContainer>
