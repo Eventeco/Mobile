@@ -7,9 +7,13 @@ import LocationIcon from '../public/icons/location.png';
 import ShareIcon from '../public/icons/share.png';
 import IssueTypeView from './IssueTypeView';
 import {useFocusEffect} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
+import SCREENS from '../constants/screens';
 
 const EventCard = ({event}) => {
   const style = useThemedStyles(styles);
+
+  const navigation = useNavigation();
 
   const [issues, setIssues] = useState([]);
 
@@ -35,9 +39,13 @@ const EventCard = ({event}) => {
     }, [event.id]),
   );
 
+  const onPressHandler = () => {
+    navigation.navigate(SCREENS.JOIN_EVENT, {event});
+  };
+
   return (
     event && (
-      <TouchableOpacity style={style.container}>
+      <TouchableOpacity style={style.container} onPress={onPressHandler}>
         <Image source={{uri: event.picturepath}} style={style.image} />
         <View style={style.innerContainer}>
           <Text style={style.nameText}>{event.name}</Text>
