@@ -14,6 +14,11 @@
 		4DAD15DE26F2C9825AB1C5E5 /* libPods-Mobile-MobileTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FB2D07BC0917D0AC17627ED9 /* libPods-Mobile-MobileTests.a */; };
 		54609A4B7E9137ED58A8315D /* libPods-Mobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1260292FFFC95C46A6A62305 /* libPods-Mobile.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		8E98BD0CE8424D979722A12D /* Lora-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 16B28328488F4546852332B1 /* Lora-Bold.ttf */; };
+		5F59B9F662FC49F68024E5A8 /* Lora-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4BCAA669FFD840FB8300BA1D /* Lora-Medium.ttf */; };
+		BF44CCA32CEC4D2688C6AB3E /* Lora-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0F8340994F7A4F299D0F4074 /* Lora-Regular.ttf */; };
+		988A74C9946547A89ADA012A /* Lora-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1D92E98565ED4325B597E049 /* Lora-SemiBold.ttf */; };
+		9A4CC7D7D1C24BC5BFCFB9AC /* Molengo-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0A904D80E83742E9830148DE /* Molengo-Regular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +49,21 @@
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		EE275B5172C55DD3989B0DC1 /* Pods-Mobile-MobileTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Mobile-MobileTests.debug.xcconfig"; path = "Target Support Files/Pods-Mobile-MobileTests/Pods-Mobile-MobileTests.debug.xcconfig"; sourceTree = "<group>"; };
 		FB2D07BC0917D0AC17627ED9 /* libPods-Mobile-MobileTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Mobile-MobileTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		0181CFE205C047D591BD92A6 /* Lora-Italic-VariableFont_wght.ttf */ = {isa = PBXFileReference; name = "Lora-Italic-VariableFont_wght.ttf"; path = "../public/fonts/Lora/Lora-Italic-VariableFont_wght.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		89BD7429470E4F87B225AC77 /* Lora-VariableFont_wght.ttf */ = {isa = PBXFileReference; name = "Lora-VariableFont_wght.ttf"; path = "../public/fonts/Lora/Lora-VariableFont_wght.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		E3055963E8924F5E8216AC55 /* Lora-Bold.ttf */ = {isa = PBXFileReference; name = "Lora-Bold.ttf"; path = "../public/fonts/Lora/static/Lora-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		1C676700231042418DC181B3 /* Lora-BoldItalic.ttf */ = {isa = PBXFileReference; name = "Lora-BoldItalic.ttf"; path = "../public/fonts/Lora/static/Lora-BoldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		8FC0EA098CF14AEDA3EF1068 /* Lora-Italic.ttf */ = {isa = PBXFileReference; name = "Lora-Italic.ttf"; path = "../public/fonts/Lora/static/Lora-Italic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		443CFA16CC804F5C8C0732A0 /* Lora-Medium.ttf */ = {isa = PBXFileReference; name = "Lora-Medium.ttf"; path = "../public/fonts/Lora/static/Lora-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		EEAAC6DC574A46F1BC1FC4EF /* Lora-MediumItalic.ttf */ = {isa = PBXFileReference; name = "Lora-MediumItalic.ttf"; path = "../public/fonts/Lora/static/Lora-MediumItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		9E86924E08E14816AE5AC768 /* Lora-Regular.ttf */ = {isa = PBXFileReference; name = "Lora-Regular.ttf"; path = "../public/fonts/Lora/static/Lora-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		175A2869553D4B8987045391 /* Lora-SemiBold.ttf */ = {isa = PBXFileReference; name = "Lora-SemiBold.ttf"; path = "../public/fonts/Lora/static/Lora-SemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		AFB5BDB5CDBB4A8FB5AF5173 /* Lora-SemiBoldItalic.ttf */ = {isa = PBXFileReference; name = "Lora-SemiBoldItalic.ttf"; path = "../public/fonts/Lora/static/Lora-SemiBoldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		16B28328488F4546852332B1 /* Lora-Bold.ttf */ = {isa = PBXFileReference; name = "Lora-Bold.ttf"; path = "../public/fonts/Lora-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		4BCAA669FFD840FB8300BA1D /* Lora-Medium.ttf */ = {isa = PBXFileReference; name = "Lora-Medium.ttf"; path = "../public/fonts/Lora-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		0F8340994F7A4F299D0F4074 /* Lora-Regular.ttf */ = {isa = PBXFileReference; name = "Lora-Regular.ttf"; path = "../public/fonts/Lora-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		1D92E98565ED4325B597E049 /* Lora-SemiBold.ttf */ = {isa = PBXFileReference; name = "Lora-SemiBold.ttf"; path = "../public/fonts/Lora-SemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		0A904D80E83742E9830148DE /* Molengo-Regular.ttf */ = {isa = PBXFileReference; name = "Molengo-Regular.ttf"; path = "../public/fonts/Molengo-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -134,6 +154,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				4EF186F1D9B828F67A686A12 /* Pods */,
+				DBF99F9B107E411E8714F315 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -148,6 +169,29 @@
 			);
 			name = Products;
 			sourceTree = "<group>";
+		};
+		DBF99F9B107E411E8714F315 /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				0181CFE205C047D591BD92A6 /* Lora-Italic-VariableFont_wght.ttf */,
+				89BD7429470E4F87B225AC77 /* Lora-VariableFont_wght.ttf */,
+				E3055963E8924F5E8216AC55 /* Lora-Bold.ttf */,
+				1C676700231042418DC181B3 /* Lora-BoldItalic.ttf */,
+				8FC0EA098CF14AEDA3EF1068 /* Lora-Italic.ttf */,
+				443CFA16CC804F5C8C0732A0 /* Lora-Medium.ttf */,
+				EEAAC6DC574A46F1BC1FC4EF /* Lora-MediumItalic.ttf */,
+				9E86924E08E14816AE5AC768 /* Lora-Regular.ttf */,
+				175A2869553D4B8987045391 /* Lora-SemiBold.ttf */,
+				AFB5BDB5CDBB4A8FB5AF5173 /* Lora-SemiBoldItalic.ttf */,
+				16B28328488F4546852332B1 /* Lora-Bold.ttf */,
+				4BCAA669FFD840FB8300BA1D /* Lora-Medium.ttf */,
+				0F8340994F7A4F299D0F4074 /* Lora-Regular.ttf */,
+				1D92E98565ED4325B597E049 /* Lora-SemiBold.ttf */,
+				0A904D80E83742E9830148DE /* Molengo-Regular.ttf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -245,6 +289,21 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				2EBC82517E3F48BDA5AE5052 /* Lora-Italic-VariableFont_wght.ttf in Resources */,
+				35E5A85BED174C8D8CCE7029 /* Lora-VariableFont_wght.ttf in Resources */,
+				B96E36934E354ABDBAAE0314 /* Lora-Bold.ttf in Resources */,
+				28540806E66B4C1E89374B81 /* Lora-BoldItalic.ttf in Resources */,
+				C4466BFAB18F42AE80BD9D2E /* Lora-Italic.ttf in Resources */,
+				631AF62C36B44509B903618A /* Lora-Medium.ttf in Resources */,
+				752CB3E419714CAD8C5DFA1B /* Lora-MediumItalic.ttf in Resources */,
+				02A0CD59A58A45F287447121 /* Lora-Regular.ttf in Resources */,
+				A0DA882910F44115841438B5 /* Lora-SemiBold.ttf in Resources */,
+				B3DE4226618144DBA405F187 /* Lora-SemiBoldItalic.ttf in Resources */,
+				8E98BD0CE8424D979722A12D /* Lora-Bold.ttf in Resources */,
+				5F59B9F662FC49F68024E5A8 /* Lora-Medium.ttf in Resources */,
+				BF44CCA32CEC4D2688C6AB3E /* Lora-Regular.ttf in Resources */,
+				988A74C9946547A89ADA012A /* Lora-SemiBold.ttf in Resources */,
+				9A4CC7D7D1C24BC5BFCFB9AC /* Molengo-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

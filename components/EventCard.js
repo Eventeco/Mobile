@@ -90,14 +90,14 @@ const styles = theme =>
       paddingHorizontal: 10,
     },
     nameText: {
-      fontSize: theme.typography.size.S,
+      fontSize: theme.typography.size.M,
       color: 'black',
-      fontWeight: '700',
+      fontFamily: 'Lora-Medium',
     },
     timeText: {
-      fontSize: theme.typography.size.XS2,
+      fontSize: theme.typography.size.XS,
       color: 'black',
-      fontWeight: '700',
+      fontFamily: 'Lora-Bold',
       marginTop: 5,
     },
     footerContainer: {
@@ -115,7 +115,7 @@ const styles = theme =>
       color: 'black',
       marginLeft: 10,
       fontSize: theme.typography.size.XS,
-      fontWeight: '700',
+      fontFamily: 'Lora-Bold',
     },
     footerIssues: {
       flexDirection: 'row',

@@ -109,7 +109,7 @@ const Register = ({navigation}) => {
                 <Text
                   style={style.noAccountText}
                   onPress={() => navigation.navigate('Login')}>
-                  Already have an account?
+                  Already have an Account?
                 </Text>
               </View>
             </SafeAreaView>
@@ -157,7 +157,9 @@ const styles = theme =>
       marginTop: 30,
     },
     input: {
-      marginBottom: 10,
+      marginBottom: 20,
+      fontFamily: 'Molengo-Regular',
+      fontSize: theme.typography.size.M,
     },
     btnContainer: {
       backgroundColor: theme.colors.GREEN_LIGHT,
@@ -165,11 +167,15 @@ const styles = theme =>
     },
     btn: {
       color: '#fff',
+      fontFamily: 'Molengo-Regular',
+      fontSize: theme.typography.size.S,
     },
     noAccountText: {
       color: theme.colors.PRIMARY_TEXT,
       textDecorationLine: 'underline',
       textAlign: 'center',
       marginTop: 20,
+      fontFamily: 'Molengo-Regular',
+      fontSize: theme.typography.size.S,
     },
   });

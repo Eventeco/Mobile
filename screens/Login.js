@@ -86,7 +86,7 @@ const Login = ({navigation}) => {
                   onPress={onLoginHandler}
                 />
                 <Text style={style.noAccountText} onPress={navigateToRegister}>
-                  Don't have an account?
+                  Don't have an Account?
                 </Text>
               </View>
             </SafeAreaView>
@@ -135,17 +135,23 @@ const styles = theme =>
     },
     input: {
       marginBottom: 54,
+      fontFamily: 'Molengo-Regular',
+      fontSize: theme.typography.size.M,
     },
     btnContainer: {
       backgroundColor: theme.colors.GREEN_LIGHT,
     },
     btn: {
       color: '#fff',
+      fontFamily: 'Molengo-Regular',
+      fontSize: theme.typography.size.S,
     },
     noAccountText: {
       color: theme.colors.PRIMARY_TEXT,
       textDecorationLine: 'underline',
+      fontFamily: 'Molengo-Regular',
       textAlign: 'center',
       marginTop: 20,
+      fontSize: theme.typography.size.S,
     },
   });

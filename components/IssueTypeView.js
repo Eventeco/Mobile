@@ -29,7 +29,7 @@ const styles = theme =>
     text: {
       color: 'black',
       fontSize: theme.typography.size.XS3,
-      fontWeight: '700',
       textAlign: 'center',
+      fontFamily: 'Lora-Bold',
     },
   });
