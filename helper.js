@@ -1,3 +1,7 @@
+import {Alert} from 'react-native';
+import axios from './axios';
+import {SET_USER} from './constants/reducer';
+
 export const formatTimestamp = timestamp => {
   const days = [
     'Monday',
@@ -31,4 +35,17 @@ export const formatTimestamp = timestamp => {
   const hours = dateObject.getHours();
   const minutes = formatMinutes(dateObject.getMinutes());
   return `${day}, ${month} ${date}, ${hours}:${minutes} GMT +3:00`;
+};
+
+export const loginHandler = async (payload, dispatch) => {
+  try {
+    const res = await axios.post('/login', payload);
+    dispatch({
+      type: SET_USER,
+      data: res.data.data,
+    });
+  } catch (e) {
+    const message = e.response.data.message;
+    Alert.alert(message);
+  }
 };

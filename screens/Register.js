@@ -17,7 +17,7 @@ import Logo from '../public/images/logo.png';
 import Button from '../components/Button';
 import axios from '../axios';
 import {useStateValue} from '../StateProvider/StateProvider';
-import {SET_USER} from '../constants/reducer';
+import {loginHandler} from '../helper';
 
 const Register = ({navigation}) => {
   const style = useThemedStyles(styles);
@@ -28,7 +28,7 @@ const Register = ({navigation}) => {
 
   const [, dispatch] = useStateValue();
 
-  const onLoginHandler = () => {
+  const onLoginHandler = async () => {
     if (username && password && name && email) {
       const registerPayload = {
         name,
@@ -40,23 +40,17 @@ const Register = ({navigation}) => {
         username,
         password,
       };
-      axios.post('/register', registerPayload).then(
-        res => {
-          axios
-            .post('/login', loginPayload)
-            .then(() => {
-              dispatch({
-                type: SET_USER,
-                data: res.data.data,
-              });
-            })
-            .catch(e => console.log(e.response.data));
-        },
-        err => {
-          const message = err.response.data.message;
-          Alert.alert(message);
-        },
-      );
+      if (password.length < 6) {
+        Alert.alert('Password must be at least 6 characters');
+        return;
+      }
+      try {
+        await axios.post('/register', registerPayload);
+      } catch (e) {
+        const message = e.response.data.message;
+        Alert.alert(message);
+      }
+      loginHandler(loginPayload, dispatch);
     } else {
       const message = 'Please fill all fields';
       Alert.alert(message);
