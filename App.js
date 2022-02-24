@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import Login from './screens/Login';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -9,24 +9,38 @@ import {useStateValue} from './StateProvider/StateProvider';
 import {SET_USER} from './constants/reducer';
 import Header from './components/Header';
 import SCREENS from './constants/screens';
+import SplashScreen from './screens/SplashScreen';
 
 const Stack = createNativeStackNavigator();
 
 const App = () => {
   const [{user}, dispatch] = useStateValue();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios
-      .get('/login-status')
-      .then(res => {
+    setLoading(true);
+    const getLoginStatus = async () => {
+      try {
+        const res = await axios.get('/login-status');
         dispatch({
           type: SET_USER,
           data: res.data.data,
         });
-      })
-      .catch(() => console.log('logged out'));
+      } catch (e) {
+        console.log('logged out');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getLoginStatus();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  if (loading) {
+    return <SplashScreen />;
+  }
+
   return (
     <NavigationContainer>
       <Stack.Navigator
