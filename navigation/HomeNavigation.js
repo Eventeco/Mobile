@@ -56,7 +56,7 @@ const HomeNavigation = () => {
         headerShown: false,
         tabBarShowLabel: false,
         tabBarInactiveTintColor: '#aaa',
-        tabBarActiveTintColor: styles.colors.GREEN_LIGHT,
+        tabBarActiveTintColor: styles.colors.GREEN_200,
       }}>
       {navigationItems.map((item, i) => (
         <Tab.Screen

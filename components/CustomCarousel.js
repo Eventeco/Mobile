@@ -6,7 +6,7 @@ import {Dimensions} from 'react-native';
 
 const windowWidth = Dimensions.get('window').width;
 
-const CustomCarousel = ({data, renderItem}) => {
+const CustomCarousel = ({data, renderItem, width, paginationOnTop}) => {
   const themedStyles = useThemedStyles(styles);
 
   const [sliderIndex, setSliderIndex] = useState(0);
@@ -15,56 +15,78 @@ const CustomCarousel = ({data, renderItem}) => {
     setSliderIndex(index);
   };
 
+  const customPaginationStyles = {
+    position: paginationOnTop ? 'absolute' : 'relative',
+    bottom: paginationOnTop ? -10 : 10,
+    backgroundColor: paginationOnTop
+      ? 'rgba(255, 255, 255, 0.8)'
+      : 'transparent',
+  };
+
+  const paginationStyle = StyleSheet.compose(
+    themedStyles.pagination,
+    customPaginationStyles,
+  );
+
+  const slideStyle = {
+    marginLeft: -40,
+    marginRight: 60,
+  };
+
+  const customDotsStyle = {
+    width: paginationOnTop ? 8 : 10,
+    height: paginationOnTop ? 8 : 10,
+    backgroundColor: paginationOnTop ? 'green' : '#45634C',
+    borderColor: 'black',
+    borderWidth: paginationOnTop ? 0 : 2,
+  };
+
+  const dotsStyle = StyleSheet.compose(themedStyles.dotStyle, customDotsStyle);
+  const inactiveDotStyle = {
+    backgroundColor: paginationOnTop ? 'black' : '#A1BD9D',
+  };
+
   return (
     <View style={themedStyles.container}>
       <Carousel
         data={data}
         renderItem={renderItem}
-        itemWidth={windowWidth}
+        itemWidth={width || windowWidth}
         sliderWidth={windowWidth}
         onSnapToItem={index => sliderIndexHandler(index)}
+        slideStyle={!paginationOnTop ? slideStyle : null}
       />
-      <Pagination
-        dotsLength={data.length}
-        activeDotIndex={sliderIndex}
-        containerStyle={themedStyles.pagination}
-        dotStyle={themedStyles.dotStyle}
-        inactiveDotStyle={themedStyles.inactiveDotStyle}
-        inactiveDotScale={0.7}
-        dotContainerStyle={themedStyles.dotContainerStyle}
-      />
+      <View style={themedStyles.paginationContainer}>
+        <Pagination
+          dotsLength={data.length}
+          activeDotIndex={sliderIndex}
+          containerStyle={paginationStyle}
+          dotStyle={dotsStyle}
+          inactiveDotStyle={inactiveDotStyle}
+          inactiveDotScale={paginationOnTop ? 0.7 : 1}
+          dotContainerStyle={themedStyles.dotContainerStyle}
+        />
+      </View>
     </View>
   );
 };
 
 export default CustomCarousel;
 
-const styles = theme =>
+const styles = () =>
   StyleSheet.create({
     container: {
       position: 'relative',
       overflow: 'hidden',
     },
-    image: {
-      width: '100%',
-      height: 150,
+    paginationContainer: {
+      alignItems: 'center',
     },
     pagination: {
-      position: 'absolute',
-      bottom: -10,
-      left: '50%',
-      transform: [{translateX: -windowWidth / 5}],
-      backgroundColor: 'rgba(255, 255, 255, 0.8)',
       borderRadius: 10,
     },
     dotStyle: {
-      width: 8,
-      height: 8,
       borderRadius: 5,
-      backgroundColor: 'green',
-    },
-    inactiveDotStyle: {
-      backgroundColor: 'black',
     },
     dotContainerStyle: {
       height: 0,

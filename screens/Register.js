@@ -160,7 +160,7 @@ const styles = theme =>
       marginBottom: 10,
     },
     btnContainer: {
-      backgroundColor: theme.colors.GREEN_LIGHT,
+      backgroundColor: theme.colors.GREEN_200,
       marginTop: 20,
     },
     btn: {

@@ -1,46 +1,22 @@
-import axios from '../axios';
-import React, {useCallback, useState} from 'react';
+import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {formatTimestamp} from '../helper';
 import useThemedStyles from '../hooks/useThemedStyles';
 import LocationIcon from '../public/icons/location.png';
 import ShareIcon from '../public/icons/share.png';
 import IssueTypeView from './IssueTypeView';
-import {useFocusEffect} from '@react-navigation/native';
 import {useNavigation} from '@react-navigation/native';
 import SCREENS from '../constants/screens';
 
-const EventCard = ({event}) => {
+const EventCard = ({event, suggestedEvents}) => {
   const style = useThemedStyles(styles);
 
   const navigation = useNavigation();
 
-  const [issues, setIssues] = useState([]);
-
-  useFocusEffect(
-    useCallback(() => {
-      let isActive = true;
-      const fetchIssues = async () => {
-        try {
-          const result = await axios.get(`/addressedIssues/${event.id}`);
-          if (isActive) {
-            setIssues(result.data.data);
-          }
-        } catch (e) {
-          console.log(e.response.data);
-        }
-      };
-
-      fetchIssues();
-
-      return () => {
-        isActive = false;
-      };
-    }, [event.id]),
-  );
+  const {issues} = event;
 
   const onPressHandler = () => {
-    navigation.navigate(SCREENS.JOIN_EVENT, {event});
+    navigation.navigate(SCREENS.JOIN_EVENT, {event, suggestedEvents});
   };
 
   return (
@@ -56,8 +32,8 @@ const EventCard = ({event}) => {
               <Text style={style.locationText}>{event.location}</Text>
               {issues.length > 0 && (
                 <View style={style.footerIssues}>
-                  {issues.map((issue, i) => (
-                    <IssueTypeView issueType={issue} key={i} />
+                  {issues.map(issue => (
+                    <IssueTypeView issueType={issue.name} key={issue.id} />
                   ))}
                 </View>
               )}

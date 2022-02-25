@@ -137,7 +137,7 @@ const styles = theme =>
       marginBottom: 54,
     },
     btnContainer: {
-      backgroundColor: theme.colors.GREEN_LIGHT,
+      backgroundColor: theme.colors.GREEN_200,
     },
     btn: {
       color: '#fff',

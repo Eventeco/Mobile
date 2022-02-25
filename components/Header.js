@@ -54,7 +54,7 @@ const styles = theme =>
       flexDirection: 'row',
       height: 60,
       paddingHorizontal: 10,
-      backgroundColor: theme.colors.GREEN_LIGHT,
+      backgroundColor: theme.colors.GREEN_200,
       justifyContent: 'space-between',
       alignItems: 'center',
     },

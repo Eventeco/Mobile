@@ -5,6 +5,7 @@ const SCREENS = {
   NEWSFEED: 'Newsfeed',
   NEWSFEED_NAVIGATION: 'NewsfeedNavigation',
   PROFILE: 'Profile',
+  VIEW_EVENT: 'ViewEvent',
   JOIN_EVENT: 'JoinEvent',
 };
 
