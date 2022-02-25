@@ -15,9 +15,8 @@ import useThemedStyles from '../hooks/useThemedStyles';
 import BGImage from '../public/images/bg.png';
 import Logo from '../public/images/logo.png';
 import Button from '../components/Button';
-import axios from '../axios';
 import {useStateValue} from '../StateProvider/StateProvider';
-import {SET_USER} from '../constants/reducer';
+import {loginHandler} from '../helper';
 
 const Login = ({navigation}) => {
   const style = useThemedStyles(styles);
@@ -32,18 +31,7 @@ const Login = ({navigation}) => {
         username,
         password,
       };
-      axios.post('/login', payload).then(
-        res => {
-          dispatch({
-            type: SET_USER,
-            data: res.data.data,
-          });
-        },
-        err => {
-          const message = err.response.data.message;
-          Alert.alert(message);
-        },
-      );
+      loginHandler(payload, dispatch);
     } else {
       const message = 'Please fill all fields';
       Alert.alert(message);
@@ -86,7 +74,7 @@ const Login = ({navigation}) => {
                   onPress={onLoginHandler}
                 />
                 <Text style={style.noAccountText} onPress={navigateToRegister}>
-                  Don't have an account?
+                  Don't have an Account?
                 </Text>
               </View>
             </SafeAreaView>
@@ -135,17 +123,23 @@ const styles = theme =>
     },
     input: {
       marginBottom: 54,
+      fontFamily: 'Molengo-Regular',
+      fontSize: theme.typography.size.M,
     },
     btnContainer: {
       backgroundColor: theme.colors.GREEN_200,
     },
     btn: {
       color: '#fff',
+      fontFamily: 'Molengo-Regular',
+      fontSize: theme.typography.size.S,
     },
     noAccountText: {
       color: theme.colors.PRIMARY_TEXT,
       textDecorationLine: 'underline',
+      fontFamily: 'Molengo-Regular',
       textAlign: 'center',
       marginTop: 20,
+      fontSize: theme.typography.size.S,
     },
   });

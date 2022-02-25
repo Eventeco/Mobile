@@ -41,7 +41,8 @@ const styles = theme =>
     },
     text: {
       color: 'black',
-      fontWeight: '700',
+      fontSize: theme.typography.size.XS3,
       textAlign: 'center',
+      fontFamily: 'Lora-Bold',
     },
   });
