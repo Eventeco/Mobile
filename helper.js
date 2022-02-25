@@ -1,4 +1,3 @@
-
 import {Alert} from 'react-native';
 import axios from './axios';
 import {SET_USER} from './constants/reducer';
@@ -58,6 +57,7 @@ export const getTimeAndTimezone = date => {
   const minutes = dateToFormat.getMinutes();
   const timezone = dateToFormat.getTimezoneOffset() / 60;
   return `${hours}:${minutes} GMT ${toThreeSF(timezone)}`;
+};
 
 export const loginHandler = async (payload, dispatch) => {
   try {
@@ -70,5 +70,4 @@ export const loginHandler = async (payload, dispatch) => {
     const message = e.response.data.message;
     Alert.alert(message);
   }
-
 };
