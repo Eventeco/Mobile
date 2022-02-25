@@ -127,7 +127,7 @@ const styles = theme =>
       fontSize: theme.typography.size.M,
     },
     btnContainer: {
-      backgroundColor: theme.colors.GREEN_LIGHT,
+      backgroundColor: theme.colors.GREEN_200,
     },
     btn: {
       color: '#fff',

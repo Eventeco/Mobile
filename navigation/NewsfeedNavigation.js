@@ -1,9 +1,8 @@
-import {StyleSheet} from 'react-native';
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Newsfeed from '../screens/Newsfeed';
 import SCREENS from '../constants/screens';
-import JoinEvent from '../screens/JoinEvent';
+import ViewEvent from '../screens/ViewEvent';
 
 const Stack = createNativeStackNavigator();
 
@@ -13,11 +12,9 @@ const NewsfeedNavigation = () => {
       initialRouteName={SCREENS.NEWSFEED}
       screenOptions={{headerShown: false}}>
       <Stack.Screen name={SCREENS.NEWSFEED} component={Newsfeed} />
-      <Stack.Screen name={SCREENS.JOIN_EVENT} component={JoinEvent} />
+      <Stack.Screen name={SCREENS.JOIN_EVENT} component={ViewEvent} />
     </Stack.Navigator>
   );
 };
 
 export default NewsfeedNavigation;
-
-const styles = StyleSheet.create({});

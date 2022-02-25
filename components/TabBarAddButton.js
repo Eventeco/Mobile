@@ -25,7 +25,7 @@ const styles = theme =>
       borderRadius: 50,
       width: 70,
       height: 70,
-      backgroundColor: theme.colors.GREEN_LIGHT,
+      backgroundColor: theme.colors.GREEN_200,
       shadowColor: '#000',
       shadowOffset: {
         width: 0,

@@ -34,6 +34,10 @@ const Newsfeed = () => {
     }, []),
   );
 
+  const getSuggestedEvents = currEvent => {
+    return events.filter(event => event.id !== currEvent.id);
+  };
+
   return (
     <SafeAreaView>
       <ImageBackground source={BG} style={style.bgImageContainer}>
@@ -41,7 +45,12 @@ const Newsfeed = () => {
           <Text style={style.eventsText}>Events Near You :</Text>
           <FlatList
             data={events}
-            renderItem={item => <EventCard event={item.item} />}
+            renderItem={item => (
+              <EventCard
+                event={item.item}
+                suggestedEvents={getSuggestedEvents(item.item)}
+              />
+            )}
             keyExtractor={item => item.id}
             scrollEnabled
             ListEmptyComponent={<Text>No events found</Text>}

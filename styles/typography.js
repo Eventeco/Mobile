@@ -5,6 +5,7 @@ const size = {
   S: 17,
   M: 20,
   L: 25,
+  XL: 30,
 };
 
 export const typography = {size};

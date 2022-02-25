@@ -1,43 +1,27 @@
-import axios from '../axios';
-import React, {useCallback, useState} from 'react';
+import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {formatTimestamp} from '../helper';
 import useThemedStyles from '../hooks/useThemedStyles';
 import LocationIcon from '../public/icons/location.png';
 import ShareIcon from '../public/icons/share.png';
 import IssueTypeView from './IssueTypeView';
-import {useFocusEffect} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
+import SCREENS from '../constants/screens';
 
-const EventCard = ({event}) => {
+const EventCard = ({event, suggestedEvents}) => {
   const style = useThemedStyles(styles);
 
-  const [issues, setIssues] = useState([]);
+  const navigation = useNavigation();
 
-  useFocusEffect(
-    useCallback(() => {
-      let isActive = true;
-      const fetchIssues = async () => {
-        try {
-          const result = await axios.get(`/addressedIssues/${event.id}`);
-          if (isActive) {
-            setIssues(result.data.data);
-          }
-        } catch (e) {
-          console.log(e.response.data);
-        }
-      };
+  const {issues} = event;
 
-      fetchIssues();
-
-      return () => {
-        isActive = false;
-      };
-    }, [event.id]),
-  );
+  const onPressHandler = () => {
+    navigation.navigate(SCREENS.JOIN_EVENT, {event, suggestedEvents});
+  };
 
   return (
     event && (
-      <TouchableOpacity style={style.container}>
+      <TouchableOpacity style={style.container} onPress={onPressHandler}>
         <Image source={{uri: event.picturepath}} style={style.image} />
         <View style={style.innerContainer}>
           <Text style={style.nameText}>{event.name}</Text>
@@ -48,8 +32,8 @@ const EventCard = ({event}) => {
               <Text style={style.locationText}>{event.location}</Text>
               {issues.length > 0 && (
                 <View style={style.footerIssues}>
-                  {issues.map((issue, i) => (
-                    <IssueTypeView issueType={issue} key={i} />
+                  {issues.map(issue => (
+                    <IssueTypeView issueType={issue.name} key={issue.id} />
                   ))}
                 </View>
               )}
