@@ -19,6 +19,7 @@
 		BF44CCA32CEC4D2688C6AB3E /* Lora-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0F8340994F7A4F299D0F4074 /* Lora-Regular.ttf */; };
 		988A74C9946547A89ADA012A /* Lora-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1D92E98565ED4325B597E049 /* Lora-SemiBold.ttf */; };
 		9A4CC7D7D1C24BC5BFCFB9AC /* Molengo-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0A904D80E83742E9830148DE /* Molengo-Regular.ttf */; };
+		41569D285F9F40B584E52C8B /* Lora-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8362DCE49066488EBD661D5A /* Lora-Italic.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,6 +65,7 @@
 		0F8340994F7A4F299D0F4074 /* Lora-Regular.ttf */ = {isa = PBXFileReference; name = "Lora-Regular.ttf"; path = "../public/fonts/Lora-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		1D92E98565ED4325B597E049 /* Lora-SemiBold.ttf */ = {isa = PBXFileReference; name = "Lora-SemiBold.ttf"; path = "../public/fonts/Lora-SemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		0A904D80E83742E9830148DE /* Molengo-Regular.ttf */ = {isa = PBXFileReference; name = "Molengo-Regular.ttf"; path = "../public/fonts/Molengo-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		8362DCE49066488EBD661D5A /* Lora-Italic.ttf */ = {isa = PBXFileReference; name = "Lora-Italic.ttf"; path = "../public/fonts/Lora-Italic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -188,6 +190,7 @@
 				0F8340994F7A4F299D0F4074 /* Lora-Regular.ttf */,
 				1D92E98565ED4325B597E049 /* Lora-SemiBold.ttf */,
 				0A904D80E83742E9830148DE /* Molengo-Regular.ttf */,
+				8362DCE49066488EBD661D5A /* Lora-Italic.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -304,6 +307,7 @@
 				BF44CCA32CEC4D2688C6AB3E /* Lora-Regular.ttf in Resources */,
 				988A74C9946547A89ADA012A /* Lora-SemiBold.ttf in Resources */,
 				9A4CC7D7D1C24BC5BFCFB9AC /* Molengo-Regular.ttf in Resources */,
+				41569D285F9F40B584E52C8B /* Lora-Italic.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

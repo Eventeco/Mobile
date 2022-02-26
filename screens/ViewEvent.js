@@ -108,9 +108,9 @@ const styles = theme =>
     name: {
       fontSize: theme.typography.size.L,
       marginVertical: 10,
-      fontWeight: '700',
       textAlign: 'center',
       color: 'black',
+      fontFamily: 'Lora-Medium',
     },
     detailsContainer: {
       paddingHorizontal: 10,
@@ -124,10 +124,10 @@ const styles = theme =>
     },
     userDetailsCreatorText: {
       fontSize: theme.typography.size.S,
-      fontWeight: '700',
       marginLeft: 10,
       color: 'black',
       marginTop: -5,
+      fontFamily: 'Lora-Bold',
     },
     userDetailsCreatorName: {
       textDecorationLine: 'underline',
@@ -139,7 +139,7 @@ const styles = theme =>
     scrollViewText: {
       color: theme.colors.GRAY_200,
       fontSize: theme.typography.size.S,
-      fontWeight: '500',
+      fontFamily: 'Lora-Bold',
     },
     timeContainer: {
       flexDirection: 'row',
@@ -174,8 +174,8 @@ const styles = theme =>
     },
     similarEventsHeading: {
       fontSize: theme.typography.size.XL,
-      fontStyle: 'italic',
       marginLeft: 30,
+      fontFamily: 'Lora-Italic',
       color: theme.colors.GRAY_200,
     },
     btnContainer: {
@@ -197,5 +197,6 @@ const styles = theme =>
     btn: {
       color: 'white',
       fontSize: theme.typography.size.L,
+      fontFamily: 'Lora-Regular',
     },
   });

@@ -36,11 +36,11 @@ const styles = theme =>
       height: 100,
     },
     text: {
-      fontSize: theme.typography.size.M,
+      fontSize: theme.typography.size.S,
       textAlign: 'center',
       marginTop: 5,
       marginBottom: 15,
-      fontWeight: '600',
       color: 'black',
+      fontFamily: 'Lora-Bold',
     },
   });
