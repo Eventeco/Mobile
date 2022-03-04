@@ -6,11 +6,13 @@ import CustomCarousel from '../components/CustomCarousel';
 import Avatar from '../components/Avatar';
 import CalendarIcon from '../public/icons/calendar.png';
 import ClockIcon from '../public/icons/clock.png';
-import {getDayAndDate, getTimeAndTimezone} from '../helper';
+import { getDayAndDate, getTimeAndTimezone } from '../helper';
 import IssueTypeView from '../components/IssueTypeView';
 import SmallEventCard from '../components/SmallEventCard';
-import {Dimensions} from 'react-native';
+import { Dimensions } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import Button from '../components/Button';
+import SCREENS from '../constants/screens';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -20,6 +22,8 @@ const ViewEvent = ({route}) => {
   const images = Array(5).fill(event.picturepath);
 
   const themedStyles = useThemedStyles(styles);
+
+  const navigation = useNavigation()
 
   const renderImageItem = ({item}) => (
     <Image
@@ -88,6 +92,7 @@ const ViewEvent = ({route}) => {
           />
           <Button
             title="JOIN EVENT"
+            onPress={() => navigation.navigate(SCREENS.JOIN_EVENT, { event, suggestedEvents })}
             styleForButtonContainer={themedStyles.btnContainer}
             styleForButton={themedStyles.btn}
           />
