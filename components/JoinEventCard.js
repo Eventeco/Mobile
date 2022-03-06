@@ -38,19 +38,20 @@ const JoinEventCard = ({event, suggestedEvents}) => {
         <View style={style.innerContainer}>
           <Text style={style.nameText}>{event.name}</Text>
           <Text style={style.timeText}>{formatTimestamp(event.starttime)}</Text>
-          <View style={style.locationContainer}>
-            <View style={style.locationLeft}>
-              <Image source={LocationIcon} />
-              <Text style={style.locationText}>Bilkent Ankara</Text>
-              {issues.length > 0 && (
-                <View style={style.eventIssuess}>
-                  {issues.map(issue => (
-                    <IssueTypeView issueType={issue.name} key={issue.id} />
-                  ))}
-                </View>
-              )}
+          <View style={style.subinfoContainer}>
+            <View style={style.locationContainer}>
+              <View style={style.locationLeft}>
+                <Image source={LocationIcon} />
+                <Text style={style.locationText}>Bilkent Ankara</Text>
+              </View>
             </View>
-            <Image source={ShareIcon} style={style.icon} />
+            {issues.length > 0 && (
+              <View style={style.eventIssuess}>
+                {issues.map(issue => (
+                  <IssueTypeView issueType={issue.name} key={issue.id} />
+                ))}
+              </View>
+            )}
           </View>
           <View style={style.rulesContainer}>
             <Text style={style.rulesHeading}>EVENT RULES:</Text>
@@ -135,6 +136,9 @@ const styles = theme =>
       fontFamily: 'Lora-Bold',
       marginTop: 5,
     },
+    subinfoContainer: {
+      flexDirection: 'row',
+    },
     locationContainer: {
       flexDirection: 'row',
       justifyContent: 'space-between',
@@ -143,7 +147,6 @@ const styles = theme =>
     },
     locationLeft: {
       flexDirection: 'row',
-      justifyContent: 'space-between',
       alignItems: 'center',
     },
     locationText: {
@@ -154,7 +157,11 @@ const styles = theme =>
     },
     eventIssuess: {
       flexDirection: 'row',
-      marginLeft: 20,
+      width: 1,
+      marginTop: 5,
+      display: 'flex',
+      overflow: 'scroll',
+      marginLeft: 10,
     },
     rulesContainer: {
       marginTop: '2%'    

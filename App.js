@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import Login from './screens/Login';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { NativeBaseProvider } from 'native-base';
 import Register from './screens/Register';
 import HomeNavigation from './navigation/HomeNavigation';
 import axios from './axios';

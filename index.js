@@ -4,15 +4,18 @@ import App from './App';
 import {name as appName} from './app.json';
 import reducer, {initialState} from './StateProvider/reducer';
 import {StateProvider} from './StateProvider/StateProvider';
+import { NativeBaseProvider } from 'native-base';
 import ThemeProvider from './hoc/ThemeProvider';
 
 const WrappedApp = () => {
   return (
-    <StateProvider initialState={initialState} reducer={reducer}>
-      <ThemeProvider>
-        <App />
-      </ThemeProvider>
-    </StateProvider>
+    <NativeBaseProvider >
+      <StateProvider initialState={initialState} reducer={reducer}>
+        <ThemeProvider>
+          <App />
+        </ThemeProvider>
+      </StateProvider>
+    </NativeBaseProvider>
   );
 };
 
