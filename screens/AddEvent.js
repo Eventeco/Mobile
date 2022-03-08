@@ -7,12 +7,17 @@ import LocationIcon from '../public/icons/location.png'
 import TextInput from '../components/TextInput'
 import { launchImageLibrary } from 'react-native-image-picker';
 import { TextArea, Badge, Text } from 'native-base';
+import TrashCan from '../public/icons/trash-can-solid.png'
+import Alert from '../components/Alert';
 
 const AddEvent = () => {
 
   const style = useThemedStyles(styles);
   const [selectedThemes, setSelectedThemes] = useState(['Deforestation', 'Pollution'])
+  
   const [coverPhoto, setCoverPhoto] = useState(null);
+  const [eventPhotos, setEventPhotos] = useState([]);
+  const [imageSizeDialog, setImageSizeDialog] = useState(false)
   const [__, setUpdate] = useState(true)
   const themes = [
     {
@@ -54,13 +59,31 @@ const AddEvent = () => {
     setUpdate(!__)
   }
 
-  const handleChoosePhoto = () => {
-    launchImageLibrary({ includeBase64: true }, (response) => {
-      if (response) {
+  const handleChooseCoverPhoto = () => {
+    launchImageLibrary({ includeBase64: true, mediaType: 'photo',  }, (response) => {
+      if (response && response?.assets[0]?.fileSize < 5200000) {
         setCoverPhoto(response);
+      } else {
+        setImageSizeDialog(true)
       }
     });
   };
+
+  const uploadPictures = () => {
+    launchImageLibrary({ includeBase64: true, mediaType: 'photo',  }, (response) => {
+      if (response && response?.assets[0]?.fileSize < 5200000) {
+        eventPhotos.push(response);
+        setUpdate(!__)
+      } else {
+        setImageSizeDialog(true)
+      }
+    });
+  }
+
+  const deleteEventPhoto = (index) => {
+    eventPhotos.splice(index, 1)
+    setUpdate(!__)
+  }
 
   const unselectThemeAction = (name) => {
     const index = selectedThemes.indexOf(name)
@@ -68,17 +91,20 @@ const AddEvent = () => {
     setUpdate(!__)
   }
 
+  console.log(coverPhoto)
+
   return (
     <View>
       <ScrollView style={style.pageContainer}>
         <View style={style.addImageBtn}>
-          <TouchableOpacity onPress={() => handleChoosePhoto()}>
+          <TouchableOpacity onPress={() => handleChooseCoverPhoto()}>
             {coverPhoto?.assets[0]?.uri? (
-              <Image source={{uri: `data:image/png;base64,${coverPhoto.assets[0].base64}`}} width={200} height={400}></Image>
+              <Image source={{uri: coverPhoto.assets[0].uri}} style={{ width: 400, height: 200}}></Image>
             ) : (
               <Image source={AddImageBtn} width={100} />
             )}
           </TouchableOpacity>
+          <Alert alertTitle={'Image File Size Exceeded'} alertText={'You cannot upload images with file size greater than 5MBs'} onClose={() => {setImageSizeDialog(false)}} isOpen={imageSizeDialog} />
         </View>
         <View style={style.formContainer}>
           <View style={style.nameInput} >
@@ -103,10 +129,18 @@ const AddEvent = () => {
             <Text style={style.fieldText}>
               Upload Pictures:
             </Text>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => uploadPictures()}>
               <Image source={UploadPicturesBtn} />
             </TouchableOpacity>
           </View>
+          {eventPhotos.map((item, index) => (
+            <View style={style.uploadedImage}>
+              <Image source={{ uri: item.assets[0].uri }} style={{ width: 80, height: 80, borderRadius: 10}} /> 
+              <TouchableOpacity onPress={() => deleteEventPhoto(index)}>
+                <Image source={TrashCan} resizeMode="cover" width={10} height={10} />
+              </TouchableOpacity>
+            </View>
+          ))}
           <View style={style.locationInput}>
             <TouchableOpacity style={style.locationIcon}>
               <Image source={LocationIcon} />
@@ -221,6 +255,15 @@ const styles = theme => StyleSheet.create({
     marginLeft: 6,
     fontFamily: 'Lora-Bold',
     marginRight: 6,
+  },
+  uploadedImage: {
+    paddingVertical: 5,
+    flex: 1,
+    justifyContent: 'space-between',
+    marginRight: 10,
+    alignContent: 'center',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
   }
 
 });
