@@ -2,7 +2,13 @@ import React from 'react';
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
 import useThemedStyles from '../hooks/useThemedStyles';
 
-const Button = ({title, styleForButton, styleForButtonContainer, onPress}) => {
+const Button = ({
+  title,
+  styleForButton,
+  styleForButtonContainer,
+  onPress,
+  disabled = false,
+}) => {
   const themedStyle = useThemedStyles(styles);
   const btnContainerStyle = StyleSheet.compose(
     themedStyle.btnContainer,
@@ -11,7 +17,10 @@ const Button = ({title, styleForButton, styleForButtonContainer, onPress}) => {
   const btnStyle = StyleSheet.compose(themedStyle.btn, styleForButton);
 
   return (
-    <TouchableOpacity onPress={onPress} style={btnContainerStyle}>
+    <TouchableOpacity
+      onPress={onPress}
+      style={btnContainerStyle}
+      disabled={disabled}>
       <Text style={btnStyle}>{title}</Text>
     </TouchableOpacity>
   );

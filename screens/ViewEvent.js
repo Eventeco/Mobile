@@ -10,6 +10,7 @@ import {getDayAndDate, getTimeAndTimezone} from '../helper';
 import IssueTypeView from '../components/IssueTypeView';
 import SmallEventCard from '../components/SmallEventCard';
 import {Dimensions} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 import Button from '../components/Button';
 import {useFocusEffect} from '@react-navigation/native';
 import axios from '../axios';
@@ -48,6 +49,8 @@ const ViewEvent = ({route, navigation}) => {
   );
 
   const themedStyles = useThemedStyles(styles);
+
+  const navigation = useNavigation();
 
   const renderImageItem = ({item}) => (
     <Image

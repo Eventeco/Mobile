@@ -16,7 +16,7 @@ const EventCard = ({event}) => {
   const {issues} = event;
 
   const onPressHandler = () => {
-    navigation.navigate(SCREENS.VIEW_EVENT, {event});
+    navigation.navigate(SCREENS.VIEW_EVENT, {event, suggestedEvents});
   };
 
   return (
