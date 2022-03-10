@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, StyleSheet, View} from 'react-native';
+import {Image, StyleSheet, View, TouchableOpacity} from 'react-native';
 import useThemedStyles from '../hooks/useThemedStyles';
 import Logo from '../public/images/logo2.png';
 import Button from './Button';
@@ -7,8 +7,9 @@ import axios from '../axios';
 import {useStateValue} from '../StateProvider/StateProvider';
 import {SET_USER} from '../constants/reducer';
 import {useNavigation} from '@react-navigation/native';
+import BackIcon from '../public/icons/back.png';
 
-const Header = () => {
+const Header = ({showBackButton = false}) => {
   const style = useThemedStyles(styles);
 
   const navigation = useNavigation();
@@ -31,8 +32,19 @@ const Header = () => {
       .catch(e => console.log(e.response.data));
   };
 
+  const backPressHandler = () => {
+    navigation.goBack();
+  };
+
   return (
     <View style={style.container}>
+      {showBackButton && (
+        <TouchableOpacity
+          onPress={backPressHandler}
+          style={style.backImageContainer}>
+          <Image source={BackIcon} style={style.backImage} />
+        </TouchableOpacity>
+      )}
       <View style={style.imageContainer}>
         <Image source={Logo} resizeMode="cover" style={style.image} />
       </View>
@@ -76,5 +88,14 @@ const styles = theme =>
     btn: {
       color: 'white',
       fontWeight: '700',
+    },
+    backImageContainer: {
+      width: 20,
+      height: 20,
+    },
+    backImage: {
+      width: '100%',
+      height: '100%',
+      resizeMode: 'contain',
     },
   });
