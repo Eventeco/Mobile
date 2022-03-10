@@ -8,7 +8,7 @@ import IssueTypeView from './IssueTypeView';
 import {useNavigation} from '@react-navigation/native';
 import SCREENS from '../constants/screens';
 
-const EventCard = ({event, suggestedEvents}) => {
+const EventCard = ({event}) => {
   const style = useThemedStyles(styles);
 
   const navigation = useNavigation();
@@ -16,7 +16,7 @@ const EventCard = ({event, suggestedEvents}) => {
   const {issues} = event;
 
   const onPressHandler = () => {
-    navigation.navigate(SCREENS.JOIN_EVENT, {event, suggestedEvents});
+    navigation.navigate(SCREENS.VIEW_EVENT, {event});
   };
 
   return (

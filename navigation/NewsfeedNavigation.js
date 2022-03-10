@@ -12,7 +12,7 @@ const NewsfeedNavigation = () => {
       initialRouteName={SCREENS.NEWSFEED}
       screenOptions={{headerShown: false}}>
       <Stack.Screen name={SCREENS.NEWSFEED} component={Newsfeed} />
-      <Stack.Screen name={SCREENS.JOIN_EVENT} component={ViewEvent} />
+      <Stack.Screen name={SCREENS.VIEW_EVENT} component={ViewEvent} />
     </Stack.Navigator>
   );
 };
