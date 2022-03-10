@@ -8,7 +8,7 @@ import IssueTypeView from './IssueTypeView';
 import {useNavigation} from '@react-navigation/native';
 import SCREENS from '../constants/screens';
 
-const EventCard = ({event, suggestedEvents}) => {
+const EventCard = ({event}) => {
   const style = useThemedStyles(styles);
 
   const navigation = useNavigation();

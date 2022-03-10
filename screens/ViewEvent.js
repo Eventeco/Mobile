@@ -1,5 +1,5 @@
 import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {useCallback, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import useThemedStyles from '../hooks/useThemedStyles';
 import CustomCarousel from '../components/CustomCarousel';
@@ -12,14 +12,41 @@ import SmallEventCard from '../components/SmallEventCard';
 import {Dimensions} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Button from '../components/Button';
+import {useFocusEffect} from '@react-navigation/native';
+import axios from '../axios';
 import SCREENS from '../constants/screens';
+import Header from '../components/Header';
 
 const windowWidth = Dimensions.get('window').width;
 
-const ViewEvent = ({route}) => {
-  const {event, suggestedEvents} = route.params;
+const ViewEvent = ({route, navigation}) => {
+  const {event} = route.params;
   const {user, issues} = event;
   const images = Array(5).fill(event.picturepath);
+
+  const [suggestedEvents, setSuggestedEvents] = useState([]);
+
+  useFocusEffect(
+    useCallback(() => {
+      let isActive = true;
+      const fetchSuggestedEvents = async () => {
+        try {
+          const result = await axios.get(`/events/suggested/${event.id}`);
+          if (isActive) {
+            setSuggestedEvents(result.data.data);
+          }
+        } catch (e) {
+          console.log(e.response.data);
+        }
+      };
+
+      fetchSuggestedEvents();
+
+      return () => {
+        isActive = false;
+      };
+    }, [event.id]),
+  );
 
   const themedStyles = useThemedStyles(styles);
 
@@ -33,12 +60,22 @@ const ViewEvent = ({route}) => {
     />
   );
 
+  const similarEventOnPressHandler = item => {
+    navigation.navigate(SCREENS.VIEW_EVENT, {event: item});
+  };
+
   const renderEventItem = ({item}) => {
-    return <SmallEventCard item={item} />;
+    return (
+      <SmallEventCard
+        item={item}
+        onPressHandler={() => similarEventOnPressHandler(item)}
+      />
+    );
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={themedStyles.container}>
+      <Header showBackButton />
       <ScrollView>
         <CustomCarousel
           data={images}
@@ -83,22 +120,23 @@ const ViewEvent = ({route}) => {
             </View>
           )}
         </View>
-        <View style={themedStyles.similarEventsContainer}>
-          <Text style={themedStyles.similarEventsHeading}>Similar Events</Text>
-          <CustomCarousel
-            data={suggestedEvents}
-            renderItem={renderEventItem}
-            width={windowWidth - windowWidth / 3}
-          />
-          <Button
-            title="JOIN EVENT"
-            onPress={() =>
-              navigation.navigate(SCREENS.JOIN_EVENT, {event, suggestedEvents})
-            }
-            styleForButtonContainer={themedStyles.btnContainer}
-            styleForButton={themedStyles.btn}
-          />
-        </View>
+        {suggestedEvents.length > 0 && (
+          <View style={themedStyles.similarEventsContainer}>
+            <Text style={themedStyles.similarEventsHeading}>
+              Similar Events
+            </Text>
+            <CustomCarousel
+              data={suggestedEvents}
+              renderItem={renderEventItem}
+              width={windowWidth - windowWidth / 3}
+            />
+          </View>
+        )}
+        <Button
+          title="JOIN EVENT"
+          styleForButtonContainer={themedStyles.btnContainer}
+          styleForButton={themedStyles.btn}
+        />
       </ScrollView>
     </SafeAreaView>
   );
@@ -108,6 +146,9 @@ export default ViewEvent;
 
 const styles = theme =>
   StyleSheet.create({
+    container: {
+      marginBottom: 100,
+    },
     imageItem: {
       width: '100%',
       height: 150,
@@ -177,7 +218,6 @@ const styles = theme =>
     },
     similarEventsContainer: {
       marginTop: 5,
-      marginBottom: 40,
     },
     similarEventsHeading: {
       fontSize: theme.typography.size.XL,
@@ -198,7 +238,6 @@ const styles = theme =>
       },
       shadowOpacity: 0.25,
       shadowRadius: 3.84,
-
       elevation: 5,
     },
     btn: {

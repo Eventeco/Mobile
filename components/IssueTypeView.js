@@ -12,6 +12,7 @@ const IssueTypeView = ({issueType, size = 'small'}) => {
     backgroundColor: color,
     width: size === 'small' ? 80 : 140,
     paddingVertical: size === 'small' ? 0 : 7,
+    marginBottom: size === 'small' ? 0 : 5,
   };
   const moreTextStyles = {
     fontSize:
