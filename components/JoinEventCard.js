@@ -54,7 +54,7 @@ const JoinEventCard = ({event}) => {
   }, [event.id]);
 
   const submitHandler = async () => {
-    if (!check1 || !check2) {
+    if ((rules && rules.length > 0 && !check1) || !check2) {
       return Alert.alert(
         "Please agree to the event rules, and EventECO's Terms and Conditions",
       );

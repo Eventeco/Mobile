@@ -19,7 +19,7 @@ import Header from '../components/Header';
 
 const windowWidth = Dimensions.get('window').width;
 
-const ViewEvent = ({route, navigation}) => {
+const ViewEvent = ({route}) => {
   const {event} = route.params;
   const {user, issues} = event;
   const images = Array(5).fill(event.picturepath);
@@ -71,6 +71,10 @@ const ViewEvent = ({route, navigation}) => {
         onPressHandler={() => similarEventOnPressHandler(item)}
       />
     );
+  };
+
+  const joinEventButtonHandler = () => {
+    navigation.navigate(SCREENS.JOIN_EVENT, {event});
   };
 
   return (
@@ -136,6 +140,7 @@ const ViewEvent = ({route, navigation}) => {
           title="JOIN EVENT"
           styleForButtonContainer={themedStyles.btnContainer}
           styleForButton={themedStyles.btn}
+          onPress={joinEventButtonHandler}
         />
       </ScrollView>
     </SafeAreaView>
