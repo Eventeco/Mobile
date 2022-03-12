@@ -29,13 +29,14 @@ const months = [
 export const formatTimestamp = timestamp => {
   const formatMinutes = minutes =>
     minutes.length === 1 ? `0${minutes}` : minutes;
-  const dateObject = new Date(timestamp);
-  const day = days[dateObject.getDay()];
-  const month = months[dateObject.getMonth()];
-  const date = dateObject.getDate() + 1;
-  const hours = dateObject.getHours();
-  const minutes = formatMinutes(dateObject.getMinutes());
-  return `${day}, ${month} ${date}, ${hours}:${minutes} GMT +3:00`;
+  const dateToFormat = new Date(timestamp);
+  const day = days[dateToFormat.getDay()];
+  const month = months[dateToFormat.getMonth()];
+  const date = dateToFormat.getDate() + 1;
+  const hours = dateToFormat.getHours();
+  const minutes = formatMinutes(dateToFormat.getMinutes());
+  const timezone = toThreeSF(dateToFormat.getTimezoneOffset() / 60);
+  return `${day}, ${month} ${date}, ${hours}:${minutes} GMT ${timezone}`;
 };
 
 export const getDayAndDate = date => {
@@ -55,8 +56,8 @@ export const getTimeAndTimezone = date => {
   const dateToFormat = new Date(date);
   const hours = dateToFormat.getHours();
   const minutes = dateToFormat.getMinutes();
-  const timezone = dateToFormat.getTimezoneOffset() / 60;
-  return `${hours}:${minutes} GMT ${toThreeSF(timezone)}`;
+  const timezone = toThreeSF(dateToFormat.getTimezoneOffset() / 60);
+  return `${hours}:${minutes} GMT ${timezone}`;
 };
 
 export const loginHandler = async (payload, dispatch) => {

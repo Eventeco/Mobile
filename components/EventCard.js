@@ -31,9 +31,11 @@ const EventCard = ({event, suggestedEvents}) => {
               <Image source={LocationIcon} />
               <Text style={style.locationText}>{event.location}</Text>
               {issues.length > 0 && (
-                <View style={style.footerIssues}>
+                <View style={style.footerIssues} horizontal>
                   {issues.map(issue => (
-                    <IssueTypeView issueType={issue.name} key={issue.id} />
+                    <View key={issue.id} style={style.issueContainer}>
+                      <IssueTypeView issueType={issue.name} />
+                    </View>
                   ))}
                 </View>
               )}
@@ -93,7 +95,7 @@ const styles = theme =>
     footerLeft: {
       flexDirection: 'row',
       justifyContent: 'space-between',
-      alignItems: 'center',
+      alignItems: 'baseline',
     },
     locationText: {
       color: 'black',
@@ -104,5 +106,10 @@ const styles = theme =>
     footerIssues: {
       flexDirection: 'row',
       marginLeft: 20,
+      maxWidth: 180,
+      flexWrap: 'wrap',
+    },
+    issueContainer: {
+      marginBottom: 5,
     },
   });
