@@ -37,7 +37,7 @@ const Newsfeed = () => {
 
   return (
     <SafeAreaView>
-      <Header />
+      <Header showSearchIcon={true} />
       <ImageBackground source={BG} style={style.bgImageContainer}>
         <View style={style.innerContainer}>
           <Text style={style.eventsText}>Events Near You :</Text>

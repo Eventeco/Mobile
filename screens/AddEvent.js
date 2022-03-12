@@ -9,10 +9,14 @@ import { launchImageLibrary } from 'react-native-image-picker';
 import { TextArea, Badge, Text } from 'native-base';
 import TrashCan from '../public/icons/trash-can-solid.png'
 import Alert from '../components/Alert';
+import Button from '../components/Button';
 
 const AddEvent = () => {
 
   const style = useThemedStyles(styles);
+  const [eventName, setEventName] = useState(null)
+  const [eventDescription, setEventDescription] = useState(null)
+  const [rules, setRules] = useState(null)
   const [selectedThemes, setSelectedThemes] = useState(['Deforestation', 'Pollution'])
   
   const [coverPhoto, setCoverPhoto] = useState(null);
@@ -61,21 +65,26 @@ const AddEvent = () => {
 
   const handleChooseCoverPhoto = () => {
     launchImageLibrary({ includeBase64: true, mediaType: 'photo',  }, (response) => {
-      if (response && response?.assets[0]?.fileSize < 5200000) {
-        setCoverPhoto(response);
-      } else {
-        setImageSizeDialog(true)
+      console.log(response)
+      if (!response.didCancel) {
+        if (response?.assets[0]?.fileSize < 5200000) {
+          setCoverPhoto(response);
+        } else {
+          setImageSizeDialog(true)
+        }
       }
     });
   };
 
   const uploadPictures = () => {
     launchImageLibrary({ includeBase64: true, mediaType: 'photo',  }, (response) => {
-      if (response && response?.assets[0]?.fileSize < 5200000) {
-        eventPhotos.push(response);
-        setUpdate(!__)
-      } else {
-        setImageSizeDialog(true)
+      if (!response.didCancel) {
+        if (response?.assets[0]?.fileSize < 5200000) {
+          eventPhotos.push(response);
+          setUpdate(!__)
+        } else {
+          setImageSizeDialog(true)
+        }
       }
     });
   }
@@ -90,9 +99,6 @@ const AddEvent = () => {
     selectedThemes.splice(index, 1)
     setUpdate(!__)
   }
-
-  console.log(coverPhoto)
-
   return (
     <View>
       <ScrollView style={style.pageContainer}>
@@ -111,19 +117,19 @@ const AddEvent = () => {
             <Text style={style.fieldText}>
               Name of the Event*
             </Text>
-            <TextInput />
+            <TextInput value={eventName} onChangeText={(e) => setEventName(e)} />
           </View>
           <View style={style.descriptionInput}>
             <Text style={style.fieldText}>
               Description*
             </Text>
-            <TextArea borderColor='black' placeholder={'Description of the event'}/>
+            <TextArea value={eventDescription} onChangeText={(e) => setEventDescription(e)} borderColor='black' placeholder={'Description of the event'}/>
           </View>
           <View style={style.descriptionInput}>
             <Text style={style.fieldText}>
               Rules for the Event*
             </Text>
-            <TextArea borderColor='black' placeholder={'Rules for the event.'}/>
+            <TextArea value={rules} onChangeText={(e) => setRules(e)} borderColor='black' placeholder={'Rules for the event.'}/>
           </View>
           <View style={style.uploadPictures}>
             <Text style={style.fieldText}>
@@ -173,6 +179,13 @@ const AddEvent = () => {
                   )}
                 </View>
               ))}
+            </View>
+            <View style={style.createBtn}>
+              <Button
+                styleForButtonContainer={style.btnContainer}
+                styleForButton={style.btn}
+                title="CREATE EVENT"
+              />
             </View>
           </View>
         </View>
@@ -233,7 +246,8 @@ const styles = theme => StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    marginBottom: 30
   },
   themeBtn: {
     marginEnd: 10,
@@ -264,6 +278,31 @@ const styles = theme => StyleSheet.create({
     alignContent: 'center',
     flexDirection: 'row',
     flexWrap: 'wrap',
-  }
+  },
+  createBtn: {
+    marginBottom: 20,
+    marginLeft: -10,
+  },
+  btnContainer: {
+    backgroundColor: theme.colors.GREEN_400,
+    width: '80%',
+    borderRadius: 10,
+    alignSelf: 'center',
+    paddingVertical: 5,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  btn: {
+    color: 'white',
+    fontSize: theme.typography.size.L,
+    fontFamily: 'Lora-Regular',
+  },
+
 
 });
