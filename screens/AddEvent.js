@@ -493,9 +493,11 @@ const AddEvent = ({navigation}) => {
                         <Badge
                           bg={item.color}
                           style={style.badgeStyle}
+                          borderWidth={2}
+                          borderColor={item.color}
                           rounded="full"
-                          _text={{fontSize: 15}}>
-                          <Text style={style.badgeText}>{item.name}</Text>
+                          _text={{fontSize: 15, color: 'white'}}>
+                          {item.name}
                         </Badge>
                       </TouchableOpacity>
                     ) : (
@@ -507,8 +509,8 @@ const AddEvent = ({navigation}) => {
                           borderColor={item.color}
                           style={style.badgeStyle}
                           rounded="full"
-                          _text={{fontSize: 15}}>
-                          <Text style={style.badgeText}>{item.name}</Text>
+                          _text={{fontSize: 15, color: item.color}}>
+                          {item.name}
                         </Badge>
                       </TouchableOpacity>
                     )}
@@ -597,19 +599,12 @@ const styles = theme =>
     badgeStyle: {
       alignItems: 'center',
       alignContent: 'center',
-      height: 40,
+      height: 33,
     },
     unselectedBadgeStyle: {
       alignItems: 'center',
       alignContent: 'center',
       height: 40,
-    },
-    badgeText: {
-      color: 'black',
-      marginTop: 5,
-      marginLeft: 6,
-      fontFamily: 'Lora-Bold',
-      marginRight: 6,
     },
     uploadedImageContainer: {
       paddingVertical: 5,

@@ -6,6 +6,7 @@ import BG from '../public/images/Background.png';
 import useThemedStyles from '../hooks/useThemedStyles';
 import {useFocusEffect} from '@react-navigation/native';
 import EventCard from '../components/EventCard';
+import Header from '../components/Header';
 
 const Newsfeed = () => {
   const style = useThemedStyles(styles);
@@ -34,23 +35,15 @@ const Newsfeed = () => {
     }, []),
   );
 
-  const getSuggestedEvents = currEvent => {
-    return events.filter(event => event.id !== currEvent.id);
-  };
-
   return (
     <SafeAreaView>
+      <Header showSearchIcon={true} />
       <ImageBackground source={BG} style={style.bgImageContainer}>
         <View style={style.innerContainer}>
           <Text style={style.eventsText}>Events Near You :</Text>
           <FlatList
             data={events}
-            renderItem={item => (
-              <EventCard
-                event={item.item}
-                suggestedEvents={getSuggestedEvents(item.item)}
-              />
-            )}
+            renderItem={item => <EventCard event={item.item} />}
             keyExtractor={item => item.id}
             scrollEnabled
             ListEmptyComponent={<Text>No events found</Text>}
@@ -73,6 +66,7 @@ const styles = theme =>
     innerContainer: {
       paddingTop: 20,
       paddingHorizontal: 15,
+      marginBottom: 150,
     },
     eventsText: {
       fontSize: theme.typography.size.M,

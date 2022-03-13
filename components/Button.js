@@ -13,6 +13,7 @@ const Button = ({
   styleForButtonContainer,
   onPress,
   isLoading = false,
+  disabled = false,
 }) => {
   const themedStyle = useThemedStyles(styles);
   const btnContainerStyle = StyleSheet.compose(
@@ -25,7 +26,7 @@ const Button = ({
     <TouchableOpacity
       onPress={onPress}
       style={btnContainerStyle}
-      disabled={isLoading}>
+      disabled={isLoading || disabled}>
       {!isLoading ? (
         <Text style={btnStyle}>{title}</Text>
       ) : (

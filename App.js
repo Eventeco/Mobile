@@ -8,7 +8,6 @@ import HomeNavigation from './navigation/HomeNavigation';
 import axios from './axios';
 import {useStateValue} from './StateProvider/StateProvider';
 import {SET_USER} from './constants/reducer';
-import Header from './components/Header';
 import SCREENS from './constants/screens';
 import SplashScreen from './screens/SplashScreen';
 
@@ -47,7 +46,7 @@ const App = () => {
       <Stack.Navigator
         initialRouteName={SCREENS.LOGIN}
         screenOptions={{
-          header: () => <Header />,
+          headerShown: false,
         }}>
         {!user ? (
           <>
