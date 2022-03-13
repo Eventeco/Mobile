@@ -1,5 +1,10 @@
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
 import useThemedStyles from '../hooks/useThemedStyles';
 
 const Button = ({
@@ -7,6 +12,7 @@ const Button = ({
   styleForButton,
   styleForButtonContainer,
   onPress,
+  isLoading = false,
   disabled = false,
 }) => {
   const themedStyle = useThemedStyles(styles);
@@ -20,8 +26,12 @@ const Button = ({
     <TouchableOpacity
       onPress={onPress}
       style={btnContainerStyle}
-      disabled={disabled}>
-      <Text style={btnStyle}>{title}</Text>
+      disabled={isLoading || disabled}>
+      {!isLoading ? (
+        <Text style={btnStyle}>{title}</Text>
+      ) : (
+        <ActivityIndicator size="large" color="white" />
+      )}
     </TouchableOpacity>
   );
 };

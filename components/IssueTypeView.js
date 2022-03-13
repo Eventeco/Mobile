@@ -38,7 +38,8 @@ const styles = theme =>
     container: {
       paddingVertical: 2,
       marginRight: 5,
-      borderRadius: 50,
+      borderRadius: 10,
+      overflow: 'visible'
     },
     text: {
       color: 'black',

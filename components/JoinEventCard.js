@@ -211,6 +211,9 @@ const styles = theme =>
       fontFamily: 'Lora-Bold',
       marginTop: 2,
     },
+    subinfoContainer: {
+      flexDirection: 'row',
+    },
     locationContainer: {
       flexDirection: 'row',
       justifyContent: 'space-between',
@@ -219,7 +222,6 @@ const styles = theme =>
     },
     locationLeft: {
       flexDirection: 'row',
-      justifyContent: 'space-between',
       alignItems: 'center',
     },
     locationText: {
@@ -231,7 +233,11 @@ const styles = theme =>
     },
     eventIssuess: {
       flexDirection: 'row',
-      marginLeft: 20,
+      width: 1,
+      marginTop: 5,
+      display: 'flex',
+      overflow: 'scroll',
+      marginLeft: 10,
     },
     rulesContainer: {
       marginTop: '2%',
