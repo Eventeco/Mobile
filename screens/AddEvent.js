@@ -22,14 +22,15 @@ import Button from '../components/Button';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {getDayAndDate, getTime} from '../helper';
 import {differenceInDays, differenceInMinutes, isBefore} from 'date-fns';
+import GooglePlacesInput from '../components/GooglePlacesInput';
+import SCREENS from '../constants/screens';
 
-const AddEvent = () => {
+const AddEvent = ({navigation}) => {
   const style = useThemedStyles(styles);
   const [selectedThemes, setSelectedThemes] = useState([]);
   const [themes, setThemes] = useState([]);
   const [coverPhoto, setCoverPhoto] = useState(null);
   const [eventPhotos, setEventPhotos] = useState([]);
-  const [__, setUpdate] = useState(true);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [rules, setRules] = useState([]);
@@ -45,6 +46,8 @@ const AddEvent = () => {
   const [mode, setMode] = useState('date');
   const [startTimePickerShow, setStartTimePickerShow] = useState(false);
   const [endTimePickerShow, setEndTimePickerShow] = useState(false);
+  const [location, setLocation] = useState();
+  const [loading, setLoading] = useState(false);
 
   const onDateTimePickerChange = (_, selectedDate, type) => {
     if (type === 'start') {
@@ -100,31 +103,34 @@ const AddEvent = () => {
 
   const handleChooseCoverPhoto = () => {
     launchImageLibrary({includeBase64: true, mediaType: 'photo'}, response => {
-      if (response && response?.assets[0]?.fileSize < 5200000) {
-        setCoverPhoto(response.assets[0]);
-      } else {
-        setIsAlertOpen(true);
-        setAlertTitle('Image File Size Exceeded');
-        setAlertText(
-          'You cannot upload images with file size greater than 5MBs',
-        );
+      if (response && response.assets) {
+        if (response?.assets[0]?.fileSize < 5200000) {
+          setCoverPhoto(response?.assets[0]);
+        } else {
+          setIsAlertOpen(true);
+          setAlertTitle('Image File Size Exceeded');
+          setAlertText(
+            'You cannot upload images with file size greater than 5MBs',
+          );
+        }
       }
     });
   };
 
   const uploadPictures = () => {
     launchImageLibrary({includeBase64: true, mediaType: 'photo'}, response => {
-      if (response && response?.assets[0]?.fileSize < 5200000) {
-        setEventPhotos(prevState => {
-          return [...prevState, response.assets[0]];
-        });
-        setUpdate(!__);
-      } else {
-        setIsAlertOpen(true);
-        setAlertTitle('Image File Size Exceeded');
-        setAlertText(
-          'You cannot upload images with file size greater than 5MBs',
-        );
+      if (response && response.assets) {
+        if (response?.assets[0]?.fileSize < 5200000) {
+          setEventPhotos(prevState => {
+            return [...prevState, response?.assets[0]];
+          });
+        } else {
+          setIsAlertOpen(true);
+          setAlertTitle('Image File Size Exceeded');
+          setAlertText(
+            'You cannot upload images with file size greater than 5MBs',
+          );
+        }
       }
     });
   };
@@ -133,14 +139,12 @@ const AddEvent = () => {
     setEventPhotos(prevState => {
       return prevState.filter((_, i) => i !== index);
     });
-    setUpdate(!__);
   };
 
   const unselectThemeAction = id => {
     setSelectedThemes(prevState => {
       return prevState.filter(themeId => themeId !== id);
     });
-    setUpdate(!__);
   };
 
   const alertCloseHandler = () => {
@@ -231,7 +235,7 @@ const AddEvent = () => {
       setAlertText('Maximum participants cannot be 0');
       return;
     }
-    if (maxParticipants <= minParticipants) {
+    if (maxParticipants && maxParticipants <= minParticipants) {
       setIsAlertOpen(true);
       setAlertTitle('Participant Upper Limit Error');
       setAlertText(
@@ -253,8 +257,12 @@ const AddEvent = () => {
       setAlertText('Event must last at least 30 minutes');
       return;
     }
-
-    //location check, rules check to be added
+    if (!location) {
+      setIsAlertOpen(true);
+      setAlertTitle('Event Location Required');
+      setAlertText('Please enter a location for the event');
+      return;
+    }
 
     const eventPhotosBase64 = eventPhotos.map(photo => photo.base64);
     const postData = {
@@ -267,13 +275,27 @@ const AddEvent = () => {
       rules,
       starttime: startTime,
       endtime: endTime,
+      location: location.description,
+      latitude: location.lat,
+      longitude: location.lng,
     };
 
     if (maxParticipants) {
       postData.maxParticipants = +maxParticipants;
     }
 
-    // console.log(postData);
+    setLoading(true);
+
+    try {
+      const result = await axios.post('/events', postData);
+      if (result.data.success) {
+        navigation.navigate(SCREENS.VIEW_EVENT, {event: result.data.data});
+      }
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -302,8 +324,8 @@ const AddEvent = () => {
           <View style={style.descriptionInput}>
             <Text style={style.fieldText}>Description*</Text>
             <TextArea
-              borderColor="black"
               placeholder={'Description of the event'}
+              backgroundColor="white"
               value={description}
               onChangeText={text => setDescription(text)}
             />
@@ -312,7 +334,7 @@ const AddEvent = () => {
             <Text style={style.fieldText}>Participant Limit</Text>
             <View style={style.participantLimitContainer}>
               <View style={style.limitContainer}>
-                <Text>Min</Text>
+                <Text>Min*</Text>
                 <TextInput
                   placeholder="Min"
                   keyboardType="numeric"
@@ -454,10 +476,12 @@ const AddEvent = () => {
             <TouchableOpacity style={style.locationIcon}>
               <Image source={LocationIcon} />
             </TouchableOpacity>
-            <TextInput placeholder={'Enter the location'} />
+            <View style={style.placesContainer}>
+              <GooglePlacesInput setLocation={setLocation} />
+            </View>
           </View>
           <View style={style.selectThemes}>
-            <Text style={style.fieldText}>Select Event Theme(s):</Text>
+            <Text style={style.fieldText}>Select Event Theme(s)*:</Text>
             <View style={style.themesContainer}>
               {themes.length > 0 &&
                 themes.map(item => (
@@ -498,6 +522,7 @@ const AddEvent = () => {
           styleForButtonContainer={style.btnContainer}
           styleForButton={style.btn}
           onPress={handleSubmit}
+          isLoading={loading}
         />
       </ScrollView>
     </TouchableWithoutFeedback>
@@ -548,9 +573,12 @@ const styles = theme =>
       height: 30,
       alignItems: 'center',
       width: '90%',
+      position: 'relative',
+      marginTop: '5%',
     },
     locationIcon: {
-      marginRight: 9,
+      position: 'absolute',
+      top: '50%',
     },
     selectThemes: {
       marginTop: 30,
@@ -652,8 +680,8 @@ const styles = theme =>
       marginVertical: '2%',
     },
     ruleText: {
-      fontSize: theme.typography.size.S,
-      fontFamily: 'Lora-SemiBold',
+      fontSize: theme.typography.size.XS,
+      fontFamily: 'Lora-Medium',
     },
     participantLimitContainer: {
       flexDirection: 'row',
@@ -679,5 +707,12 @@ const styles = theme =>
     },
     timingInput: {
       width: '45%',
+    },
+    placesContainer: {
+      height: 200,
+      position: 'absolute',
+      top: 0,
+      right: 0,
+      left: 20,
     },
   });

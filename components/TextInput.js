@@ -4,7 +4,7 @@ import {Input} from 'native-base';
 const TextInput = props => {
   return (
     <Input
-      borderColor="black"
+      backgroundColor="white"
       placeholder={props.placeholder || 'Enter the name of the event'}
       _focus={{borderColor: 'green.500'}}
       width="100%"
