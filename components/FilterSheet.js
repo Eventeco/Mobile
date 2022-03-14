@@ -1,45 +1,14 @@
 import React, {useState} from 'react';
 import {Actionsheet, Box, Text, Input, Badge, Radio, Switch} from 'native-base';
 import {TouchableOpacity} from 'react-native';
+import {useStateValue} from '../StateProvider/StateProvider';
 
 const FilterSheet = ({isOpen, onClose}) => {
   const [issue, setIssue] = useState(['Deforestation']);
   const [type, setType] = useState('one');
   const [donation, setDonation] = useState(false);
-  const issues = [
-    {
-      color: 'green.300',
-      name: 'Deforestation',
-    },
-    {
-      color: 'blue.300',
-      name: 'Pollution',
-    },
-    {
-      color: 'yellow.300',
-      name: 'Climate',
-    },
-    {
-      color: 'red.300',
-      name: 'Poverty',
-    },
-    {
-      color: 'indigo.300',
-      name: 'Education',
-    },
-    {
-      color: 'orange.300',
-      name: 'Hunger',
-    },
-    {
-      color: 'lime.300',
-      name: 'Energy',
-    },
-    {
-      color: 'fuchsia.300',
-      name: 'Wildlife',
-    },
-  ];
+
+  const [{issues}] = useStateValue();
 
   const removeIssue = item => {
     const indexRemove = issue.indexOf(item);

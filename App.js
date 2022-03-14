@@ -2,12 +2,11 @@ import React, {useEffect, useState} from 'react';
 import Login from './screens/Login';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import { NativeBaseProvider } from 'native-base';
 import Register from './screens/Register';
 import HomeNavigation from './navigation/HomeNavigation';
 import axios from './axios';
 import {useStateValue} from './StateProvider/StateProvider';
-import {SET_USER} from './constants/reducer';
+import {SET_ISSUES, SET_USER} from './constants/reducer';
 import SCREENS from './constants/screens';
 import SplashScreen from './screens/SplashScreen';
 
@@ -33,7 +32,20 @@ const App = () => {
       }
     };
 
+    const getIssues = async () => {
+      try {
+        const res = await axios.get('/issueTypes');
+        dispatch({
+          type: SET_ISSUES,
+          data: res.data.data,
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
     getLoginStatus();
+    getIssues();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

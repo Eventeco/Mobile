@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import useThemedStyles from '../hooks/useThemedStyles';
 import AddImageBtn from '../public/icons/add-image-btn.png';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import UploadPicturesBtn from '../public/icons/upload-btn.png';
 import LocationIcon from '../public/icons/location.png';
 import TextInput from '../components/TextInput';
@@ -26,11 +26,13 @@ import GooglePlacesInput from '../components/GooglePlacesInput';
 import SCREENS from '../constants/screens';
 import Header from '../components/Header';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {useStateValue} from '../StateProvider/StateProvider';
 
 const AddEvent = ({navigation}) => {
   const style = useThemedStyles(styles);
+  const [{issues}] = useStateValue();
+
   const [selectedThemes, setSelectedThemes] = useState([]);
-  const [themes, setThemes] = useState([]);
   const [coverPhoto, setCoverPhoto] = useState(null);
   const [eventPhotos, setEventPhotos] = useState([]);
   const [name, setName] = useState('');
@@ -83,19 +85,6 @@ const AddEvent = ({navigation}) => {
   const showTimepicker = type => {
     showMode('time', type);
   };
-
-  useEffect(() => {
-    const getIssueTypes = async () => {
-      try {
-        const res = await axios.get('/issueTypes');
-        setThemes(res.data.data);
-      } catch (e) {
-        console.log(e);
-      }
-    };
-
-    getIssueTypes();
-  }, []);
 
   const selectThemeAction = id => {
     setSelectedThemes(prevState => {
@@ -502,8 +491,8 @@ const AddEvent = ({navigation}) => {
             <View style={style.selectThemes}>
               <Text style={style.fieldText}>Select Event Theme(s)*:</Text>
               <View style={style.themesContainer}>
-                {themes.length > 0 &&
-                  themes.map(item => (
+                {issues.length > 0 &&
+                  issues.map(item => (
                     <View style={style.themeBtn} key={item.id}>
                       {selectedThemes.length > 0 &&
                       selectedThemes.includes(item.id) ? (
