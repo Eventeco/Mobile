@@ -10,7 +10,7 @@ import SearchIcon from '../public/icons/search-icon.png'
 import FilterIcon from '../public/icons/filter-icon.png'
 import FilterSheet from './FilterSheet';
 
-const Header = ({showBackButton = false, showSearchIcon = false}) => {
+const Header = ({showBackButton = false, showSearchIcon = false, setQueryParams}) => {
   const style = useThemedStyles(styles);
 
   const navigation = useNavigation();
@@ -48,14 +48,14 @@ const Header = ({showBackButton = false, showSearchIcon = false}) => {
             <Image source={BackIcon} style={style.backImage} />
           </TouchableOpacity>
           <View width="90%" style={style.inputField}>
-            <Input size="lg" />
+            <Input value={searchText} onChangeText={setSearchText} size="lg" />
           </View>
           <TouchableOpacity onPress={onOpen}>
             <View style={style.filterIcon}>
               <Image source={FilterIcon} resizeMode="cover" />
             </View>
           </TouchableOpacity>
-          <FilterSheet isOpen={isOpen} onClose={onClose} />
+          <FilterSheet setQueryParams={setQueryParams} name={searchText} setName={setSearchText} isOpen={isOpen} onClose={onClose} />
         </View>
       )}
       {showSearchIcon && (

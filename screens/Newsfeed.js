@@ -12,13 +12,14 @@ const Newsfeed = () => {
   const style = useThemedStyles(styles);
 
   const [events, setEvents] = useState([]);
+  const [queryParams, setQueryParams] = useState({})
 
   useFocusEffect(
     useCallback(() => {
       let isActive = true;
       const fetchEvents = async () => {
         try {
-          const result = await axios.get('/events');
+          const result = await axios.get('/events?issues=2', { params: queryParams });
           if (isActive) {
             setEvents(result.data.data);
           }
@@ -32,12 +33,12 @@ const Newsfeed = () => {
       return () => {
         isActive = false;
       };
-    }, []),
+    }, [queryParams]),
   );
 
   return (
     <SafeAreaView>
-      <Header showSearchIcon={true} />
+      <Header showSearchIcon={true} setQueryParams={setQueryParams} />
       <ImageBackground source={BG} style={style.bgImageContainer}>
         <View style={style.innerContainer}>
           <Text style={style.eventsText}>Events Near You :</Text>
