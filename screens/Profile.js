@@ -7,8 +7,7 @@ import {useStateValue} from '../StateProvider/StateProvider';
 import {SET_USER} from '../constants/reducer';
 import Button from '../components/Button';
 
-const Profile = () => {
-
+const Profile = ({navigation}) => {
   const style = useThemedStyles(styles);
   const [, dispatch] = useStateValue();
 

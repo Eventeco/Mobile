@@ -24,6 +24,8 @@ import {getDayAndDate, getTime} from '../helper';
 import {differenceInDays, differenceInMinutes, isBefore} from 'date-fns';
 import GooglePlacesInput from '../components/GooglePlacesInput';
 import SCREENS from '../constants/screens';
+import Header from '../components/Header';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const AddEvent = ({navigation}) => {
   const style = useThemedStyles(styles);
@@ -102,19 +104,22 @@ const AddEvent = ({navigation}) => {
   };
 
   const handleChooseCoverPhoto = () => {
-    launchImageLibrary({includeBase64: true, mediaType: 'photo'}, response => {
-      if (response && response.assets) {
-        if (response?.assets[0]?.fileSize < 5200000) {
-          setCoverPhoto(response?.assets[0]);
-        } else {
-          setIsAlertOpen(true);
-          setAlertTitle('Image File Size Exceeded');
-          setAlertText(
-            'You cannot upload images with file size greater than 5MBs',
-          );
+    launchImageLibrary(
+      {includeBase64: true, mediaType: 'photo', quality: 0.5},
+      response => {
+        if (response && response.assets) {
+          if (response?.assets[0]?.fileSize < 5200000) {
+            setCoverPhoto(response?.assets[0]);
+          } else {
+            setIsAlertOpen(true);
+            setAlertTitle('Image File Size Exceeded');
+            setAlertText(
+              'You cannot upload images with file size greater than 5MBs',
+            );
+          }
         }
-      }
-    });
+      },
+    );
   };
 
   const uploadPictures = () => {
@@ -299,235 +304,250 @@ const AddEvent = ({navigation}) => {
   };
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <ScrollView style={style.pageContainer}>
-        <View style={style.addImageBtn}>
-          <TouchableOpacity onPress={() => handleChooseCoverPhoto()}>
-            {coverPhoto?.uri ? (
-              <Image source={{uri: coverPhoto.uri}} style={style.coverPhoto} />
-            ) : (
-              <Image source={AddImageBtn} width={100} />
-            )}
-          </TouchableOpacity>
-          <Alert
-            alertTitle={alertTitle}
-            alertText={alertText}
-            onClose={alertCloseHandler}
-            isOpen={isAlertOpen}
-          />
-        </View>
-        <View style={style.formContainer}>
-          <View style={style.nameInput}>
-            <Text style={style.fieldText}>Name of the Event*</Text>
-            <TextInput value={name} onChangeText={text => setName(text)} />
-          </View>
-          <View style={style.descriptionInput}>
-            <Text style={style.fieldText}>Description*</Text>
-            <TextArea
-              placeholder={'Description of the event'}
-              backgroundColor="white"
-              value={description}
-              onChangeText={text => setDescription(text)}
-            />
-          </View>
-          <View style={style.descriptionInput}>
-            <Text style={style.fieldText}>Participant Limit</Text>
-            <View style={style.participantLimitContainer}>
-              <View style={style.limitContainer}>
-                <Text>Min*</Text>
-                <TextInput
-                  placeholder="Min"
-                  keyboardType="numeric"
-                  {...style.limitInput}
-                  onChangeText={text => participantOnChangeHandler('min', text)}
-                  value={minParticipants}
-                />
-              </View>
-              <View style={style.limitContainer}>
-                <Text>Max</Text>
-                <TextInput
-                  placeholder="Max"
-                  keyboardType="numeric"
-                  {...style.limitInput}
-                  onChangeText={text => participantOnChangeHandler('max', text)}
-                  value={maxParticipants}
-                />
-              </View>
-            </View>
-          </View>
-          <View style={style.descriptionInput}>
-            <Text style={style.fieldText}>Event Timing*</Text>
-            <View style={style.timingContainer}>
-              <Text>Start Time</Text>
-              <View style={style.timingInputContainer}>
-                <TextInput
-                  onPressIn={() => showDatepicker('start')}
-                  showSoftInputOnFocus={false}
-                  placeholder="Start Date"
-                  value={getDayAndDate(startTime)}
-                  {...style.timingInput}
-                />
-                <TextInput
-                  onPressIn={() => showTimepicker('start')}
-                  showSoftInputOnFocus={false}
-                  placeholder="Start Time"
-                  value={getTime(startTime)}
-                  {...style.timingInput}
-                />
-              </View>
-            </View>
-            <View style={style.timingContainer}>
-              <Text>End Time</Text>
-              <View style={style.timingInputContainer}>
-                <TextInput
-                  onPressIn={() => showDatepicker('end')}
-                  showSoftInputOnFocus={false}
-                  placeholder="End Date"
-                  value={getDayAndDate(endTime)}
-                  {...style.timingInput}
-                />
-                <TextInput
-                  onPressIn={() => showTimepicker('end')}
-                  showSoftInputOnFocus={false}
-                  placeholder="End Time"
-                  value={getTime(endTime)}
-                  {...style.timingInput}
-                />
-              </View>
-            </View>
-            {startTimePickerShow && (
-              <DateTimePicker
-                testID="dateTimePicker"
-                value={startTime}
-                mode={mode}
-                is24Hour={true}
-                onChange={(e, date) => onDateTimePickerChange(e, date, 'start')}
-                minimumDate={new Date()}
-              />
-            )}
-            {endTimePickerShow && (
-              <DateTimePicker
-                testID="dateTimePicker"
-                value={endTime}
-                mode={mode}
-                is24Hour={true}
-                onChange={(e, date) => onDateTimePickerChange(e, date, 'end')}
-                minimumDate={new Date()}
-              />
-            )}
-          </View>
-          <View style={style.descriptionInput}>
-            <Text style={style.fieldText}>Rules for the Event*</Text>
-            {rules.length > 0 &&
-              rules.map((item, index) => (
-                <View key={index} style={style.ruleContainer}>
-                  <Text style={style.ruleText}>
-                    {'\u2022'}&nbsp;&nbsp;{item}
-                  </Text>
-                  <TouchableOpacity onPress={() => deleteRuleHandler(index)}>
-                    <Image source={TrashCan} width={10} />
-                  </TouchableOpacity>
-                </View>
-              ))}
-            <Button
-              title="Add Rule"
-              styleForButtonContainer={style.addRuleBtnContainer}
-              styleForButton={style.addRuleBtn}
-              onPress={() => setIsRuleAlertOpen(true)}
-            />
-            <Alert
-              alertTitle="Add Rules"
-              onClose={ruleAlertCloseHandler}
-              isOpen={isRuleAlertOpen}>
-              <TextArea
-                borderColor="black"
-                placeholder="Add Rule"
-                value={rule}
-                onChangeText={text => setRule(text)}
-              />
-              <Button
-                title="ADD"
-                styleForButtonContainer={style.addRuleAlertBtnContainer}
-                styleForButton={style.addRuleAlertBtn}
-                onPress={() => addRuleHandler(rule)}
-              />
-            </Alert>
-          </View>
-          <View style={style.uploadPictures}>
-            <Text style={style.fieldText}>Upload Pictures:</Text>
-            <TouchableOpacity onPress={() => uploadPictures()}>
-              <Image source={UploadPicturesBtn} />
-            </TouchableOpacity>
-          </View>
-          {eventPhotos.map((item, index) => (
-            <View style={style.uploadedImageContainer} key={index}>
-              <Image source={{uri: item.uri}} style={style.uploadedImage} />
-              <TouchableOpacity onPress={() => deleteEventPhoto(index)}>
+    <SafeAreaView>
+      <Header />
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <ScrollView
+          style={style.pageContainer}
+          keyboardShouldPersistTaps="handled">
+          <View style={style.addImageBtn}>
+            <TouchableOpacity onPress={() => handleChooseCoverPhoto()}>
+              {coverPhoto?.uri ? (
                 <Image
-                  source={TrashCan}
-                  resizeMode="cover"
-                  width={10}
-                  height={10}
+                  source={{uri: coverPhoto.uri}}
+                  style={style.coverPhoto}
                 />
-              </TouchableOpacity>
-            </View>
-          ))}
-          <View style={style.locationInput}>
-            <TouchableOpacity style={style.locationIcon}>
-              <Image source={LocationIcon} />
+              ) : (
+                <Image source={AddImageBtn} width={100} />
+              )}
             </TouchableOpacity>
-            <View style={style.placesContainer}>
-              <GooglePlacesInput setLocation={setLocation} />
-            </View>
+            <Alert
+              alertTitle={alertTitle}
+              alertText={alertText}
+              onClose={alertCloseHandler}
+              isOpen={isAlertOpen}
+            />
           </View>
-          <View style={style.selectThemes}>
-            <Text style={style.fieldText}>Select Event Theme(s)*:</Text>
-            <View style={style.themesContainer}>
-              {themes.length > 0 &&
-                themes.map(item => (
-                  <View style={style.themeBtn} key={item.id}>
-                    {selectedThemes.length > 0 &&
-                    selectedThemes.includes(item.id) ? (
-                      <TouchableOpacity
-                        onPress={() => unselectThemeAction(item.id)}>
-                        <Badge
-                          bg={item.color}
-                          style={style.badgeStyle}
-                          borderWidth={2}
-                          borderColor={item.color}
-                          rounded="full"
-                          _text={{fontSize: 15, color: 'white'}}>
-                          {item.name}
-                        </Badge>
-                      </TouchableOpacity>
-                    ) : (
-                      <TouchableOpacity
-                        onPress={() => selectThemeAction(item.id)}>
-                        <Badge
-                          variant={'outline'}
-                          borderWidth={2}
-                          borderColor={item.color}
-                          style={style.badgeStyle}
-                          rounded="full"
-                          _text={{fontSize: 15, color: item.color}}>
-                          {item.name}
-                        </Badge>
-                      </TouchableOpacity>
-                    )}
+          <View style={style.formContainer}>
+            <View style={style.nameInput}>
+              <Text style={style.fieldText}>Name of the Event*</Text>
+              <TextInput value={name} onChangeText={text => setName(text)} />
+            </View>
+            <View style={style.descriptionInput}>
+              <Text style={style.fieldText}>Description*</Text>
+              <TextArea
+                placeholder={'Description of the event'}
+                backgroundColor="white"
+                value={description}
+                onChangeText={text => setDescription(text)}
+                maxHeight={100}
+              />
+            </View>
+            <View style={style.descriptionInput}>
+              <Text style={style.fieldText}>Participant Limit</Text>
+              <View style={style.participantLimitContainer}>
+                <View style={style.limitContainer}>
+                  <Text>Min*</Text>
+                  <TextInput
+                    placeholder="Min"
+                    keyboardType="numeric"
+                    {...style.limitInput}
+                    onChangeText={text =>
+                      participantOnChangeHandler('min', text)
+                    }
+                    value={minParticipants}
+                  />
+                </View>
+                <View style={style.limitContainer}>
+                  <Text>Max</Text>
+                  <TextInput
+                    placeholder="Max"
+                    keyboardType="numeric"
+                    {...style.limitInput}
+                    onChangeText={text =>
+                      participantOnChangeHandler('max', text)
+                    }
+                    value={maxParticipants}
+                  />
+                </View>
+              </View>
+            </View>
+            <View style={style.descriptionInput}>
+              <Text style={style.fieldText}>Event Timing*</Text>
+              <View style={style.timingContainer}>
+                <Text>Start Time</Text>
+                <View style={style.timingInputContainer}>
+                  <TextInput
+                    onPressIn={() => showDatepicker('start')}
+                    showSoftInputOnFocus={false}
+                    placeholder="Start Date"
+                    value={getDayAndDate(startTime)}
+                    {...style.timingInput}
+                  />
+                  <TextInput
+                    onPressIn={() => showTimepicker('start')}
+                    showSoftInputOnFocus={false}
+                    placeholder="Start Time"
+                    value={getTime(startTime)}
+                    {...style.timingInput}
+                  />
+                </View>
+              </View>
+              <View style={style.timingContainer}>
+                <Text>End Time</Text>
+                <View style={style.timingInputContainer}>
+                  <TextInput
+                    onPressIn={() => showDatepicker('end')}
+                    showSoftInputOnFocus={false}
+                    placeholder="End Date"
+                    value={getDayAndDate(endTime)}
+                    {...style.timingInput}
+                  />
+                  <TextInput
+                    onPressIn={() => showTimepicker('end')}
+                    showSoftInputOnFocus={false}
+                    placeholder="End Time"
+                    value={getTime(endTime)}
+                    {...style.timingInput}
+                  />
+                </View>
+              </View>
+              {startTimePickerShow && (
+                <DateTimePicker
+                  testID="dateTimePicker"
+                  value={startTime}
+                  mode={mode}
+                  is24Hour={true}
+                  onChange={(e, date) =>
+                    onDateTimePickerChange(e, date, 'start')
+                  }
+                  minimumDate={new Date()}
+                />
+              )}
+              {endTimePickerShow && (
+                <DateTimePicker
+                  testID="dateTimePicker"
+                  value={endTime}
+                  mode={mode}
+                  is24Hour={true}
+                  onChange={(e, date) => onDateTimePickerChange(e, date, 'end')}
+                  minimumDate={new Date()}
+                />
+              )}
+            </View>
+            <View style={style.descriptionInput}>
+              <Text style={style.fieldText}>Rules for the Event*</Text>
+              {rules.length > 0 &&
+                rules.map((item, index) => (
+                  <View key={index} style={style.ruleContainer}>
+                    <Text style={style.ruleText}>
+                      {'\u2022'}&nbsp;&nbsp;{item}
+                    </Text>
+                    <TouchableOpacity onPress={() => deleteRuleHandler(index)}>
+                      <Image source={TrashCan} width={10} />
+                    </TouchableOpacity>
                   </View>
                 ))}
+              <Button
+                title="Add Rule"
+                styleForButtonContainer={style.addRuleBtnContainer}
+                styleForButton={style.addRuleBtn}
+                onPress={() => setIsRuleAlertOpen(true)}
+              />
+              <Alert
+                alertTitle="Add Rules"
+                onClose={ruleAlertCloseHandler}
+                isOpen={isRuleAlertOpen}>
+                <TextArea
+                  borderColor="black"
+                  placeholder="Add Rule"
+                  value={rule}
+                  onChangeText={text => setRule(text)}
+                />
+                <Button
+                  title="ADD"
+                  styleForButtonContainer={style.addRuleAlertBtnContainer}
+                  styleForButton={style.addRuleAlertBtn}
+                  onPress={() => addRuleHandler(rule)}
+                />
+              </Alert>
+            </View>
+            <View style={style.uploadPictures}>
+              <Text style={style.fieldText}>Upload Pictures:</Text>
+              <TouchableOpacity onPress={() => uploadPictures()}>
+                <Image source={UploadPicturesBtn} />
+              </TouchableOpacity>
+            </View>
+            {eventPhotos.map((item, index) => (
+              <View style={style.uploadedImageContainer} key={index}>
+                <Image source={{uri: item.uri}} style={style.uploadedImage} />
+                <TouchableOpacity onPress={() => deleteEventPhoto(index)}>
+                  <Image
+                    source={TrashCan}
+                    resizeMode="cover"
+                    width={10}
+                    height={10}
+                  />
+                </TouchableOpacity>
+              </View>
+            ))}
+            <View style={style.locationInput}>
+              <TouchableOpacity style={style.locationIcon}>
+                <Image source={LocationIcon} />
+              </TouchableOpacity>
+              <View style={style.placesContainer}>
+                <GooglePlacesInput setLocation={setLocation} />
+              </View>
+            </View>
+            <View style={style.selectThemes}>
+              <Text style={style.fieldText}>Select Event Theme(s)*:</Text>
+              <View style={style.themesContainer}>
+                {themes.length > 0 &&
+                  themes.map(item => (
+                    <View style={style.themeBtn} key={item.id}>
+                      {selectedThemes.length > 0 &&
+                      selectedThemes.includes(item.id) ? (
+                        <TouchableOpacity
+                          onPress={() => unselectThemeAction(item.id)}>
+                          <Badge
+                            bg={item.color}
+                            style={style.badgeStyle}
+                            borderWidth={2}
+                            borderColor={item.color}
+                            rounded="full"
+                            _text={{fontSize: 15, color: 'white'}}>
+                            {item.name}
+                          </Badge>
+                        </TouchableOpacity>
+                      ) : (
+                        <TouchableOpacity
+                          onPress={() => selectThemeAction(item.id)}>
+                          <Badge
+                            variant={'outline'}
+                            borderWidth={2}
+                            borderColor={item.color}
+                            style={style.badgeStyle}
+                            rounded="full"
+                            _text={{fontSize: 15, color: item.color}}>
+                            {item.name}
+                          </Badge>
+                        </TouchableOpacity>
+                      )}
+                    </View>
+                  ))}
+              </View>
             </View>
           </View>
-        </View>
-        <Button
-          title="CREATE EVENT"
-          styleForButtonContainer={style.btnContainer}
-          styleForButton={style.btn}
-          onPress={handleSubmit}
-          isLoading={loading}
-        />
-      </ScrollView>
-    </TouchableWithoutFeedback>
+          <Button
+            title="CREATE EVENT"
+            styleForButtonContainer={style.btnContainer}
+            styleForButton={style.btn}
+            onPress={handleSubmit}
+            isLoading={loading}
+          />
+        </ScrollView>
+      </TouchableWithoutFeedback>
+    </SafeAreaView>
   );
 };
 
@@ -623,6 +643,7 @@ const styles = theme =>
     btnContainer: {
       backgroundColor: theme.colors.GREEN_400,
       width: '80%',
+      marginBottom: '20%',
       borderRadius: 10,
       alignSelf: 'center',
       paddingVertical: 5,
@@ -634,7 +655,6 @@ const styles = theme =>
       },
       shadowOpacity: 0.25,
       shadowRadius: 3.84,
-
       elevation: 5,
     },
     btn: {
@@ -677,6 +697,7 @@ const styles = theme =>
     ruleText: {
       fontSize: theme.typography.size.XS,
       fontFamily: 'Lora-Medium',
+      maxWidth: '90%',
     },
     participantLimitContainer: {
       flexDirection: 'row',

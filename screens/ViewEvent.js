@@ -1,5 +1,5 @@
-import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
-import React, {useCallback, useState} from 'react';
+import {Image, ScrollView, StyleSheet, Text, View, Alert} from 'react-native';
+import React, {useCallback, useState, useEffect} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import useThemedStyles from '../hooks/useThemedStyles';
 import CustomCarousel from '../components/CustomCarousel';
@@ -10,21 +10,34 @@ import {getDayAndDate, getTimeAndTimezone} from '../helper';
 import IssueTypeView from '../components/IssueTypeView';
 import SmallEventCard from '../components/SmallEventCard';
 import {Dimensions} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
 import Button from '../components/Button';
 import {useFocusEffect} from '@react-navigation/native';
 import axios from '../axios';
 import SCREENS from '../constants/screens';
 import Header from '../components/Header';
+import {BASE_URL} from '../constants';
+import useTheme from '../hooks/useTheme';
+import {useStateValue} from '../StateProvider/StateProvider';
 
 const windowWidth = Dimensions.get('window').width;
 
-const ViewEvent = ({route}) => {
+const ViewEvent = ({route, navigation}) => {
   const {event} = route.params;
-  const {user, issues} = event;
-  const images = Array(5).fill(event.picturepath);
+  const {user, issues, pictures} = event;
+  const themedStyles = useThemedStyles(styles);
+  const theme = useTheme();
 
+  const [{user: loggedInUser}] = useStateValue();
+
+  const images = [
+    event.picturepath,
+    ...pictures.map(picture => picture.picturepath),
+  ];
+
+  const [isParticipant, setIsParticipant] = useState(false);
   const [suggestedEvents, setSuggestedEvents] = useState([]);
+
+  const isEventCreator = event.creatorid === loggedInUser.id;
 
   useFocusEffect(
     useCallback(() => {
@@ -48,13 +61,35 @@ const ViewEvent = ({route}) => {
     }, [event.id]),
   );
 
-  const themedStyles = useThemedStyles(styles);
+  const styleForButtonContainer = StyleSheet.compose(
+    themedStyles.btnContainer,
+    {
+      backgroundColor: isParticipant ? '#aaa' : theme.colors.GREEN_400,
+    },
+  );
 
-  const navigation = useNavigation();
+  const styleForButton = StyleSheet.compose(themedStyles.btn, {
+    color: isParticipant ? 'black' : 'white',
+  });
+
+  useEffect(() => {
+    const fetchIsParticipantData = async () => {
+      try {
+        const res = await axios.get(
+          `/eventParticipants/isParticipant/${event.id}`,
+        );
+        setIsParticipant(res.data.data);
+      } catch (e) {
+        Alert.alert('Error', 'Something went wrong');
+      }
+    };
+
+    fetchIsParticipantData();
+  }, [event.id]);
 
   const renderImageItem = ({item}) => (
     <Image
-      source={{uri: item}}
+      source={{uri: `${BASE_URL}/eventPictures/key/${item}`}}
       style={themedStyles.imageItem}
       resizeMode="cover"
     />
@@ -115,11 +150,7 @@ const ViewEvent = ({route}) => {
           {issues.length > 0 && (
             <View style={themedStyles.issueTypesContainer}>
               {issues.map(issue => (
-                <IssueTypeView
-                  issueType={issue.name}
-                  key={issue.id}
-                  size="big"
-                />
+                <IssueTypeView issueType={issue} key={issue.id} size="big" />
               ))}
             </View>
           )}
@@ -136,12 +167,15 @@ const ViewEvent = ({route}) => {
             />
           </View>
         )}
-        <Button
-          title="JOIN EVENT"
-          styleForButtonContainer={themedStyles.btnContainer}
-          styleForButton={themedStyles.btn}
-          onPress={joinEventButtonHandler}
-        />
+        {!isEventCreator && (
+          <Button
+            title={!isParticipant ? 'JOIN EVENT' : 'ALREADY A PARTICIPANT'}
+            styleForButtonContainer={styleForButtonContainer}
+            styleForButton={styleForButton}
+            onPress={joinEventButtonHandler}
+            disabled={isParticipant}
+          />
+        )}
       </ScrollView>
     </SafeAreaView>
   );
@@ -186,7 +220,7 @@ const styles = theme =>
       textDecorationLine: 'underline',
     },
     scrollView: {
-      height: 100,
+      maxHeight: 100,
       marginVertical: 10,
     },
     scrollViewText: {
@@ -231,6 +265,7 @@ const styles = theme =>
       color: theme.colors.GRAY_200,
     },
     btnContainer: {
+      marginTop: 20,
       backgroundColor: theme.colors.GREEN_400,
       width: '80%',
       borderRadius: 10,

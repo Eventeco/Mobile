@@ -1,12 +1,13 @@
 import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {formatTimestamp} from '../helper';
+import {formatBigString, formatTimestamp} from '../helper';
 import useThemedStyles from '../hooks/useThemedStyles';
 import LocationIcon from '../public/icons/location.png';
 import ShareIcon from '../public/icons/share.png';
 import IssueTypeView from './IssueTypeView';
 import {useNavigation} from '@react-navigation/native';
 import SCREENS from '../constants/screens';
+import {BASE_URL} from '../constants';
 
 const EventCard = ({event, suggestedEvents}) => {
   const style = useThemedStyles(styles);
@@ -22,19 +23,24 @@ const EventCard = ({event, suggestedEvents}) => {
   return (
     event && (
       <TouchableOpacity style={style.container} onPress={onPressHandler}>
-        <Image source={{uri: event.picturepath}} style={style.image} />
+        <Image
+          source={{uri: `${BASE_URL}/eventPictures/key/${event.picturepath}`}}
+          style={style.image}
+        />
         <View style={style.innerContainer}>
           <Text style={style.nameText}>{event.name}</Text>
           <Text style={style.timeText}>{formatTimestamp(event.starttime)}</Text>
           <View style={style.footerContainer}>
             <View style={style.footerLeft}>
               <Image source={LocationIcon} />
-              <Text style={style.locationText}>{event.location}</Text>
+              <Text style={style.locationText}>
+                {formatBigString(event.location)}
+              </Text>
               {issues.length > 0 && (
                 <View style={style.footerIssues} horizontal>
                   {issues.map(issue => (
                     <View key={issue.id} style={style.issueContainer}>
-                      <IssueTypeView issueType={issue.name} />
+                      <IssueTypeView issueType={issue} />
                     </View>
                   ))}
                 </View>

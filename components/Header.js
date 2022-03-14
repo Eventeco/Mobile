@@ -5,24 +5,20 @@ import Logo from '../public/images/logo2.png';
 import {useStateValue} from '../StateProvider/StateProvider';
 import {useNavigation} from '@react-navigation/native';
 import BackIcon from '../public/icons/back.png';
-import { VStack, Heading, Input, Icon, Box, useDisclose } from 'native-base';
-import SearchIcon from '../public/icons/search-icon.png'
-import FilterIcon from '../public/icons/filter-icon.png'
+import {VStack, Heading, Input, Icon, Box, useDisclose} from 'native-base';
+import SearchIcon from '../public/icons/search-icon.png';
+import FilterIcon from '../public/icons/filter-icon.png';
 import FilterSheet from './FilterSheet';
 
 const Header = ({showBackButton = false, showSearchIcon = false}) => {
   const style = useThemedStyles(styles);
 
   const navigation = useNavigation();
-  const [searchMode, setSearchMode] = useState(false)
-  const [searchText, setSearchText] = useState('')
+  const [searchMode, setSearchMode] = useState(false);
+  const [searchText, setSearchText] = useState('');
   const [, dispatch] = useStateValue();
 
-  const {
-    isOpen,
-    onOpen,
-    onClose
-  } = useDisclose();
+  const {isOpen, onOpen, onClose} = useDisclose();
   const backPressHandler = () => {
     navigation.goBack();
   };
@@ -40,7 +36,7 @@ const Header = ({showBackButton = false, showSearchIcon = false}) => {
         <View style={style.imageContainer}>
           <Image source={Logo} resizeMode="cover" style={style.image} />
         </View>
-      ): (
+      ) : (
         <View width="85%" style={style.inputContainer}>
           <TouchableOpacity
             onPress={() => setSearchMode(false)}
@@ -61,7 +57,7 @@ const Header = ({showBackButton = false, showSearchIcon = false}) => {
       {showSearchIcon && (
         <View>
           <TouchableOpacity onPress={() => setSearchMode(true)}>
-            <Image source={SearchIcon} resizeMode="cover"/>
+            <Image source={SearchIcon} resizeMode="cover" />
           </TouchableOpacity>
         </View>
       )}
@@ -102,12 +98,12 @@ const styles = theme =>
     inputContainer: {
       flexDirection: 'row',
       alignItems: 'center',
-      justifyContent: 'space-between'
+      justifyContent: 'space-between',
     },
     filterIcon: {
-      marginLeft: 10
+      marginLeft: 10,
     },
     inputField: {
-      marginLeft: 10
-    }
+      marginLeft: 10,
+    },
   });

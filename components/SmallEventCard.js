@@ -1,12 +1,16 @@
 import {Image, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import React from 'react';
 import useThemedStyles from '../hooks/useThemedStyles';
+import {BASE_URL} from '../constants';
 
 const SmallEventCard = ({item, onPressHandler = () => {}}) => {
   const themedStyles = useThemedStyles(styles);
   return (
     <TouchableOpacity style={themedStyles.container} onPress={onPressHandler}>
-      <Image source={{uri: item.picturepath}} style={themedStyles.image} />
+      <Image
+        source={{uri: `${BASE_URL}/eventPictures/key/${item.picturepath}`}}
+        style={themedStyles.image}
+      />
       <Text style={themedStyles.text}>{item.name}</Text>
     </TouchableOpacity>
   );

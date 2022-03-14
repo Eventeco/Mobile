@@ -1,19 +1,18 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import {issueTypeColors} from '../constants';
 import useTheme from '../hooks/useTheme';
 import useThemedStyles from '../hooks/useThemedStyles';
 
 const IssueTypeView = ({issueType, size = 'small'}) => {
   const style = useThemedStyles(styles);
-  const color = issueTypeColors[issueType.toLowerCase()];
   const theme = useTheme();
   const moreContainerStyles = {
-    backgroundColor: color,
+    backgroundColor: issueType.color,
     width: size === 'small' ? 80 : 140,
     paddingVertical: size === 'small' ? 0 : 7,
     marginBottom: size === 'small' ? 0 : 5,
   };
+
   const moreTextStyles = {
     fontSize:
       size === 'small' ? theme.typography.size.XS3 : theme.typography.size.S,
@@ -26,7 +25,7 @@ const IssueTypeView = ({issueType, size = 'small'}) => {
   const textStyles = StyleSheet.compose(style.text, moreTextStyles);
   return (
     <View style={containerStyles}>
-      <Text style={textStyles}>{issueType}</Text>
+      <Text style={textStyles}>{issueType.name}</Text>
     </View>
   );
 };
@@ -39,7 +38,7 @@ const styles = theme =>
       paddingVertical: 2,
       marginRight: 5,
       borderRadius: 10,
-      overflow: 'visible'
+      overflow: 'visible',
     },
     text: {
       color: 'black',

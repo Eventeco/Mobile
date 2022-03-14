@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {
   Image,
   StyleSheet,
@@ -15,43 +15,19 @@ import RadioButton from '../components/RadioButton';
 import Button from './Button';
 import {Alert} from 'react-native';
 import axios from '../axios';
-import useTheme from '../hooks/useTheme';
 import {useNavigation} from '@react-navigation/native';
 import SCREENS from '../constants/screens';
+import {BASE_URL} from '../constants';
 
 const JoinEventCard = ({event}) => {
   const style = useThemedStyles(styles);
-  const theme = useTheme();
   const navigation = useNavigation();
 
   const [check1, setCheck1] = useState(false);
   const [check2, setCheck2] = useState(false);
-  const [isParticipant, setIsParticipant] = useState(false);
-
-  const styleForButtonContainer = StyleSheet.compose(style.btnContainer, {
-    backgroundColor: isParticipant ? '#aaa' : theme.colors.GREEN_400,
-  });
-
-  const styleForButton = StyleSheet.compose(style.btn, {
-    color: isParticipant ? 'black' : 'white',
-  });
+  const [isLoading, setIsLoading] = useState(false);
 
   const {issues, rules} = event;
-
-  useEffect(() => {
-    const fetchIsParticipantData = async () => {
-      try {
-        const res = await axios.get(
-          `/eventParticipants/isParticipant/${event.id}`,
-        );
-        setIsParticipant(res.data.data);
-      } catch (e) {
-        Alert.alert('Error', 'Something went wrong');
-      }
-    };
-
-    fetchIsParticipantData();
-  }, [event.id]);
 
   const submitHandler = async () => {
     if ((rules && rules.length > 0 && !check1) || !check2) {
@@ -59,6 +35,8 @@ const JoinEventCard = ({event}) => {
         "Please agree to the event rules, and EventECO's Terms and Conditions",
       );
     }
+
+    setIsLoading(true);
 
     try {
       await axios.get(`/user/check-event/${event.id}`);
@@ -78,6 +56,8 @@ const JoinEventCard = ({event}) => {
           },
         ],
       );
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -96,7 +76,10 @@ const JoinEventCard = ({event}) => {
   return (
     event && (
       <View style={style.container}>
-        <Image source={{uri: event.picturepath}} style={style.image} />
+        <Image
+          source={{uri: `${BASE_URL}/eventPictures/key/${event.picturepath}`}}
+          style={style.image}
+        />
         <View style={style.innerContainer}>
           <Text style={style.nameText}>{event.name}</Text>
           <Text style={style.timeText}>{formatTimestamp(event.starttime)}</Text>
@@ -104,17 +87,15 @@ const JoinEventCard = ({event}) => {
             <View style={style.locationLeft}>
               <Image source={LocationIcon} />
               <Text style={style.locationText}>{event.location}</Text>
-              <ScrollView horizontal>
-                {issues.length > 0 && (
-                  <View style={style.eventIssuess}>
-                    {issues.map(issue => (
-                      <IssueTypeView issueType={issue.name} key={issue.id} />
-                    ))}
-                  </View>
-                )}
-              </ScrollView>
             </View>
           </View>
+          {issues.length > 0 && (
+            <View style={style.eventIssues}>
+              {issues.map(issue => (
+                <IssueTypeView issueType={issue} key={issue.id} />
+              ))}
+            </View>
+          )}
           <View style={style.rulesContainer}>
             {rules && rules.length > 0 && (
               <>
@@ -154,15 +135,11 @@ const JoinEventCard = ({event}) => {
             </View>
             <View>
               <Button
-                title={
-                  isParticipant
-                    ? 'ALREADY A PARTICIPANT'
-                    : 'CONFIRM PARTICIPATION'
-                }
-                styleForButtonContainer={styleForButtonContainer}
-                styleForButton={styleForButton}
+                title="CONFIRM PARTICIPATION"
+                styleForButtonContainer={style.btnContainer}
+                styleForButton={style.btn}
                 onPress={submitHandler}
-                disabled={isParticipant}
+                isLoading={isLoading}
               />
             </View>
           </View>
@@ -211,9 +188,6 @@ const styles = theme =>
       fontFamily: 'Lora-Bold',
       marginTop: 2,
     },
-    subinfoContainer: {
-      flexDirection: 'row',
-    },
     locationContainer: {
       flexDirection: 'row',
       justifyContent: 'space-between',
@@ -223,21 +197,18 @@ const styles = theme =>
     locationLeft: {
       flexDirection: 'row',
       alignItems: 'center',
+      flexWrap: 'wrap',
     },
     locationText: {
       color: 'black',
       marginLeft: 10,
       fontSize: theme.typography.size.XS,
       fontFamily: 'Lora-Bold',
-      maxWidth: '30%',
     },
-    eventIssuess: {
+    eventIssues: {
       flexDirection: 'row',
-      width: 1,
-      marginTop: 5,
-      display: 'flex',
-      overflow: 'scroll',
-      marginLeft: 10,
+      marginTop: 10,
+      justifyContent: 'center',
     },
     rulesContainer: {
       marginTop: '2%',
@@ -284,6 +255,7 @@ const styles = theme =>
       textDecorationLine: 'underline',
     },
     btnContainer: {
+      backgroundColor: theme.colors.GREEN_400,
       width: '80%',
       borderRadius: 10,
       alignSelf: 'center',
@@ -302,5 +274,6 @@ const styles = theme =>
     btn: {
       fontSize: theme.typography.size.M,
       fontFamily: 'Lora-Medium',
+      color: 'white',
     },
   });
