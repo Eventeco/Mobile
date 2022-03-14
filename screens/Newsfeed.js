@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   ImageBackground,
   StyleSheet,
@@ -11,7 +11,6 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import axios from '../axios';
 import BG from '../public/images/Background.png';
 import useThemedStyles from '../hooks/useThemedStyles';
-import {useFocusEffect} from '@react-navigation/native';
 import EventCard from '../components/EventCard';
 import Header from '../components/Header';
 
@@ -20,35 +19,35 @@ const Newsfeed = () => {
 
   const [events, setEvents] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [queryParams, setQueryParams] = useState({
+    name: '',
+    description: '',
+    type: '',
+    isDonationEnabled: false,
+    issues: '',
+  });
 
-  useFocusEffect(
-    useCallback(() => {
-      let isActive = true;
-      const fetchEvents = async () => {
-        setIsLoading(true);
-        try {
-          const result = await axios.get('/events');
-          if (isActive) {
-            setEvents(result.data.data);
-          }
-        } catch (e) {
-          console.log(e.response.data);
-        } finally {
-          setIsLoading(false);
-        }
-      };
+  useEffect(() => {
+    const fetchEvents = async () => {
+      setIsLoading(true);
+      try {
+        const result = await axios.get('/events', {
+          params: queryParams,
+        });
+        setEvents(result.data.data);
+      } catch (e) {
+        console.log(e.response.data);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-      fetchEvents();
-
-      return () => {
-        isActive = false;
-      };
-    }, []),
-  );
+    fetchEvents();
+  }, [queryParams]);
 
   return (
     <SafeAreaView>
-      <Header showSearchIcon={true} />
+      <Header showSearchIcon={true} setQueryParams={setQueryParams} />
       <ImageBackground source={BG} style={style.bgImageContainer}>
         <View style={style.innerContainer}>
           <Text style={style.eventsText}>Events Near You :</Text>

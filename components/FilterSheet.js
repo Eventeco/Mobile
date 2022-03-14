@@ -1,14 +1,26 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Actionsheet, Box, Text, Input, Badge, Radio, Switch} from 'native-base';
 import {TouchableOpacity} from 'react-native';
 import {useStateValue} from '../StateProvider/StateProvider';
 
-const FilterSheet = ({isOpen, onClose}) => {
-  const [issue, setIssue] = useState(['Deforestation']);
-  const [type, setType] = useState('one');
+const FilterSheet = ({isOpen, onClose, setQueryParams, setName, name}) => {
+  const [issue, setIssue] = useState([]);
+  const [type, setType] = useState('');
+  const [description, setDescription] = useState('');
   const [donation, setDonation] = useState(false);
 
   const [{issues}] = useStateValue();
+
+  useEffect(() => {
+    setQueryParams({
+      name: name,
+      description: description,
+      type: type,
+      isDonationEnabled: donation,
+      issues: issue.toString(),
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [name, issue, type, description, donation]);
 
   const removeIssue = item => {
     const indexRemove = issue.indexOf(item);
@@ -21,13 +33,25 @@ const FilterSheet = ({isOpen, onClose}) => {
         <Actionsheet.Item key={'name'} height="10">
           <Box width="100%" flexDirection="row" alignItems="center">
             <Text width="100">Name:</Text>
-            <Input _focus={{borderColor: 'green.400'}} width="70%" height="9" />
+            <Input
+              value={name}
+              onChangeText={setName}
+              _focus={{borderColor: 'green.400'}}
+              width="70%"
+              height="9"
+            />
           </Box>
         </Actionsheet.Item>
         <Actionsheet.Item key={'desc'} height="10">
           <Box width="100%" flexDirection="row" alignItems="center">
             <Text width="100">Description</Text>
-            <Input _focus={{borderColor: 'green.400'}} width="70%" height="9" />
+            <Input
+              value={description}
+              onChangeText={setDescription}
+              _focus={{borderColor: 'green.400'}}
+              width="70%"
+              height="9"
+            />
           </Box>
         </Actionsheet.Item>
         <Actionsheet.Item key={'issues'} height="100" flexDirection="row">
@@ -40,8 +64,8 @@ const FilterSheet = ({isOpen, onClose}) => {
             alignItems="center">
             {issues.map(item => (
               <Box key={item.name}>
-                {issue.includes(item.name) ? (
-                  <TouchableOpacity onPress={() => removeIssue(item.name)}>
+                {issue.includes(item.id) ? (
+                  <TouchableOpacity onPress={() => removeIssue(item.id)}>
                     <Badge
                       bg={item.color}
                       borderWidth={2}
@@ -56,7 +80,7 @@ const FilterSheet = ({isOpen, onClose}) => {
                 ) : (
                   <TouchableOpacity
                     onPress={() =>
-                      setIssue(prevState => [...prevState, item.name])
+                      setIssue(prevState => [...prevState, item.id])
                     }>
                     <Badge
                       marginY={0.5}
@@ -84,12 +108,12 @@ const FilterSheet = ({isOpen, onClose}) => {
               onChange={nextValue => {
                 setType(nextValue);
               }}>
-              <Radio colorScheme={'green'} value="one" my={1}>
+              <Radio colorScheme={'green'} value="normal" my={1}>
                 <Text marginLeft={2} marginRight={4}>
                   Normal
                 </Text>
               </Radio>
-              <Radio colorScheme={'green'} value="two" my={1}>
+              <Radio colorScheme={'green'} value="recurring" my={1}>
                 <Text marginLeft={2}>Recurring</Text>
               </Radio>
             </Radio.Group>

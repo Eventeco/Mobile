@@ -2,21 +2,23 @@ import React, {useState} from 'react';
 import {Image, StyleSheet, View, TouchableOpacity} from 'react-native';
 import useThemedStyles from '../hooks/useThemedStyles';
 import Logo from '../public/images/logo2.png';
-import {useStateValue} from '../StateProvider/StateProvider';
 import {useNavigation} from '@react-navigation/native';
 import BackIcon from '../public/icons/back.png';
-import {VStack, Heading, Input, Icon, Box, useDisclose} from 'native-base';
+import {Input, useDisclose} from 'native-base';
 import SearchIcon from '../public/icons/search-icon.png';
 import FilterIcon from '../public/icons/filter-icon.png';
 import FilterSheet from './FilterSheet';
 
-const Header = ({showBackButton = false, showSearchIcon = false}) => {
+const Header = ({
+  showBackButton = false,
+  showSearchIcon = false,
+  setQueryParams = {},
+}) => {
   const style = useThemedStyles(styles);
 
   const navigation = useNavigation();
   const [searchMode, setSearchMode] = useState(false);
   const [searchText, setSearchText] = useState('');
-  const [, dispatch] = useStateValue();
 
   const {isOpen, onOpen, onClose} = useDisclose();
   const backPressHandler = () => {
@@ -44,14 +46,20 @@ const Header = ({showBackButton = false, showSearchIcon = false}) => {
             <Image source={BackIcon} style={style.backImage} />
           </TouchableOpacity>
           <View width="90%" style={style.inputField}>
-            <Input size="lg" />
+            <Input value={searchText} onChangeText={setSearchText} size="lg" />
           </View>
           <TouchableOpacity onPress={onOpen}>
             <View style={style.filterIcon}>
               <Image source={FilterIcon} resizeMode="cover" />
             </View>
           </TouchableOpacity>
-          <FilterSheet isOpen={isOpen} onClose={onClose} />
+          <FilterSheet
+            setQueryParams={setQueryParams}
+            name={searchText}
+            setName={setSearchText}
+            isOpen={isOpen}
+            onClose={onClose}
+          />
         </View>
       )}
       {showSearchIcon && (

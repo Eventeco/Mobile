@@ -18,20 +18,6 @@ const App = () => {
 
   useEffect(() => {
     setLoading(true);
-    const getLoginStatus = async () => {
-      try {
-        const res = await axios.get('/login-status');
-        dispatch({
-          type: SET_USER,
-          data: res.data.data,
-        });
-      } catch (e) {
-        console.log('logged out');
-      } finally {
-        setLoading(false);
-      }
-    };
-
     const getIssues = async () => {
       try {
         const res = await axios.get('/issueTypes');
@@ -43,9 +29,21 @@ const App = () => {
         console.log(e);
       }
     };
-
+    const getLoginStatus = async () => {
+      try {
+        const res = await axios.get('/login-status');
+        dispatch({
+          type: SET_USER,
+          data: res.data.data,
+        });
+        getIssues();
+      } catch (e) {
+        console.log('logged out');
+      } finally {
+        setLoading(false);
+      }
+    };
     getLoginStatus();
-    getIssues();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
