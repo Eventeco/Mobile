@@ -11,6 +11,7 @@ import TabBarAddButton from '../components/TabBarAddButton';
 import TabBarBigIcon from '../components/TabBarBigIcon';
 import AddEvent from '../screens/AddEvent';
 import NewsfeedNavigation from './NewsfeedNavigation';
+import ProfileNavigation from './ProfileNavigation';
 
 const Tab = createBottomTabNavigator();
 
@@ -26,8 +27,8 @@ const navigationItems = [
     source: AddIcon,
   },
   {
-    name: SCREENS.PROFILE,
-    component: Profile,
+    name: SCREENS.PROFILE_NAVIGATION,
+    component: ProfileNavigation,
     source: ProfileIcon,
   },
 ];

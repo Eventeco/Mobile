@@ -1,15 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {Text, StyleSheet} from 'react-native';
 import useThemedStyles from '../hooks/useThemedStyles';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import axios from '../axios';
 import {useStateValue} from '../StateProvider/StateProvider';
+import {Image, View} from 'react-native';
 import {SET_USER} from '../constants/reducer';
 import Button from '../components/Button';
+import Header from '../components/Header';
+import StaggerMenu from '../components/Stagger';
+import {useDisclose, Box, IconButton} from 'native-base';
+import StaggerCircle from '../public/icons/dots-horizontal.png';
 
 const Profile = ({navigation}) => {
   const style = useThemedStyles(styles);
   const [, dispatch] = useStateValue();
+  const {isOpen, onToggle} = useDisclose();
+  const [isLoading, setIsLoading] = useState(false);
 
   const logoutHandler = () => {
     axios
@@ -28,7 +35,8 @@ const Profile = ({navigation}) => {
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{width: '100%', height: '100%'}}>
+      <Header />
       <Text>Profile</Text>
       <Button
         title="Logout"
@@ -36,6 +44,35 @@ const Profile = ({navigation}) => {
         styleForButton={style.btn}
         onPress={logoutHandler}
       />
+      <View style={{flex: 1}}>
+        <View
+          style={{
+            position: 'absolute',
+            bottom: 6,
+            right: 15,
+            alignSelf: 'flex-end',
+          }}>
+          <Box
+            zIndex="10"
+            position="absolute"
+            right="10%"
+            bottom="120%"
+            width="120">
+            <StaggerMenu onToggle={onToggle} isOpen={isOpen} />
+          </Box>
+          {!isLoading && (
+            <IconButton
+              variant="solid"
+              borderRadius="full"
+              zIndex="10"
+              size="lg"
+              colorScheme="green"
+              onPress={onToggle}
+              icon={<Image source={StaggerCircle} />}
+            />
+          )}
+        </View>
+      </View>
     </SafeAreaView>
   );
 };

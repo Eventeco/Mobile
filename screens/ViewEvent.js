@@ -1,4 +1,4 @@
-import {Image, ScrollView, StyleSheet, Text, View, Alert} from 'react-native';
+import {Image, ScrollView, StyleSheet, Text, View, Alert, TouchableOpacity} from 'react-native';
 import React, {useCallback, useState, useEffect} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import useThemedStyles from '../hooks/useThemedStyles';
@@ -18,12 +18,15 @@ import Header from '../components/Header';
 import {BASE_URL} from '../constants';
 import useTheme from '../hooks/useTheme';
 import {useStateValue} from '../StateProvider/StateProvider';
+import ParticipentsModal from '../components/ParticipentsModal';
+import ParticipantsIcon from '../public/icons/participants.png'
 
 const windowWidth = Dimensions.get('window').width;
 
 const ViewEvent = ({route, navigation}) => {
   const {event} = route.params;
   const {user, issues, pictures} = event;
+  const [showModal, setShowModal] = useState(false)
   const themedStyles = useThemedStyles(styles);
   const theme = useTheme();
 
@@ -115,6 +118,7 @@ const ViewEvent = ({route, navigation}) => {
   return (
     <SafeAreaView style={themedStyles.container}>
       <Header showBackButton />
+      <ParticipentsModal eventId={event.id} showModal={showModal} setShowModal={setShowModal}  />
       <ScrollView>
         <CustomCarousel
           data={images}
@@ -131,6 +135,11 @@ const ViewEvent = ({route, navigation}) => {
                 {user.firstname}
               </Text>
             </Text>
+            {isEventCreator && (
+              <TouchableOpacity onPress={() => {setShowModal(true)}}>
+                <Image style={{marginLeft:20,  width: 30, height: 30 }} resizeMode="contain" source={ParticipantsIcon} />
+              </TouchableOpacity>
+            )}
           </View>
           <ScrollView style={themedStyles.scrollView} nestedScrollEnabled>
             <Text style={themedStyles.scrollViewText}>{event.description}</Text>

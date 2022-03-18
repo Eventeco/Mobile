@@ -18,11 +18,14 @@ import axios from '../axios';
 import {useNavigation} from '@react-navigation/native';
 import SCREENS from '../constants/screens';
 import {BASE_URL} from '../constants';
+import TermsModal from '../components/TermsModal';
 
 const JoinEventCard = ({event}) => {
   const style = useThemedStyles(styles);
   const navigation = useNavigation();
 
+
+  const [showModal, setShowModal] = useState(false)
   const [check1, setCheck1] = useState(false);
   const [check2, setCheck2] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -129,9 +132,10 @@ const JoinEventCard = ({event}) => {
                 </TouchableOpacity>
                 <Text style={style.radioText}>
                   I agree to EventECO’s
-                  <Text style={style.underline}> terms and conditions</Text>
+                  <Text style={style.underline} onPress={() => {setShowModal(true)}}> terms and conditions</Text>
                 </Text>
               </View>
+              <TermsModal showModal={showModal} setShowModal={setShowModal} />
             </View>
             <View>
               <Button

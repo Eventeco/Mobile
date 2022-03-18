@@ -19,7 +19,7 @@ const EventCard = ({event, suggestedEvents}) => {
   const onPressHandler = () => {
     navigation.navigate(SCREENS.VIEW_EVENT, {event, suggestedEvents});
   };
-
+  
   return (
     event && (
       <TouchableOpacity style={style.container} onPress={onPressHandler}>
