@@ -1,22 +1,30 @@
-import React, { useEffect, useState} from 'react';
-import {Text, StyleSheet, ScrollView, View, FlatList, ActivityIndicator} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  Text,
+  StyleSheet,
+  ScrollView,
+  View,
+  FlatList,
+  ActivityIndicator,
+} from 'react-native';
 import useThemedStyles from '../hooks/useThemedStyles';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import axios from '../axios';
 import {useStateValue} from '../StateProvider/StateProvider';
 import Header from '../components/Header';
-import { Box, useDisclose, IconButton } from 'native-base';
-import { Image } from 'react-native';
+import {Box, useDisclose, IconButton} from 'native-base';
+import {Image} from 'react-native';
 import StaggerMenu from '../components/Stagger';
-import StaggerCircle from '../public/icons/dots-horizontal.png'
+import StaggerCircle from '../public/icons/dots-horizontal.png';
 import EventCard from '../components/EventCard';
+import EventsList from '../components/EventsList';
 
 const CreatedEvents = ({navigation}) => {
   const style = useThemedStyles(styles);
   const [, dispatch] = useStateValue();
   const {isOpen, onToggle} = useDisclose();
   const [events, setEvents] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -35,43 +43,43 @@ const CreatedEvents = ({navigation}) => {
   }, []);
 
   return (
-    <SafeAreaView style={{ width: '100%', height: '100%'}}>
+    <SafeAreaView style={{width: '100%', height: '100%'}}>
+      <Header />
       <ScrollView>
-        <Header />
         <View style={style.innerContainer}>
-          <Text style={style.eventsText}>Your Events: </Text>
-          {isLoading ? (
-            <ActivityIndicator size="large" />
-          ) : (
-            <FlatList
-              data={events}
-              renderItem={item => <EventCard event={item.item} />}
-              keyExtractor={item => item.id}
-              scrollEnabled
-              ListEmptyComponent={
-                <Text style={style.noEventsText}>No events found</Text>
-              }
-              style={style.flatList}
-            />
-          )}
-        </View>
-        <View>
+          <Text style={style.eventsText}>Your Created Events: </Text>
+          <EventsList
+            isLoading={isLoading}
+            events={events}
+            flatListStyle={style.flatList}
+          />
         </View>
       </ScrollView>
-      <View style={{flex:1}}>
-        <View style={{position:'absolute',bottom:5, right:15 ,alignSelf:'flex-end'}}>
-          <Box zIndex="10" position="absolute" right="10%" bottom="120%" width="120">
+      <View style={{flex: 1}}>
+        <View
+          style={{
+            position: 'absolute',
+            bottom: 5,
+            right: 15,
+            alignSelf: 'flex-end',
+          }}>
+          <Box
+            zIndex="10"
+            position="absolute"
+            right="10%"
+            bottom="120%"
+            width="120">
             <StaggerMenu onToggle={onToggle} isOpen={isOpen} />
           </Box>
           {!isLoading && (
             <IconButton
-            variant="solid"
-            borderRadius="full"
-            zIndex="10"
-            size="lg"
-            colorScheme="green"
-            onPress={onToggle}
-            icon={<Image source={StaggerCircle} />}
+              variant="solid"
+              borderRadius="full"
+              zIndex="10"
+              size="lg"
+              colorScheme="green"
+              onPress={onToggle}
+              icon={<Image source={StaggerCircle} />}
             />
           )}
         </View>
@@ -131,11 +139,5 @@ const styles = theme =>
     },
     flatList: {
       marginBottom: 40,
-    },
-    noEventsText: {
-      fontSize: theme.typography.size.L,
-      color: 'black',
-      textAlign: 'center',
-      marginTop: 20,
     },
   });

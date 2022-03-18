@@ -1,6 +1,6 @@
 import {Alert} from 'react-native';
 import axios from './axios';
-import {SET_USER} from './constants/reducer';
+import {SET_USER, SET_ISSUES} from './constants/reducer';
 import {format} from 'date-fns';
 
 export const formatTimestamp = timestamp => {
@@ -29,6 +29,11 @@ export const loginHandler = async (payload, dispatch) => {
     dispatch({
       type: SET_USER,
       data: res.data.data,
+    });
+    const issuesResult = await axios.get('/issueTypes');
+    dispatch({
+      type: SET_ISSUES,
+      data: issuesResult.data.data,
     });
   } catch (e) {
     const message = e.response.data.message;

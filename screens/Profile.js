@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {Text, StyleSheet} from 'react-native';
 import useThemedStyles from '../hooks/useThemedStyles';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -37,7 +37,6 @@ const Profile = ({navigation}) => {
   return (
     <SafeAreaView style={{width: '100%', height: '100%'}}>
       <Header />
-      <Text>Profile</Text>
       <Button
         title="Logout"
         styleForButtonContainer={style.btnContainer}

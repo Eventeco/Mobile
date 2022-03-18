@@ -1,15 +1,23 @@
-import React, { useEffect, useState} from 'react';
-import {Text, StyleSheet, ScrollView, View, FlatList, ActivityIndicator} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  Text,
+  StyleSheet,
+  ScrollView,
+  View,
+  FlatList,
+  ActivityIndicator,
+} from 'react-native';
 import useThemedStyles from '../hooks/useThemedStyles';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import axios from '../axios';
 import {useStateValue} from '../StateProvider/StateProvider';
 import Header from '../components/Header';
-import { Box, useDisclose, IconButton } from 'native-base';
-import { Image } from 'react-native';
+import {Box, useDisclose, IconButton} from 'native-base';
+import {Image} from 'react-native';
 import StaggerMenu from '../components/Stagger';
-import StaggerCircle from '../public/icons/dots-horizontal.png'
+import StaggerCircle from '../public/icons/dots-horizontal.png';
 import EventCard from '../components/EventCard';
+import EventsList from '../components/EventsList';
 
 const JoinedEvents = ({navigation}) => {
   const style = useThemedStyles(styles);
@@ -34,42 +42,46 @@ const JoinedEvents = ({navigation}) => {
     fetchEvents();
   }, []);
 
+  console.log(events);
+
   return (
-    <SafeAreaView style={{ width: '100%', height: '100%' }}>
+    <SafeAreaView style={{width: '100%', height: '100%'}}>
       <ScrollView>
         <Header />
         <View style={style.innerContainer}>
           <Text style={style.eventsText}>Events that you have joined: </Text>
-          {isLoading ? (
-            <ActivityIndicator size="large" />
-          ) : (
-            <FlatList
-              data={events}
-              renderItem={item => <EventCard event={item.item} />}
-              keyExtractor={item => item.id}
-              scrollEnabled
-              ListEmptyComponent={
-                <Text style={style.noEventsText}>No events found</Text>
-              }
-              style={style.flatList}
-            />
-          )}
+          <EventsList
+            isLoading={isLoading}
+            events={events}
+            flatListStyle={style.flatList}
+          />
         </View>
       </ScrollView>
-      <View style={{flex:1}}>
-        <View style={{position:'absolute',bottom:6, right:15 ,alignSelf:'flex-end'}}>
-          <Box zIndex="10" position="absolute" right="10%" bottom="120%" width="120">
+      <View style={{flex: 1}}>
+        <View
+          style={{
+            position: 'absolute',
+            bottom: 6,
+            right: 15,
+            alignSelf: 'flex-end',
+          }}>
+          <Box
+            zIndex="10"
+            position="absolute"
+            right="10%"
+            bottom="120%"
+            width="120">
             <StaggerMenu onToggle={onToggle} isOpen={isOpen} />
           </Box>
           {!isLoading && (
             <IconButton
-            variant="solid"
-            borderRadius="full"
-            zIndex="10"
-            size="lg"
-            colorScheme="green"
-            onPress={onToggle}
-            icon={<Image source={StaggerCircle} />}
+              variant="solid"
+              borderRadius="full"
+              zIndex="10"
+              size="lg"
+              colorScheme="green"
+              onPress={onToggle}
+              icon={<Image source={StaggerCircle} />}
             />
           )}
         </View>

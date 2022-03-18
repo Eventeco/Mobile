@@ -283,6 +283,7 @@ const AddEvent = ({navigation}) => {
     try {
       const result = await axios.post('/events', postData);
       if (result.data.success) {
+        resetStates();
         navigation.navigate(SCREENS.VIEW_EVENT, {event: result.data.data});
       }
     } catch (e) {
@@ -290,6 +291,21 @@ const AddEvent = ({navigation}) => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const resetStates = () => {
+    setName('');
+    setDescription('');
+    setCoverPhoto(null);
+    setEventPhotos([]);
+    setSelectedThemes([]);
+    setRules([]);
+    setRule('');
+    setMinParticipants('');
+    setMaxParticipants('');
+    setLocation(null);
+    setStartTime(null);
+    setEndTime(null);
   };
 
   return (
