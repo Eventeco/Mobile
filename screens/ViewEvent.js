@@ -20,6 +20,7 @@ import useTheme from '../hooks/useTheme';
 import {useStateValue} from '../StateProvider/StateProvider';
 import ParticipentsModal from '../components/ParticipentsModal';
 import ParticipantsIcon from '../public/icons/participants.png'
+import { Badge, HStack, Text as NativeText } from 'native-base';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -39,7 +40,7 @@ const ViewEvent = ({route, navigation}) => {
 
   const [isParticipant, setIsParticipant] = useState(false);
   const [suggestedEvents, setSuggestedEvents] = useState([]);
-
+  const [participants, setParticipants] = useState({count: 0});
   const isEventCreator = event.creatorid === loggedInUser.id;
 
   useFocusEffect(
@@ -55,6 +56,17 @@ const ViewEvent = ({route, navigation}) => {
           console.log(e.response.data);
         }
       };
+
+      const fetchParticipants = async () => {
+        try {
+          const res = await axios.get(`/eventParticipants/count/${event.id}`);
+          setParticipants(res.data.data);
+        } catch (e) {
+          console.log(e)
+        }
+      };
+  
+      fetchParticipants();
 
       fetchSuggestedEvents();
 
@@ -128,18 +140,25 @@ const ViewEvent = ({route, navigation}) => {
         <View style={themedStyles.detailsContainer}>
           <Text style={themedStyles.name}>{event.name}</Text>
           <View style={themedStyles.userDetails}>
-            <Avatar path={user.profilepicpath} />
-            <Text style={themedStyles.userDetailsCreatorText}>
-              Created by{' '}
-              <Text style={themedStyles.userDetailsCreatorName}>
-                {user.firstname}
+            <HStack alignItems="center">
+              <Avatar path={user.profilepicpath} />
+              <Text style={themedStyles.userDetailsCreatorText}>
+                Created by{' '}
+                <Text style={themedStyles.userDetailsCreatorName}>
+                  {user.firstname}
+                </Text>
               </Text>
-            </Text>
-            {isEventCreator && (
-              <TouchableOpacity onPress={() => {setShowModal(true)}}>
-                <Image style={{marginLeft:20,  width: 30, height: 30 }} resizeMode="contain" source={ParticipantsIcon} />
+            </HStack>
+            <HStack>
+              <Badge colorScheme="green">
+                <NativeText color="green.700">
+                  {participants.count}
+                </NativeText>
+              </Badge>
+              <TouchableOpacity disabled={!isEventCreator} onPress={() => {setShowModal(true)}}>
+                <Image style={{ width: 30, height: 30 }} resizeMode="contain" source={ParticipantsIcon} />
               </TouchableOpacity>
-            )}
+            </HStack>
           </View>
           <ScrollView style={themedStyles.scrollView} nestedScrollEnabled>
             <Text style={themedStyles.scrollViewText}>{event.description}</Text>
@@ -156,6 +175,24 @@ const ViewEvent = ({route, navigation}) => {
               {getTimeAndTimezone(event.starttime)}
             </Text>
           </View>
+          <HStack justifyContent="space-between">
+            <HStack alignItems="center">
+              <Text style={themedStyles.participantText}>
+                Minimum Participants:
+              </Text>
+              <Badge borderRadius="xl" colorScheme="green" textAlign="center" flexDirection="row">
+                {event.minparticipants}
+              </Badge> 
+            </HStack>
+            <HStack alignItems="center">
+              <Text style={themedStyles.participantText}>
+                Maximum Participants:
+              </Text>
+              <Badge borderRadius="xl" colorScheme="green" textAlign="center" flexDirection="row">
+                  {event.maxParticipants ? (event.maxParticipants) : "∞"}
+                </Badge> 
+            </HStack>
+          </HStack>
           {issues.length > 0 && (
             <View style={themedStyles.issueTypesContainer}>
               {issues.map(issue => (
@@ -217,6 +254,7 @@ const styles = theme =>
     userDetails: {
       flexDirection: 'row',
       alignItems: 'center',
+      justifyContent: 'space-between'
     },
     userDetailsCreatorText: {
       fontSize: theme.typography.size.S,
@@ -294,4 +332,9 @@ const styles = theme =>
       fontSize: theme.typography.size.L,
       fontFamily: 'Lora-Regular',
     },
+    participantText: {
+      fontSize: theme.typography.size.XS,
+      fontWeight: '500',
+      color: theme.colors.GRAY_200,
+    }
   });

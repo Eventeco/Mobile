@@ -44,35 +44,7 @@ const Profile = ({navigation}) => {
         styleForButton={style.btn}
         onPress={logoutHandler}
       />
-      <View style={{flex: 1}}>
-        <View
-          style={{
-            position: 'absolute',
-            bottom: 6,
-            right: 15,
-            alignSelf: 'flex-end',
-          }}>
-          <Box
-            zIndex="10"
-            position="absolute"
-            right="10%"
-            bottom="120%"
-            width="120">
-            <StaggerMenu onToggle={onToggle} isOpen={isOpen} />
-          </Box>
-          {!isLoading && (
-            <IconButton
-              variant="solid"
-              borderRadius="full"
-              zIndex="10"
-              size="lg"
-              colorScheme="green"
-              onPress={onToggle}
-              icon={<Image source={StaggerCircle} />}
-            />
-          )}
-        </View>
-      </View>
+      <StaggerMenu isLoading={isLoading} />
     </SafeAreaView>
   );
 };
