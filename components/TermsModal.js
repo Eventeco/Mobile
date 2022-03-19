@@ -1,59 +1,101 @@
-import React from 'react'
-import { Modal, VStack, HStack, Text, Button } from 'native-base';
+import React from 'react';
+import {Modal, VStack, Text, Button} from 'native-base';
 
-
-
-const TermsModal = ({ showModal, setShowModal, ...props }) => {
+const TermsModal = ({showModal, setShowModal, ...props}) => {
   return (
-    <Modal isOpen={showModal} onClose={() => setShowModal(false)} size="lg" {...props}>
+    <Modal
+      isOpen={showModal}
+      onClose={() => setShowModal(false)}
+      size="lg"
+      {...props}>
       <Modal.Content maxWidth="400">
         <Modal.CloseButton />
-        <Modal.Header>Terms and Conditions</Modal.Header>
+        <Modal.Header>EventECO's Terms and Conditions</Modal.Header>
         <Modal.Body>
-          <VStack space={3}>
-                <Text style={styles.tcP}>Welcome to our website. If you continue to browse and use this website, you are agreeing to comply with and be bound by the following terms and conditions of use, which together with our privacy policy govern [business name]’s relationship with you in relation to this website. If you disagree with any part of these terms and conditions, please do not use our website.</Text>
-                <Text style={styles.tcP}>The term ‘[business name]’ or ‘us’ or ‘we’ refers to the owner of the website whose registered office is [address]. Our company registration number is [company registration number and place of registration]. The term ‘you’ refers to the user or viewer of our website.</Text>
-                    <Text style={styles.tcL}>{'\u2022'} The content of the pages of this website is for your general information and use only. It is subject to change without notice.</Text>
-                    <Text style={styles.tcL}>{'\u2022'} This website uses cookies to monitor browsing preferences. If you do allow cookies to be used, the following personal information may be stored by us for use by third parties: [insert list of information].</Text>
-                    <Text style={styles.tcL}>{'\u2022'} Neither we nor any third parties provide any warranty or guarantee as to the accuracy, timeliness, performance, completeness or suitability of the information and materials found or offered on this website for any particular purpose. You acknowledge that such information and materials may contain inaccuracies or errors and we expressly exclude liability for any such inaccuracies or errors to the fullest extent permitted by law.</Text>
-                    <Text style={styles.tcL}>{'\u2022'} Your use of any information or materials on this website is entirely at your own risk, for which we shall not be liable. It shall be your own responsibility to ensure that any products, services or information available through this website meet your specific requirements.</Text>
-                    <Text style={styles.tcL}>{'\u2022'} This website contains material which is owned by or licensed to us. This material includes, but is not limited to, the design, layout, look, appearance and graphics. Reproduction is prohibited other than in accordance with the copyright notice, which forms part of these terms and conditions.</Text>
-                    <Text style={styles.tcL}>{'\u2022'} All trademarks reproduced in this website, which are not the property of, or licensed to the operator, are acknowledged on the website.
-Unauthorised use of this website may give rise to a claim for damages and/or be a criminal offence.</Text>
-                    <Text style={styles.tcL}>{'\u2022'} From time to time, this website may also include links to other websites. These links are provided for your convenience to provide further information. They do not signify that we endorse the website(s). We have no responsibility for the content of the linked website(s).</Text>
-                    <Text style={styles.tcL}>{'\u2022'} Your use of this website and any dispute arising out of such use of the website is subject to the laws of England, Northern Ireland, Scotland and Wales.</Text>
-                <Text style={styles.tcP}>The use of this website is subject to the following terms of use</Text>
+          <VStack space={4}>
+            <VStack>
+              <Text fontWeight="medium">1. Intellectual Property rights</Text>
+              <Text>
+                This is to acknowledge that Codistrica retains all proprietary
+                right, title and interest in the services, our name, or logo and
+                any other intellectual property rights including, but not
+                limited to modifications, enhancements and upgrades thereto. You
+                agree that you will not use or register any trademark, business
+                name, domain name or social media account name which
+                incorporates in whole or in part EventEco or is similar in any
+                form.
+              </Text>
+            </VStack>
+            <VStack>
+              <Text fontWeight="medium">2. Limitations of Use</Text>
+              <Text>
+                By using our application, you agree on behalf of yourself, not
+                to modify, prepare derivative works of, or reverse engineer
+                EventEco. You will not try to resell our services to any third
+                party. You will not use our services in violation of any
+                applicable laws or regulations.
+              </Text>
+            </VStack>
+            <VStack>
+              <Text fontWeight="medium">
+                3. Responsibility regarding User Content
+              </Text>
+              <Text>
+                Our service shall enable you to provide information which may
+                have text, pictures, links or videos; all this content shall
+                belong to you and we take no responsibility for and we do not
+                expressly or implicitly endorse your content. By submitting your
+                content to our services, you take full responsibility of the
+                appropriateness of your content which may expose you to
+                liability if you post any content without all necessary rights.
+                {'\n'}
+                Although we have no obligation to monitor and screen your
+                content, we may in sole discretion, remove your content at any
+                time and for any reason, which shall be specified and will be in
+                coherence with our content policy, or if you otherwise create
+                liability for us.
+              </Text>
+            </VStack>
+            <VStack>
+              <Text fontWeight="medium">4. Donations</Text>
+              <Text>
+                Our service includes the option of providing donations, but in
+                no form is Codistrica responsible for the exchange of said
+                donations. We take no responsibility in transferring your
+                donations to respected parties and shall not be held accountable
+                for any fraudulent activity. You agree that Codistrica, shall,
+                in no event, be liable for any consequential, incidental,
+                indirect or punitive loss or damage that may be incurred
+                financially or physically, with regards to donations and events.
+              </Text>
+            </VStack>
+            <VStack>
+              <Text fontWeight="medium">5. Right to Terminate Accounts</Text>
+              <Text>
+                If you fail to comply with any of the provisions of this
+                Agreement, Codistrica may, with notice to you, terminate this
+                Agreement and/or your EventEco ID, and you will remain liable
+                for all damage imposed. Termination will be proceeded with your
+                account and event information be removed from EventEco
+                permanently and will not be, in any case provided to you after
+                termination.
+              </Text>
+            </VStack>
           </VStack>
         </Modal.Body>
         <Modal.Footer>
-          <Button flex="1" colorScheme="green" onPress={() => {
-          setShowModal(false);
-        }}>
+          <Button
+            flex="1"
+            colorScheme="green"
+            onPress={() => {
+              setShowModal(false);
+            }}>
             Close
           </Button>
         </Modal.Footer>
       </Modal.Content>
     </Modal>
-  )
-}
+  );
+};
 
-export default TermsModal
-
-const styles = {
-tcP: {
-    marginTop: 10,
-    marginBottom: 10,
-    fontSize: 12
-},
-tcP:{
-    marginTop: 10,
-    fontSize: 12
-},
-tcL:{
-    marginLeft: 10,
-    marginTop: 10,
-    marginBottom: 10,
-    fontSize: 12
-},
-}
-
+export default TermsModal;

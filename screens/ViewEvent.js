@@ -1,4 +1,13 @@
-import {Image, ScrollView, StyleSheet, Text, View, Alert, TouchableOpacity} from 'react-native';
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  Alert,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
 import React, {useCallback, useState, useEffect} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import useThemedStyles from '../hooks/useThemedStyles';
@@ -21,15 +30,19 @@ import {useStateValue} from '../StateProvider/StateProvider';
 import ParticipentsModal from '../components/ParticipentsModal';
 import ParticipantsIcon from '../public/icons/participants.png'
 import { Badge, HStack, Text as NativeText } from 'native-base';
+import LocationIcon from '../public/icons/location.png';
 
 const windowWidth = Dimensions.get('window').width;
 
 const ViewEvent = ({route, navigation}) => {
   const {event} = route.params;
   const {user, issues, pictures} = event;
-  const [showModal, setShowModal] = useState(false)
+  const [showModal, setShowModal] = useState(false);
   const themedStyles = useThemedStyles(styles);
   const theme = useTheme();
+  const [isSimilarEventsLoading, setIsSimilarEventsLoading] = useState(false);
+  const [isParticipantDataLoading, setIsParticipantDataLoading] =
+    useState(false);
 
   const [{user: loggedInUser}] = useStateValue();
 
@@ -47,6 +60,7 @@ const ViewEvent = ({route, navigation}) => {
     useCallback(() => {
       let isActive = true;
       const fetchSuggestedEvents = async () => {
+        setIsSimilarEventsLoading(true);
         try {
           const result = await axios.get(`/events/suggested/${event.id}`);
           if (isActive) {
@@ -54,6 +68,8 @@ const ViewEvent = ({route, navigation}) => {
           }
         } catch (e) {
           console.log(e.response.data);
+        } finally {
+          setIsSimilarEventsLoading(false);
         }
       };
 
@@ -89,6 +105,7 @@ const ViewEvent = ({route, navigation}) => {
 
   useEffect(() => {
     const fetchIsParticipantData = async () => {
+      setIsParticipantDataLoading(true);
       try {
         const res = await axios.get(
           `/eventParticipants/isParticipant/${event.id}`,
@@ -96,11 +113,15 @@ const ViewEvent = ({route, navigation}) => {
         setIsParticipant(res.data.data);
       } catch (e) {
         Alert.alert('Error', 'Something went wrong');
+      } finally {
+        setIsParticipantDataLoading(false);
       }
     };
 
-    fetchIsParticipantData();
-  }, [event.id]);
+    if (!isEventCreator) {
+      fetchIsParticipantData();
+    }
+  }, [event.id, isEventCreator]);
 
   const renderImageItem = ({item}) => (
     <Image
@@ -130,7 +151,11 @@ const ViewEvent = ({route, navigation}) => {
   return (
     <SafeAreaView style={themedStyles.container}>
       <Header showBackButton />
-      <ParticipentsModal eventId={event.id} showModal={showModal} setShowModal={setShowModal}  />
+      <ParticipentsModal
+        eventId={event.id}
+        showModal={showModal}
+        setShowModal={setShowModal}
+      />
       <ScrollView>
         <CustomCarousel
           data={images}
@@ -163,6 +188,10 @@ const ViewEvent = ({route, navigation}) => {
           <ScrollView style={themedStyles.scrollView} nestedScrollEnabled>
             <Text style={themedStyles.scrollViewText}>{event.description}</Text>
           </ScrollView>
+          <View style={themedStyles.timeContainer}>
+            <Image source={LocationIcon} style={themedStyles.locationImage} />
+            <Text style={themedStyles.timeText}>{event.location}</Text>
+          </View>
           <View style={themedStyles.timeContainer}>
             <Image source={CalendarIcon} style={themedStyles.timeImage} />
             <Text style={themedStyles.timeText}>
@@ -201,17 +230,21 @@ const ViewEvent = ({route, navigation}) => {
             </View>
           )}
         </View>
-        {suggestedEvents.length > 0 && (
-          <View style={themedStyles.similarEventsContainer}>
-            <Text style={themedStyles.similarEventsHeading}>
-              Similar Events
-            </Text>
-            <CustomCarousel
-              data={suggestedEvents}
-              renderItem={renderEventItem}
-              width={windowWidth - windowWidth / 3}
-            />
-          </View>
+        {isSimilarEventsLoading ? (
+          <ActivityIndicator size="large" color={theme.colors.GREEN_400} />
+        ) : (
+          suggestedEvents.length > 0 && (
+            <View style={themedStyles.similarEventsContainer}>
+              <Text style={themedStyles.similarEventsHeading}>
+                Similar Events
+              </Text>
+              <CustomCarousel
+                data={suggestedEvents}
+                renderItem={renderEventItem}
+                width={windowWidth - windowWidth / 3}
+              />
+            </View>
+          )
         )}
         {!isEventCreator && (
           <Button
@@ -220,6 +253,7 @@ const ViewEvent = ({route, navigation}) => {
             styleForButton={styleForButton}
             onPress={joinEventButtonHandler}
             disabled={isParticipant}
+            isLoading={isParticipantDataLoading}
           />
         )}
       </ScrollView>
@@ -291,7 +325,7 @@ const styles = theme =>
       height: 23,
     },
     timeText: {
-      fontSize: theme.typography.size.S,
+      fontSize: theme.typography.size.XS,
       fontWeight: '500',
       color: theme.colors.GRAY_200,
     },
@@ -312,7 +346,6 @@ const styles = theme =>
       color: theme.colors.GRAY_200,
     },
     btnContainer: {
-      marginTop: 20,
       backgroundColor: theme.colors.GREEN_400,
       width: '80%',
       borderRadius: 10,
@@ -336,5 +369,20 @@ const styles = theme =>
       fontSize: theme.typography.size.XS,
       fontWeight: '500',
       color: theme.colors.GRAY_200,
-    }
+    },
+    participantsIcon: {
+      marginLeft: 20,
+      width: 30,
+      height: 30,
+    },
+    locationContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    locationImage: {
+      marginRight: 10,
+      width: 18,
+      height: 18,
+      tintColor: theme.colors.GRAY_200,
+    },
   });

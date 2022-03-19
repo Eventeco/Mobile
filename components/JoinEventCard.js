@@ -24,8 +24,7 @@ const JoinEventCard = ({event}) => {
   const style = useThemedStyles(styles);
   const navigation = useNavigation();
 
-
-  const [showModal, setShowModal] = useState(false)
+  const [showModal, setShowModal] = useState(false);
   const [check1, setCheck1] = useState(false);
   const [check2, setCheck2] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -87,10 +86,8 @@ const JoinEventCard = ({event}) => {
           <Text style={style.nameText}>{event.name}</Text>
           <Text style={style.timeText}>{formatTimestamp(event.starttime)}</Text>
           <View style={style.locationContainer}>
-            <View style={style.locationLeft}>
-              <Image source={LocationIcon} />
-              <Text style={style.locationText}>{event.location}</Text>
-            </View>
+            <Image source={LocationIcon} />
+            <Text style={style.locationText}>{event.location}</Text>
           </View>
           {issues.length > 0 && (
             <View style={style.eventIssues}>
@@ -132,7 +129,14 @@ const JoinEventCard = ({event}) => {
                 </TouchableOpacity>
                 <Text style={style.radioText}>
                   I agree to EventECO’s
-                  <Text style={style.underline} onPress={() => {setShowModal(true)}}> terms and conditions</Text>
+                  <Text
+                    style={style.underline}
+                    onPress={() => {
+                      setShowModal(true);
+                    }}>
+                    {' '}
+                    terms and conditions
+                  </Text>
                 </Text>
               </View>
               <TermsModal showModal={showModal} setShowModal={setShowModal} />
@@ -194,14 +198,8 @@ const styles = theme =>
     },
     locationContainer: {
       flexDirection: 'row',
-      justifyContent: 'space-between',
       alignItems: 'center',
       marginTop: 5,
-    },
-    locationLeft: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      flexWrap: 'wrap',
     },
     locationText: {
       color: 'black',

@@ -12,7 +12,7 @@ const CreatedEvents = ({navigation}) => {
   const style = useThemedStyles(styles);
   const [, dispatch] = useStateValue();
   const [events, setEvents] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -31,9 +31,9 @@ const CreatedEvents = ({navigation}) => {
   }, []);
 
   return (
-    <SafeAreaView style={{ width: '100%', height: '100%'}}>
+    <SafeAreaView style={{width: '100%', height: '100%'}}>
+      <Header />
       <ScrollView>
-        <Header />
         <View style={style.innerContainer}>
           <Text style={style.eventsText}>Your Events: </Text>
           {isLoading ? (
@@ -106,11 +106,5 @@ const styles = theme =>
     },
     flatList: {
       marginBottom: 40,
-    },
-    noEventsText: {
-      fontSize: theme.typography.size.L,
-      color: 'black',
-      textAlign: 'center',
-      marginTop: 20,
     },
   });

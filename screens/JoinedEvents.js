@@ -30,8 +30,10 @@ const JoinedEvents = ({navigation}) => {
     fetchEvents();
   }, []);
 
+  console.log(events);
+
   return (
-    <SafeAreaView style={{ width: '100%', height: '100%' }}>
+    <SafeAreaView style={{width: '100%', height: '100%'}}>
       <ScrollView>
         <Header />
         <View style={style.innerContainer}>

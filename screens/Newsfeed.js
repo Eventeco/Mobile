@@ -1,18 +1,12 @@
-import React, {useEffect, useState} from 'react';
-import {
-  ImageBackground,
-  StyleSheet,
-  Text,
-  View,
-  FlatList,
-  ActivityIndicator,
-} from 'react-native';
+import React, {useEffect, useState, useCallback} from 'react';
+import {ImageBackground, StyleSheet, Text, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import axios from '../axios';
 import BG from '../public/images/Background.png';
 import useThemedStyles from '../hooks/useThemedStyles';
-import EventCard from '../components/EventCard';
 import Header from '../components/Header';
+import EventsList from '../components/EventsList';
+import {useFocusEffect} from '@react-navigation/native';
 
 const Newsfeed = () => {
   const style = useThemedStyles(styles);
@@ -27,23 +21,32 @@ const Newsfeed = () => {
     issues: '',
   });
 
-  useEffect(() => {
-    const fetchEvents = async () => {
-      setIsLoading(true);
-      try {
-        const result = await axios.get('/events', {
-          params: queryParams,
-        });
-        setEvents(result.data.data);
-      } catch (e) {
-        console.log(e.response.data);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  useFocusEffect(
+    useCallback(() => {
+      let isActive = true;
+      const fetchEvents = async () => {
+        setIsLoading(true);
+        try {
+          const result = await axios.get('/events', {
+            params: queryParams,
+          });
+          if (isActive) {
+            setEvents(result.data.data);
+          }
+        } catch (e) {
+          console.log(e.response.data);
+        } finally {
+          setIsLoading(false);
+        }
+      };
 
-    fetchEvents();
-  }, [queryParams]);
+      fetchEvents();
+
+      return () => {
+        isActive = false;
+      };
+    }, [queryParams]),
+  );
 
   return (
     <SafeAreaView>
@@ -51,20 +54,11 @@ const Newsfeed = () => {
       <ImageBackground source={BG} style={style.bgImageContainer}>
         <View style={style.innerContainer}>
           <Text style={style.eventsText}>Events Near You :</Text>
-          {isLoading ? (
-            <ActivityIndicator size="large" />
-          ) : (
-            <FlatList
-              data={events}
-              renderItem={item => <EventCard event={item.item} />}
-              keyExtractor={item => item.id}
-              scrollEnabled
-              ListEmptyComponent={
-                <Text style={style.noEventsText}>No events found</Text>
-              }
-              style={style.flatList}
-            />
-          )}
+          <EventsList
+            isLoading={isLoading}
+            events={events}
+            flatListStyle={style.flatList}
+          />
         </View>
       </ImageBackground>
     </SafeAreaView>
@@ -90,11 +84,5 @@ const styles = theme =>
     },
     flatList: {
       marginBottom: 40,
-    },
-    noEventsText: {
-      fontSize: theme.typography.size.L,
-      color: 'black',
-      textAlign: 'center',
-      marginTop: 20,
     },
   });
