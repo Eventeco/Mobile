@@ -1,25 +1,23 @@
 import React from 'react';
-import { View, Image } from 'react-native';
+import {View, Image, StyleSheet} from 'react-native';
 import {Stagger, Button, useDisclose, Box, IconButton} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
 import SCREENS from '../constants/screens';
-import StaggerCircle from '../public/icons/dots-horizontal.png'
+import StaggerCircle from '../public/icons/dots-horizontal.png';
+import useThemedStyles from '../hooks/useThemedStyles';
 
-const StaggerMenu = ({ isLoading }) => {
+const StaggerMenu = () => {
   const navigation = useNavigation();
   const {isOpen, onToggle} = useDisclose();
+  const style = useThemedStyles(styles);
+
   const onPressHandler = item => {
     navigation.navigate(item);
   };
+
   return (
-    <View style={{flex: 1}}>
-      <View
-        style={{
-          position: 'absolute',
-          bottom: 6,
-          right: 15,
-          alignSelf: 'flex-end',
-        }}>
+    <View style={style.container}>
+      <View style={style.innerContainer}>
         <Box
           zIndex="10"
           position="absolute"
@@ -59,12 +57,6 @@ const StaggerMenu = ({ isLoading }) => {
               },
             }}>
             <Button
-              onPress={() => onPressHandler(SCREENS.PROFILE)}
-              colorScheme="green"
-              mb="3">
-              Profile
-            </Button>
-            <Button
               onPress={() => onPressHandler(SCREENS.CREATED_EVENTS)}
               colorScheme="green"
               mb="3">
@@ -77,20 +69,31 @@ const StaggerMenu = ({ isLoading }) => {
             </Button>
           </Stagger>
         </Box>
-        {!isLoading && (
-          <IconButton
-            variant="solid"
-            borderRadius="full"
-            zIndex="10"
-            size="lg"
-            colorScheme="green"
-            onPress={onToggle}
-            icon={<Image source={StaggerCircle} />}
-          />
-        )}
+        <IconButton
+          variant="solid"
+          borderRadius="full"
+          zIndex="10"
+          size="lg"
+          colorScheme="green"
+          onPress={onToggle}
+          icon={<Image source={StaggerCircle} />}
+        />
       </View>
     </View>
   );
 };
 
 export default StaggerMenu;
+
+const styles = () =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+    },
+    innerContainer: {
+      position: 'absolute',
+      bottom: 6,
+      right: 15,
+      alignSelf: 'flex-end',
+    },
+  });

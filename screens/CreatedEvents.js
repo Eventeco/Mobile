@@ -1,46 +1,60 @@
-import React, { useEffect, useState} from 'react';
-import {Text, StyleSheet, ScrollView, View, ActivityIndicator} from 'react-native';
+import React, {useState, useCallback} from 'react';
+import {
+  Text,
+  StyleSheet,
+  ScrollView,
+  View,
+  ActivityIndicator,
+} from 'react-native';
 import useThemedStyles from '../hooks/useThemedStyles';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import axios from '../axios';
-import {useStateValue} from '../StateProvider/StateProvider';
 import Header from '../components/Header';
 import StaggerMenu from '../components/Stagger';
 import EventCard from '../components/EventCard';
+import {useFocusEffect} from '@react-navigation/native';
 
-const CreatedEvents = ({navigation}) => {
+const CreatedEvents = () => {
   const style = useThemedStyles(styles);
-  const [, dispatch] = useStateValue();
   const [events, setEvents] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchEvents = async () => {
-      setIsLoading(true);
-      try {
-        const result = await axios.get('/userPastEvents/created');
-        setEvents(result.data.data);
-      } catch (e) {
-        console.log(e.response.data);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  useFocusEffect(
+    useCallback(() => {
+      let isActive = true;
+      const fetchEvents = async () => {
+        setIsLoading(true);
+        try {
+          const result = await axios.get('/userPastEvents/created');
+          if (isActive) {
+            setEvents(result.data.data);
+          }
+        } catch (e) {
+          console.log(e.response.data);
+        } finally {
+          setIsLoading(false);
+        }
+      };
 
-    fetchEvents();
-  }, []);
+      fetchEvents();
+
+      return () => {
+        isActive = false;
+      };
+    }, []),
+  );
 
   return (
-    <SafeAreaView style={{width: '100%', height: '100%'}}>
-      <Header />
+    <SafeAreaView style={style.container}>
+      <Header showBackButton />
       <ScrollView>
         <View style={style.innerContainer}>
-          <Text style={style.eventsText}>Your Events: </Text>
+          <Text style={style.eventsText}>Events that you have created: </Text>
           {isLoading ? (
             <ActivityIndicator size="large" />
           ) : (
             <View>
-              {events.map((item) => (
+              {events.map(item => (
                 <EventCard key={item.id} event={item} />
               ))}
               {events.length <= 0 && (
@@ -60,40 +74,8 @@ export default CreatedEvents;
 const styles = theme =>
   StyleSheet.create({
     container: {
-      flexDirection: 'row',
-      height: 60,
-      paddingHorizontal: 10,
-      backgroundColor: theme.colors.GREEN_200,
-      justifyContent: 'space-between',
-      alignItems: 'center',
-    },
-    imageContainer: {
-      width: 140,
-      height: 20,
-    },
-    image: {
       width: '100%',
       height: '100%',
-      resizeMode: 'cover',
-    },
-    btnContainer: {
-      backgroundColor: 'red',
-      width: 150,
-      minHeight: 'auto',
-      paddingVertical: 7,
-    },
-    btn: {
-      color: 'white',
-      fontWeight: '700',
-    },
-    backImageContainer: {
-      width: 20,
-      height: 20,
-    },
-    backImage: {
-      width: '100%',
-      height: '100%',
-      resizeMode: 'contain',
     },
     innerContainer: {
       paddingTop: 20,
@@ -104,7 +86,10 @@ const styles = theme =>
       fontSize: theme.typography.size.M,
       color: 'black',
     },
-    flatList: {
-      marginBottom: 40,
+    noEventsText: {
+      fontSize: theme.typography.size.L,
+      color: 'black',
+      textAlign: 'center',
+      marginTop: 20,
     },
   });

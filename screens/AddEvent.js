@@ -6,10 +6,11 @@ import {
   Image,
   TouchableWithoutFeedback,
   Keyboard,
+  LogBox,
 } from 'react-native';
 import useThemedStyles from '../hooks/useThemedStyles';
 import AddImageBtn from '../public/icons/add-image-btn.png';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import UploadPicturesBtn from '../public/icons/upload-btn.png';
 import LocationIcon from '../public/icons/location.png';
 import TextInput from '../components/TextInput';
@@ -52,6 +53,10 @@ const AddEvent = ({navigation}) => {
   const [endTimePickerShow, setEndTimePickerShow] = useState(false);
   const [location, setLocation] = useState();
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+  }, []);
 
   const onDateTimePickerChange = (_, selectedDate, type) => {
     if (type === 'start') {

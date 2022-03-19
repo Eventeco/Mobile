@@ -5,7 +5,6 @@ import HomeIcon from '../public/icons/home.png';
 import ProfileIcon from '../public/icons/profile.png';
 import AddIcon from '../public/icons/add.png';
 import useTheme from '../hooks/useTheme';
-import Profile from '../screens/Profile';
 import TabBarIcon from '../components/TabBarIcon';
 import TabBarAddButton from '../components/TabBarAddButton';
 import TabBarBigIcon from '../components/TabBarBigIcon';

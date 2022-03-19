@@ -28,8 +28,8 @@ import {BASE_URL} from '../constants';
 import useTheme from '../hooks/useTheme';
 import {useStateValue} from '../StateProvider/StateProvider';
 import ParticipentsModal from '../components/ParticipentsModal';
-import ParticipantsIcon from '../public/icons/participants.png'
-import { Badge, HStack, Text as NativeText } from 'native-base';
+import ParticipantsIcon from '../public/icons/participants.png';
+import {Badge, HStack, Text as NativeText} from 'native-base';
 import LocationIcon from '../public/icons/location.png';
 
 const windowWidth = Dimensions.get('window').width;
@@ -78,10 +78,10 @@ const ViewEvent = ({route, navigation}) => {
           const res = await axios.get(`/eventParticipants/count/${event.id}`);
           setParticipants(res.data.data);
         } catch (e) {
-          console.log(e)
+          console.log(e);
         }
       };
-  
+
       fetchParticipants();
 
       fetchSuggestedEvents();
@@ -176,12 +176,18 @@ const ViewEvent = ({route, navigation}) => {
             </HStack>
             <HStack>
               <Badge colorScheme="green">
-                <NativeText color="green.700">
-                  {participants.count}
-                </NativeText>
+                <NativeText color="green.700">{participants.count}</NativeText>
               </Badge>
-              <TouchableOpacity disabled={!isEventCreator} onPress={() => {setShowModal(true)}}>
-                <Image style={{ width: 30, height: 30 }} resizeMode="contain" source={ParticipantsIcon} />
+              <TouchableOpacity
+                disabled={!isEventCreator}
+                onPress={() => {
+                  setShowModal(true);
+                }}>
+                <Image
+                  style={themedStyles.participantsIcon}
+                  resizeMode="contain"
+                  source={ParticipantsIcon}
+                />
               </TouchableOpacity>
             </HStack>
           </View>
@@ -209,17 +215,25 @@ const ViewEvent = ({route, navigation}) => {
               <Text style={themedStyles.participantText}>
                 Minimum Participants:
               </Text>
-              <Badge borderRadius="xl" colorScheme="green" textAlign="center" flexDirection="row">
+              <Badge
+                borderRadius="xl"
+                colorScheme="green"
+                textAlign="center"
+                flexDirection="row">
                 {event.minparticipants}
-              </Badge> 
+              </Badge>
             </HStack>
             <HStack alignItems="center">
               <Text style={themedStyles.participantText}>
                 Maximum Participants:
               </Text>
-              <Badge borderRadius="xl" colorScheme="green" textAlign="center" flexDirection="row">
-                  {event.maxParticipants ? (event.maxParticipants) : "∞"}
-                </Badge> 
+              <Badge
+                borderRadius="xl"
+                colorScheme="green"
+                textAlign="center"
+                flexDirection="row">
+                {event.maxParticipants ? event.maxParticipants : '∞'}
+              </Badge>
             </HStack>
           </HStack>
           {issues.length > 0 && (
@@ -288,7 +302,7 @@ const styles = theme =>
     userDetails: {
       flexDirection: 'row',
       alignItems: 'center',
-      justifyContent: 'space-between'
+      justifyContent: 'space-between',
     },
     userDetailsCreatorText: {
       fontSize: theme.typography.size.S,
@@ -371,7 +385,6 @@ const styles = theme =>
       color: theme.colors.GRAY_200,
     },
     participantsIcon: {
-      marginLeft: 20,
       width: 30,
       height: 30,
     },

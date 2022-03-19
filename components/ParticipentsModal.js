@@ -31,9 +31,12 @@ const ParticipentsModal = ({eventId, showModal, setShowModal, ...props}) => {
         </Text>
         <Modal.Body>
           <VStack space={3}>
-            {participants.map((item) => (
-              <HStack key={item.userid} alignItems="center" justifyContent="space-between">
-                <Text fontWeight="medium">{item.firstname + ' ' + item.lastname}</Text>
+            {participants.map(item => (
+              <HStack
+                key={item.userid}
+                alignItems="center"
+                justifyContent="space-between">
+                <Text fontWeight="medium">{item.username}</Text>
                 <Text color="blueGray.400">{item.email}</Text>
               </HStack>
             ))}
