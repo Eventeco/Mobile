@@ -234,7 +234,7 @@ const AddEvent = ({navigation}) => {
       setAlertText('Maximum participants cannot be 0');
       return;
     }
-    if (maxParticipants && maxParticipants <= minParticipants) {
+    if (maxParticipants && +maxParticipants <= +minParticipants) {
       setIsAlertOpen(true);
       setAlertTitle('Participant Upper Limit Error');
       setAlertText(
@@ -309,8 +309,8 @@ const AddEvent = ({navigation}) => {
     setMinParticipants('');
     setMaxParticipants('');
     setLocation(null);
-    setStartTime(null);
-    setEndTime(null);
+    setStartTime(new Date());
+    setEndTime(new Date());
   };
 
   return (

@@ -53,7 +53,6 @@ const ViewEvent = ({route, navigation}) => {
 
   const [isParticipant, setIsParticipant] = useState(false);
   const [suggestedEvents, setSuggestedEvents] = useState([]);
-  const [participants, setParticipants] = useState({count: 0});
   const isEventCreator = event.creatorid === loggedInUser.id;
 
   useFocusEffect(
@@ -72,17 +71,6 @@ const ViewEvent = ({route, navigation}) => {
           setIsSimilarEventsLoading(false);
         }
       };
-
-      const fetchParticipants = async () => {
-        try {
-          const res = await axios.get(`/eventParticipants/count/${event.id}`);
-          setParticipants(res.data.data);
-        } catch (e) {
-          console.log(e);
-        }
-      };
-
-      fetchParticipants();
 
       fetchSuggestedEvents();
 
@@ -176,7 +164,9 @@ const ViewEvent = ({route, navigation}) => {
             </HStack>
             <HStack>
               <Badge colorScheme="green">
-                <NativeText color="green.700">{participants.count}</NativeText>
+                <NativeText color="green.700">
+                  {event.participantscount || 0}
+                </NativeText>
               </Badge>
               <TouchableOpacity
                 disabled={!isEventCreator}
@@ -232,14 +222,14 @@ const ViewEvent = ({route, navigation}) => {
                 colorScheme="green"
                 textAlign="center"
                 flexDirection="row">
-                {event.maxParticipants ? event.maxParticipants : '∞'}
+                {event.maxparticipants ? event.maxparticipants : '∞'}
               </Badge>
             </HStack>
           </HStack>
           {issues.length > 0 && (
             <View style={themedStyles.issueTypesContainer}>
-              {issues.map(issue => (
-                <IssueTypeView issueType={issue} key={issue.id} size="big" />
+              {issues.map((issue, i) => (
+                <IssueTypeView issueType={issue} key={i} size="big" />
               ))}
             </View>
           )}
