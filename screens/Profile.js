@@ -33,22 +33,24 @@ const Profile = ({navigation}) => {
   };
 
   const handleChooseProfilePhoto = () => {
-    launchImageLibrary(
-      {includeBase64: true, mediaType: 'photo', quality: 0.5},
-      response => {
-        if (response && response.assets) {
-          if (response?.assets[0]?.fileSize < 5200000) {
-            setProfileImage(response?.assets[0]);
-          } else {
-            setIsAlertOpen(true);
-            setAlertTitle('Image File Size Exceeded');
-            setAlertText(
-              'You cannot upload images with file size greater than 5MBs',
-            );
+    if (edit) {
+      launchImageLibrary(
+        {includeBase64: true, mediaType: 'photo', quality: 0.5},
+        response => {
+          if (response && response.assets) {
+            if (response?.assets[0]?.fileSize < 5200000) {
+              setProfileImage(response?.assets[0]);
+            } else {
+              setIsAlertOpen(true);
+              setAlertTitle('Image File Size Exceeded');
+              setAlertText(
+                'You cannot upload images with file size greater than 5MBs',
+              );
+            }
           }
-        }
-      },
-    );
+        },
+      );
+    }
   };
 
   const showMode = (currentMode) => {
@@ -101,7 +103,8 @@ const Profile = ({navigation}) => {
         firstname: name.split(' ')[0],
         lastname: name.replace(name.split(' ')[0] + " ", ''),
         dateofbirth: dob,
-        email: email
+        email: email,
+        profileImage: profileImage.base64
       }
       axios
       .patch('/user' , changes)
@@ -120,15 +123,13 @@ const Profile = ({navigation}) => {
       <VStack style={style.pageStack}>
         <HStack style={style.imageStack} justifyContent="space-between">
           <View>
-            {profileImage ? (
-              <TouchableOpacity onPress={() => handleChooseProfilePhoto()}>
+            <TouchableOpacity onPress={() => handleChooseProfilePhoto()}>
+              {profileImage ? (
                 <Image source={{uri: profileImage.uri}} style={style.profileImage} />
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity onPress={() => handleChooseProfilePhoto()}>
+              ) : (
                 <Image source={EmptyImage} style={style.profileImage} />
-              </TouchableOpacity>
-            )}
+              )}
+            </TouchableOpacity> 
           </View>
           <View>
             {!edit ? (
