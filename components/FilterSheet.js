@@ -2,12 +2,15 @@ import React, {useState, useEffect} from 'react';
 import {Actionsheet, Box, Text, Input, Badge, Radio, Switch} from 'native-base';
 import {TouchableOpacity} from 'react-native';
 import {useStateValue} from '../StateProvider/StateProvider';
+import GooglePlacesInput from './GooglePlacesInput';
 
 const FilterSheet = ({isOpen, onClose, setQueryParams, setName, name}) => {
   const [issue, setIssue] = useState([]);
   const [type, setType] = useState('');
   const [description, setDescription] = useState('');
   const [donation, setDonation] = useState(false);
+  const [location, setLocation] = useState('');
+  const [radius, setRadius] = useState('');
 
   const [{issues}] = useStateValue();
 
@@ -18,14 +21,17 @@ const FilterSheet = ({isOpen, onClose, setQueryParams, setName, name}) => {
       type: type,
       isDonationEnabled: donation,
       issues: issue.toString(),
+      latitude: location.lat,
+      longitude: location.lng,
+      radius,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [name, issue, type, description, donation]);
+  }, [name, issue, type, description, donation, location, radius]);
 
   const removeIssue = item => {
-    const indexRemove = issue.indexOf(item);
-    issue.splice(indexRemove, 1);
-    setIssue([...issue]);
+    setIssue(prevState => {
+      return prevState.filter(i => i !== item);
+    });
   };
   return (
     <Actionsheet isOpen={isOpen} onClose={onClose}>
@@ -51,6 +57,36 @@ const FilterSheet = ({isOpen, onClose, setQueryParams, setName, name}) => {
               _focus={{borderColor: 'green.400'}}
               width="70%"
               height="9"
+            />
+          </Box>
+        </Actionsheet.Item>
+        <Actionsheet.Item key={'location'} height="20" zIndex={10}>
+          <Box
+            width="100%"
+            flexDirection="row"
+            alignItems="center"
+            position="relative">
+            <Text width="100">Location</Text>
+            <Box
+              width="240%"
+              height="200"
+              position="absolute"
+              top="-10"
+              left={24}>
+              <GooglePlacesInput setLocation={setLocation} />
+            </Box>
+          </Box>
+        </Actionsheet.Item>
+        <Actionsheet.Item key={'radius'} height="10">
+          <Box width="100%" flexDirection="row" alignItems="center">
+            <Text width="100">Radius (km)</Text>
+            <Input
+              value={radius}
+              onChangeText={setRadius}
+              _focus={{borderColor: 'green.400'}}
+              width="70%"
+              height="9"
+              keyboardType="numeric"
             />
           </Box>
         </Actionsheet.Item>

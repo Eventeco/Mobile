@@ -1,5 +1,5 @@
 import React, {useState, useCallback} from 'react';
-import {ImageBackground, StyleSheet, Text, View} from 'react-native';
+import {ImageBackground, StyleSheet, Text, View, Alert} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import axios from '../axios';
 import BG from '../public/images/Background.png';
@@ -19,6 +19,9 @@ const Newsfeed = () => {
     type: '',
     isDonationEnabled: false,
     issues: '',
+    latitude: '',
+    longitude: '',
+    radius: '',
   });
 
   useFocusEffect(
@@ -28,13 +31,16 @@ const Newsfeed = () => {
         setIsLoading(true);
         try {
           const result = await axios.get('/events', {
-            params: queryParams,
+            params: {
+              ...queryParams,
+              radius: queryParams.radius && queryParams.radius * 1000,
+            },
           });
           if (isActive) {
             setEvents(result.data.data);
           }
         } catch (e) {
-          console.log(e.response.data);
+          Alert.alert(e.response.data.message);
         } finally {
           setIsLoading(false);
         }
