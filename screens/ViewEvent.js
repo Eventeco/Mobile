@@ -29,7 +29,12 @@ import useTheme from '../hooks/useTheme';
 import {useStateValue} from '../StateProvider/StateProvider';
 import ParticipentsModal from '../components/ParticipentsModal';
 import ParticipantsIcon from '../public/icons/participants.png';
-import {Badge, HStack, Text as NativeText, Button as NativeBtn} from 'native-base';
+import {
+  Badge,
+  HStack,
+  Text as NativeText,
+  Button as NativeBtn,
+} from 'native-base';
 import LocationIcon from '../public/icons/location.png';
 import ConfirmationModal from '../components/ConfirmationModal';
 import NewAlert from '../components/Alert';
@@ -55,8 +60,8 @@ const ViewEvent = ({route, navigation}) => {
 
   const [isParticipant, setIsParticipant] = useState(false);
   const [suggestedEvents, setSuggestedEvents] = useState([]);
-  const [showConfirmModal, setShowConfirmModal] = useState(false)
-  const [deleteAlert, setDeleteAlert] = useState(false)
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [deleteAlert, setDeleteAlert] = useState(false);
   const isEventCreator = event.creatorid === loggedInUser.id;
 
   useFocusEffect(
@@ -117,7 +122,7 @@ const ViewEvent = ({route, navigation}) => {
 
   const renderImageItem = ({item}) => (
     <Image
-      source={{uri: `${BASE_URL}/eventPictures/key/${item}`}}
+      source={{uri: `${BASE_URL}/s3/getImage/${item}`}}
       style={themedStyles.imageItem}
       resizeMode="cover"
     />
@@ -140,14 +145,14 @@ const ViewEvent = ({route, navigation}) => {
     navigation.navigate(SCREENS.JOIN_EVENT, {event});
   };
 
-  const deleteEvent = () => {
+  const deleteEvent = async () => {
     try {
-      axios.delete(`/events/${event.id}`)
+      await axios.delete(`/events/${event.id}`);
       navigation.navigate(SCREENS.NEWSFEED);
     } catch (e) {
-      console.log(e)
+      console.log(e);
     }
-  }
+  };
 
   return (
     <SafeAreaView style={themedStyles.container}>
@@ -172,11 +177,11 @@ const ViewEvent = ({route, navigation}) => {
           <Text style={themedStyles.name}>{event.name}</Text>
           <View style={themedStyles.userDetails}>
             <HStack alignItems="center">
-              <Avatar path={user.profilepicpath} />
+              <Avatar path={`${BASE_URL}/s3/getImage/${user.profilepicpath}`} />
               <Text style={themedStyles.userDetailsCreatorText}>
                 Created by{' '}
                 <Text style={themedStyles.userDetailsCreatorName}>
-                  {user.firstname}
+                  {user.username}
                 </Text>
               </Text>
             </HStack>
@@ -279,13 +284,26 @@ const ViewEvent = ({route, navigation}) => {
           />
         ) : (
           <View>
-            <NewAlert isOpen={deleteAlert} onClose={() => setDeleteAlert(!deleteAlert)} alertTitle="Delete Failed" alertText="You cannot delete an event 5 hours from the starting date, or after the event has been completed." />
-            {(new Date(event.starttime) - new Date())/1000 > 18000 ? (
-              <NativeBtn onPress={() => setShowConfirmModal(true)} colorScheme="red" alignSelf="center" width="2/3">
+            <NewAlert
+              isOpen={deleteAlert}
+              onClose={() => setDeleteAlert(!deleteAlert)}
+              alertTitle="Delete Failed"
+              alertText="You cannot delete an event 5 hours from the starting date, or after the event has been completed."
+            />
+            {(new Date(event.starttime) - new Date()) / 1000 > 18000 ? (
+              <NativeBtn
+                onPress={() => setShowConfirmModal(true)}
+                colorScheme="red"
+                alignSelf="center"
+                width="2/3">
                 DELETE EVENT
               </NativeBtn>
-            ):(
-              <NativeBtn onPress={() => setDeleteAlert(true)} colorScheme="gray" alignSelf="center" width="2/3">
+            ) : (
+              <NativeBtn
+                onPress={() => setDeleteAlert(true)}
+                colorScheme="gray"
+                alignSelf="center"
+                width="2/3">
                 DELETE EVENT
               </NativeBtn>
             )}

@@ -180,86 +180,66 @@ const AddEvent = ({navigation}) => {
 
   //todo
   const handleSubmit = async () => {
+    let errorTitle = '',
+      errorText = '';
     if (!name) {
-      setIsAlertOpen(true);
-      setAlertTitle('Event Name Required');
-      setAlertText('Please enter a name for the event');
-      return;
+      errorTitle = 'Event Name Required';
+      errorText = 'Please enter a name for the event';
     }
     if (!description) {
-      setIsAlertOpen(true);
-      setAlertTitle('Event Description Required');
-      setAlertText('Please enter a description for the event');
-      return;
+      errorTitle = 'Event Description Required';
+      errorText = 'Please enter a description for the event';
     }
     if (selectedThemes.length === 0) {
-      setIsAlertOpen(true);
-      setAlertTitle('Event Theme Required');
-      setAlertText('Please select at least one event theme');
-      return;
+      errorTitle = 'Event Theme Required';
+      errorText = 'Please select at least one theme for the event';
     }
     if (selectedThemes.length > 3) {
-      setIsAlertOpen(true);
-      setAlertTitle('Event Theme Exceeded');
-      setAlertText('You cannot select more than 3 themes');
-      return;
+      errorTitle = 'Event Theme Limit Exceeded';
+      errorText = 'You cannot select more than 3 themes for the event';
     }
     if (!coverPhoto) {
-      setIsAlertOpen(true);
-      setAlertTitle('Cover Photo Required');
-      setAlertText('Please select a cover photo for the event');
-      return;
+      errorTitle = 'Event Cover Photo Required';
+      errorText = 'Please select a cover photo for the event';
     }
     if (rules.length === 0) {
-      setIsAlertOpen(true);
-      setAlertTitle('Event Rules Required');
-      setAlertText('Please enter at least one event rule');
-      return;
+      errorTitle = 'Event Rules Required';
+      errorText = 'Please add at least one rule for the event';
     }
     if (!minParticipants) {
-      setIsAlertOpen(true);
-      setAlertTitle('Participant Lower Limit Required');
-      setAlertText('Please enter minimum participants required for the event');
-      return;
+      errorTitle = 'Event Minimum Participants Required';
+      errorText = 'Please enter a minimum number of participants for the event';
     }
     if (minParticipants === '0') {
-      setIsAlertOpen(true);
-      setAlertTitle('Participant Lower Limit Required');
-      setAlertText('Minimum participants cannot be 0');
-      return;
+      errorTitle = 'Participant Lower Limit Required';
+      errorText = 'Minimum participants cannot be 0';
     }
     if (maxParticipants === '0') {
-      setIsAlertOpen(true);
-      setAlertTitle('Participant Upper Limit Error');
-      setAlertText('Maximum participants cannot be 0');
-      return;
+      errorTitle = 'Participant Upper Limit Required';
+      errorText = 'Maximum participants cannot be 0';
     }
     if (maxParticipants && +maxParticipants <= +minParticipants) {
-      setIsAlertOpen(true);
-      setAlertTitle('Participant Upper Limit Error');
-      setAlertText(
-        'Maximum participants cannot be less than or equal to minimum participants',
-      );
-      return;
+      errorTitle = 'Participant Upper Limit Error';
+      errorText =
+        'Maximum participants cannot be less than or equal to minimum participants';
     }
-
     if (differenceInDays(endTime, startTime) !== 0) {
-      setIsAlertOpen(true);
-      setAlertTitle('Event Time Error');
-      setAlertText('Event end time is more than a day after start time');
-      return;
+      errorTitle = 'Event Time Error';
+      errorText = 'Event end time is more than a day after start time';
     }
-
     if (differenceInMinutes(endTime, startTime) < 30) {
-      setIsAlertOpen(true);
-      setAlertTitle('Event Time Error');
-      setAlertText('Event must last at least 30 minutes');
-      return;
+      errorTitle = 'Event Time Error';
+      errorText = 'Event must last at least 30 minutes';
     }
     if (!location) {
+      errorTitle = 'Event Location Required';
+      errorText = 'Please enter a location for the event';
+    }
+
+    if (errorTitle) {
       setIsAlertOpen(true);
-      setAlertTitle('Event Location Required');
-      setAlertText('Please enter a location for the event');
+      setAlertTitle(errorTitle);
+      setAlertText(errorText);
       return;
     }
 

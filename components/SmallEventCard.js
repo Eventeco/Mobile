@@ -8,7 +8,7 @@ const SmallEventCard = ({item, onPressHandler = () => {}}) => {
   return (
     <TouchableOpacity style={themedStyles.container} onPress={onPressHandler}>
       <Image
-        source={{uri: `${BASE_URL}/eventPictures/key/${item.picturepath}`}}
+        source={{uri: `${BASE_URL}/s3/getImage/${item.picturepath}`}}
         style={themedStyles.image}
       />
       <Text style={themedStyles.text}>{item.name}</Text>
