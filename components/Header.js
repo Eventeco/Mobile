@@ -8,6 +8,7 @@ import {Input, useDisclose} from 'native-base';
 import SearchIcon from '../public/icons/search-icon.png';
 import FilterIcon from '../public/icons/filter-icon.png';
 import FilterSheet from './FilterSheet';
+import {searchQueryParams} from '../constants';
 
 const Header = ({
   showBackButton = false,
@@ -23,6 +24,11 @@ const Header = ({
   const {isOpen, onOpen, onClose} = useDisclose();
   const backPressHandler = () => {
     navigation.goBack();
+  };
+
+  const searchBackPressHandler = () => {
+    setSearchMode(false);
+    setQueryParams(searchQueryParams);
   };
 
   return (
@@ -41,7 +47,7 @@ const Header = ({
       ) : (
         <View width="85%" style={style.inputContainer}>
           <TouchableOpacity
-            onPress={() => setSearchMode(false)}
+            onPress={searchBackPressHandler}
             style={style.backImageContainer}>
             <Image source={BackIcon} style={style.backImage} />
           </TouchableOpacity>

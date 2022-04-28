@@ -7,22 +7,14 @@ import useThemedStyles from '../hooks/useThemedStyles';
 import Header from '../components/Header';
 import EventsList from '../components/EventsList';
 import {useFocusEffect} from '@react-navigation/native';
+import {searchQueryParams} from '../constants';
 
 const Newsfeed = () => {
   const style = useThemedStyles(styles);
 
   const [events, setEvents] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [queryParams, setQueryParams] = useState({
-    name: '',
-    description: '',
-    type: '',
-    isDonationEnabled: false,
-    issues: '',
-    latitude: '',
-    longitude: '',
-    radius: '',
-  });
+  const [queryParams, setQueryParams] = useState(searchQueryParams);
 
   useFocusEffect(
     useCallback(() => {
