@@ -24,7 +24,7 @@ const EventCard = ({event, suggestedEvents}) => {
     event && (
       <TouchableOpacity style={style.container} onPress={onPressHandler}>
         <Image
-          source={{uri: `${BASE_URL}/eventPictures/key/${event.picturepath}`}}
+          source={{uri: `${BASE_URL}/s3/getImage/${event.picturepath}`}}
           style={style.image}
         />
         <View style={style.innerContainer}>
