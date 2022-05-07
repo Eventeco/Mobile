@@ -10,6 +10,7 @@ const SCREENS = {
   PROFILE_NAVIGATION: 'ProfileNavigation',
   VIEW_EVENT: 'ViewEvent',
   JOIN_EVENT: 'JoinEvent',
+  EDIT_EVENT: 'EditEvent',
 };
 
 export default SCREENS;

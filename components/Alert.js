@@ -4,7 +4,6 @@ import {AlertDialog} from 'native-base';
 
 const Alert = ({onClose, isOpen, alertTitle, alertText, icon, children}) => {
   const cancelRef = React.useRef(null);
-
   return (
     <AlertDialog
       leastDestructiveRef={cancelRef}
