@@ -9,7 +9,7 @@ import {
   LogBox,
 } from 'react-native';
 import useThemedStyles from '../hooks/useThemedStyles';
-import { BASE_URL } from '../constants';
+import {BASE_URL} from '../constants';
 import React, {useState, useEffect} from 'react';
 import UploadPicturesBtn from '../public/icons/upload-btn.png';
 import LocationIcon from '../public/icons/location.png';
@@ -33,33 +33,44 @@ const EditEvent = ({navigation, route}) => {
   const style = useThemedStyles(styles);
   const [{issues}] = useStateValue();
 
-  const { event } = route.params;
+  const {event} = route.params;
 
   if (!event) {
-    <View>
-      Loading
-    </View>
+    <View>Loading</View>;
   }
 
-  const [selectedThemes, setSelectedThemes] = useState(Object.values(event.issues).map((item) => item.id));
+  const [selectedThemes, setSelectedThemes] = useState(
+    Object.values(event.issues).map(item => item.id),
+  );
   const [coverPhoto, setCoverPhoto] = useState();
   const [eventPhotos, setEventPhotos] = useState([]);
+  const [currentPhotos, setCurrentPhotos] = useState(event.pictures);
   const [name, setName] = useState(event.name);
   const [description, setDescription] = useState(event.description);
-  const [rules, setRules] = useState(Object.values(event.rules).map((item) => item.rule));
+  const [rules, setRules] = useState(
+    Object.values(event.rules).map(item => item.rule),
+  );
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [alertTitle, setAlertTitle] = useState('');
   const [alertText, setAlertText] = useState('');
   const [isRuleAlertOpen, setIsRuleAlertOpen] = useState(false);
   const [rule, setRule] = useState('');
-  const [minParticipants, setMinParticipants] = useState(event.minparticipants + '');
-  const [maxParticipants, setMaxParticipants] = useState(event.maxparticipants + '');
+  const [minParticipants, setMinParticipants] = useState(
+    event.minparticipants + '',
+  );
+  const [maxParticipants, setMaxParticipants] = useState(
+    event.maxparticipants ? event.maxparticipants + '' : '',
+  );
   const [startTime, setStartTime] = useState(new Date(event.starttime));
   const [endTime, setEndTime] = useState(new Date(event.endtime));
   const [mode, setMode] = useState('date');
   const [startTimePickerShow, setStartTimePickerShow] = useState(false);
   const [endTimePickerShow, setEndTimePickerShow] = useState(false);
-  const [location, setLocation] = useState({ description: event.location, lat: event.latitude, lng: event.longitude });
+  const [location, setLocation] = useState({
+    description: event.location,
+    lat: event.latitude,
+    lng: event.longitude,
+  });
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -148,6 +159,12 @@ const EditEvent = ({navigation, route}) => {
     });
   };
 
+  const deleteCurrentPhoto = index => {
+    setCurrentPhotos(prevState => {
+      return prevState.filter((_, i) => i !== index);
+    });
+  };
+
   const unselectThemeAction = id => {
     setSelectedThemes(prevState => {
       return prevState.filter(themeId => themeId !== id);
@@ -186,7 +203,6 @@ const EditEvent = ({navigation, route}) => {
     }
   };
 
-  //todo
   const handleSubmit = async () => {
     let errorTitle = '',
       errorText = '';
@@ -205,10 +221,6 @@ const EditEvent = ({navigation, route}) => {
     if (selectedThemes.length > 3) {
       errorTitle = 'Event Theme Limit Exceeded';
       errorText = 'You cannot select more than 3 themes for the event';
-    }
-    if (!coverPhoto) {
-      errorTitle = 'Event Cover Photo Required';
-      errorText = 'Please select a cover photo for the event';
     }
     if (rules.length === 0) {
       errorTitle = 'Event Rules Required';
@@ -252,13 +264,18 @@ const EditEvent = ({navigation, route}) => {
     }
 
     const eventPhotosBase64 = eventPhotos.map(photo => photo.base64);
-    const postData = {
+    const currentPhotosPicturePath = currentPhotos.map(
+      photo => photo.picturepath,
+    );
+    const allPhotos = [...eventPhotosBase64, ...currentPhotosPicturePath];
+
+    const patchData = {
+      eventId: event.id,
       name,
       description,
       issueIds: selectedThemes,
       minParticipants: +minParticipants,
-      coverImage: coverPhoto.base64,
-      images: eventPhotosBase64,
+      images: allPhotos,
       rules,
       starttime: startTime,
       endtime: endTime,
@@ -268,37 +285,25 @@ const EditEvent = ({navigation, route}) => {
     };
 
     if (maxParticipants) {
-      postData.maxParticipants = +maxParticipants;
+      patchData.maxParticipants = +maxParticipants;
+    }
+
+    if (coverPhoto) {
+      patchData.coverPhoto = coverPhoto.base64;
     }
 
     setLoading(true);
 
     try {
-      const result = await axios.patch('/events', postData);
+      const result = await axios.patch('/events', patchData);
       if (result.data.success) {
-        resetStates();
         navigation.navigate(SCREENS.VIEW_EVENT, {event: result.data.data});
       }
     } catch (e) {
-      console.log(e);
+      console.log(e.response.data);
     } finally {
       setLoading(false);
     }
-  };
-
-  const resetStates = () => {
-    setName('');
-    setDescription('');
-    setCoverPhoto(null);
-    setEventPhotos([]);
-    setSelectedThemes([]);
-    setRules([]);
-    setRule('');
-    setMinParticipants('');
-    setMaxParticipants('');
-    setLocation(null);
-    setStartTime(new Date());
-    setEndTime(new Date());
   };
 
   return (
@@ -316,7 +321,10 @@ const EditEvent = ({navigation, route}) => {
                   style={style.coverPhoto}
                 />
               ) : (
-                <Image source={{uri: `${BASE_URL}/s3/getImage/${event.picturepath}`}} style={style.coverPhoto } />
+                <Image
+                  source={{uri: `${BASE_URL}/s3/getImage/${event.picturepath}`}}
+                  style={style.coverPhoto}
+                />
               )}
             </TouchableOpacity>
             <Alert
@@ -476,6 +484,22 @@ const EditEvent = ({navigation, route}) => {
                 <Image source={UploadPicturesBtn} />
               </TouchableOpacity>
             </View>
+            {currentPhotos.map((item, index) => (
+              <View style={style.uploadedImageContainer} key={index}>
+                <Image
+                  source={{uri: `${BASE_URL}/s3/getImage/${item.picturepath}`}}
+                  style={style.uploadedImage}
+                />
+                <TouchableOpacity onPress={() => deleteCurrentPhoto(index)}>
+                  <Image
+                    source={TrashCan}
+                    resizeMode="cover"
+                    width={10}
+                    height={10}
+                  />
+                </TouchableOpacity>
+              </View>
+            ))}
             {eventPhotos.map((item, index) => (
               <View style={style.uploadedImageContainer} key={index}>
                 <Image source={{uri: item.uri}} style={style.uploadedImage} />
@@ -494,7 +518,10 @@ const EditEvent = ({navigation, route}) => {
                 <Image source={LocationIcon} />
               </TouchableOpacity>
               <View style={style.placesContainer}>
-                <GooglePlacesInput location={location} setLocation={setLocation} />
+                <GooglePlacesInput
+                  location={location}
+                  setLocation={setLocation}
+                />
               </View>
             </View>
             <View style={style.selectThemes}>

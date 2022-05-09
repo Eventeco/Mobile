@@ -26,6 +26,7 @@ const Newsfeed = () => {
             params: {
               ...queryParams,
               radius: queryParams.radius && queryParams.radius * 1000,
+              status: 'upcoming',
             },
           });
           if (isActive) {

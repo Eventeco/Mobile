@@ -60,9 +60,9 @@ const ViewEvent = ({route, navigation}) => {
 
   const [isParticipant, setIsParticipant] = useState(false);
   const [suggestedEvents, setSuggestedEvents] = useState([]);
-  const [showConfirmModal, setShowConfirmModal] = useState(false)
-  const [deleteAlert, setDeleteAlert] = useState(false)
-  const [editAlert, setEditAlert] = useState(false)
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [deleteAlert, setDeleteAlert] = useState(false);
+  const [editAlert, setEditAlert] = useState(false);
   const isEventCreator = event.creatorid === loggedInUser.id;
 
   useFocusEffect(
@@ -284,24 +284,56 @@ const ViewEvent = ({route, navigation}) => {
             isLoading={isParticipantDataLoading}
           />
         ) : (
-          <View flexDirection="row" justifyContent="space-between" alignSelf="center">
-            <NewAlert isOpen={deleteAlert} onClose={() => setDeleteAlert(!deleteAlert)} alertTitle="Delete Failed" alertText="You cannot delete an event 5 hours from the starting date, or after the event has been completed." />
-            <NewAlert isOpen={editAlert} onClose={() => setEditAlert(!editAlert)} alertTitle="Edit Failed" alertText="You cannot edit an event after it has started." />
-            {(new Date(event.starttime) > new Date()) ? (
-              <NativeBtn onPress={() => navigation.navigate(SCREENS.EDIT_EVENT, {event})} alignSelf="center" colorScheme="green" width="1/3" mr="1">
+          <View
+            flexDirection="row"
+            justifyContent="space-between"
+            alignSelf="center">
+            <NewAlert
+              isOpen={deleteAlert}
+              onClose={() => setDeleteAlert(!deleteAlert)}
+              alertTitle="Delete Failed"
+              alertText="You cannot delete an event 5 hours from the starting date, or after the event has been completed."
+            />
+            <NewAlert
+              isOpen={editAlert}
+              onClose={() => setEditAlert(!editAlert)}
+              alertTitle="Edit Failed"
+              alertText="You cannot edit an event after it has started."
+            />
+            {new Date(event.starttime) > new Date() ? (
+              <NativeBtn
+                onPress={() => navigation.navigate(SCREENS.EDIT_EVENT, {event})}
+                alignSelf="center"
+                colorScheme="green"
+                width="1/3"
+                mr="1">
                 EDIT EVENT
               </NativeBtn>
-            ):(
-              <NativeBtn onPress={() => setEditAlert(true)} colorScheme="gray" width="1/3" mr="1">
+            ) : (
+              <NativeBtn
+                onPress={() => setEditAlert(true)}
+                colorScheme="gray"
+                width="1/3"
+                mr="1">
                 EDIT EVENT
               </NativeBtn>
             )}
-            {(new Date(event.starttime) - new Date())/1000 > 18000 ? (
-              <NativeBtn onPress={() => setShowConfirmModal(true)} colorScheme="red" alignSelf="center" ml="1" width="1/3">
+            {(new Date(event.starttime) - new Date()) / 1000 > 18000 ? (
+              <NativeBtn
+                onPress={() => setShowConfirmModal(true)}
+                colorScheme="red"
+                alignSelf="center"
+                ml="1"
+                width="1/3">
                 DELETE EVENT
               </NativeBtn>
-            ):(
-              <NativeBtn onPress={() => setDeleteAlert(true)} colorScheme="gray" alignSelf="center" ml="1" width="1/3">
+            ) : (
+              <NativeBtn
+                onPress={() => setDeleteAlert(true)}
+                colorScheme="gray"
+                alignSelf="center"
+                ml="1"
+                width="1/3">
                 DELETE EVENT
               </NativeBtn>
             )}
@@ -389,7 +421,7 @@ const styles = theme =>
     },
     similarEventsContainer: {
       marginTop: 5,
-      marginBottom: 40
+      marginBottom: 40,
     },
     similarEventsHeading: {
       fontSize: theme.typography.size.XL,
