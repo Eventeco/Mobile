@@ -390,6 +390,7 @@ const styles = theme =>
       borderBottomWidth: 2,
       borderBottomColor: theme.colors.GRAY_200,
       paddingBottom: 5,
+      marginBottom: 10,
     },
     userDetails: {
       flexDirection: 'row',
@@ -443,7 +444,6 @@ const styles = theme =>
       marginVertical: 10,
     },
     similarEventsContainer: {
-      marginTop: 5,
       marginBottom: 0,
     },
     similarEventsHeading: {

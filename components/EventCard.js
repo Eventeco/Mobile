@@ -3,7 +3,6 @@ import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {formatBigString, formatTimestamp} from '../helper';
 import useThemedStyles from '../hooks/useThemedStyles';
 import LocationIcon from '../public/icons/location.png';
-import ShareIcon from '../public/icons/share.png';
 import IssueTypeView from './IssueTypeView';
 import {useNavigation} from '@react-navigation/native';
 import SCREENS from '../constants/screens';
@@ -46,7 +45,6 @@ const EventCard = ({event, suggestedEvents}) => {
                 </View>
               )}
             </View>
-            <Image source={ShareIcon} style={style.icon} />
           </View>
         </View>
       </TouchableOpacity>

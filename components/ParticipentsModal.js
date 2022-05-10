@@ -40,6 +40,12 @@ const ParticipentsModal = ({eventId, showModal, setShowModal, ...props}) => {
                   alignItems="center"
                   justifyContent="space-between">
                   <VStack>
+                    <Text fontWeight="medium">{item.firstname}</Text>
+                    <Text color="blueGray.400" fontSize="xs">
+                      {item.email}
+                    </Text>
+                  </VStack>
+                  <VStack>
                     {item.profilepicpath ? (
                       <Image
                         alt="User Image"
@@ -59,12 +65,6 @@ const ParticipentsModal = ({eventId, showModal, setShowModal, ...props}) => {
                         height={50}
                       />
                     )}
-                  </VStack>
-                  <VStack>
-                    <Text fontWeight="medium">{item.firstname}</Text>
-                    <Text color="blueGray.400" fontSize="xs">
-                      {item.email}
-                    </Text>
                   </VStack>
                 </HStack>
               </VStack>

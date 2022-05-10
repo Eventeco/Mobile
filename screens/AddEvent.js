@@ -53,6 +53,7 @@ const AddEvent = ({navigation}) => {
   const [endTimePickerShow, setEndTimePickerShow] = useState(false);
   const [location, setLocation] = useState();
   const [loading, setLoading] = useState(false);
+  const [locationText, setLocationText] = useState('');
 
   useEffect(() => {
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
@@ -185,6 +186,10 @@ const AddEvent = ({navigation}) => {
     if (!name) {
       errorTitle = 'Event Name Required';
       errorText = 'Please enter a name for the event';
+    }
+    if (name.length > 30) {
+      errorTitle = 'Event Name Too Long';
+      errorText = 'Please enter a name for the event less than 30 characters';
     }
     if (!description) {
       errorTitle = 'Event Description Required';
@@ -486,7 +491,11 @@ const AddEvent = ({navigation}) => {
                 <Image source={LocationIcon} />
               </TouchableOpacity>
               <View style={style.placesContainer}>
-                <GooglePlacesInput setLocation={setLocation} />
+                <GooglePlacesInput
+                  setLocation={setLocation}
+                  locationText={locationText}
+                  setLocationText={setLocationText}
+                />
               </View>
             </View>
             <View style={style.selectThemes}>

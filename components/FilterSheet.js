@@ -1,32 +1,28 @@
-import React, {useState, useEffect} from 'react';
-import {Actionsheet, Box, Text, Input, Badge, Radio, Switch} from 'native-base';
+import React, {useState} from 'react';
+import {Actionsheet, Box, Text, Input, Badge, Button} from 'native-base';
 import {TouchableOpacity} from 'react-native';
 import {useStateValue} from '../StateProvider/StateProvider';
 import GooglePlacesInput from './GooglePlacesInput';
 
 const FilterSheet = ({isOpen, onClose, setQueryParams, setName, name}) => {
   const [issue, setIssue] = useState([]);
-  const [type, setType] = useState('');
   const [description, setDescription] = useState('');
-  const [donation, setDonation] = useState(false);
   const [location, setLocation] = useState('');
   const [radius, setRadius] = useState('');
+  const [locationText, setLocationText] = useState('');
 
   const [{issues}] = useStateValue();
 
-  useEffect(() => {
+  const onSearchPressHandler = () => {
     setQueryParams({
       name: name,
       description: description,
-      type: type,
-      isDonationEnabled: donation,
       issues: issue.toString(),
       latitude: location.lat,
       longitude: location.lng,
       radius,
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [name, issue, type, description, donation, location, radius]);
+  };
 
   const removeIssue = item => {
     setIssue(prevState => {
@@ -73,7 +69,11 @@ const FilterSheet = ({isOpen, onClose, setQueryParams, setName, name}) => {
               position="absolute"
               top="-10"
               left={24}>
-              <GooglePlacesInput setLocation={setLocation} />
+              <GooglePlacesInput
+                setLocation={setLocation}
+                locationText={locationText}
+                setLocationText={setLocationText}
+              />
             </Box>
           </Box>
         </Actionsheet.Item>
@@ -134,38 +134,12 @@ const FilterSheet = ({isOpen, onClose, setQueryParams, setName, name}) => {
             ))}
           </Box>
         </Actionsheet.Item>
-        <Actionsheet.Item height="20" key={'type'}>
-          <Box height="20" width="100%" flexDirection="row" alignItems="center">
-            <Text width="100">Type</Text>
-            <Radio.Group
-              flexDirection="row"
-              name="myRadioGroup"
-              value={type}
-              onChange={nextValue => {
-                setType(nextValue);
-              }}>
-              <Radio colorScheme={'green'} value="normal" my={1}>
-                <Text marginLeft={2} marginRight={4}>
-                  Normal
-                </Text>
-              </Radio>
-              <Radio colorScheme={'green'} value="recurring" my={1}>
-                <Text marginLeft={2}>Recurring</Text>
-              </Radio>
-            </Radio.Group>
-          </Box>
-        </Actionsheet.Item>
-        <Actionsheet.Item key={'donaction'} height="10">
-          <Box width="100%" flexDirection="row" alignItems="center">
-            <Text width="100">Donation</Text>
-            <Switch
-              onThumbColor={'green.400'}
-              value={donation}
-              onToggle={() => setDonation(!donation)}
-              colorScheme={'green'}
-            />
-          </Box>
-        </Actionsheet.Item>
+        <Button
+          onPress={onSearchPressHandler}
+          colorScheme="green"
+          marginTop={1}>
+          Search
+        </Button>
       </Actionsheet.Content>
     </Actionsheet>
   );

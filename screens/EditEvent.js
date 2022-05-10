@@ -71,6 +71,7 @@ const EditEvent = ({navigation, route}) => {
     lat: event.latitude,
     lng: event.longitude,
   });
+  const [locationText, setLocationText] = useState(event.location);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -209,6 +210,10 @@ const EditEvent = ({navigation, route}) => {
     if (!name) {
       errorTitle = 'Event Name Required';
       errorText = 'Please enter a name for the event';
+    }
+    if (name.length > 30) {
+      errorTitle = 'Event Name Too Long';
+      errorText = 'Please enter a name for the event less than 30 characters';
     }
     if (!description) {
       errorTitle = 'Event Description Required';
@@ -519,8 +524,9 @@ const EditEvent = ({navigation, route}) => {
               </TouchableOpacity>
               <View style={style.placesContainer}>
                 <GooglePlacesInput
-                  location={location}
                   setLocation={setLocation}
+                  locationText={locationText}
+                  setLocationText={setLocationText}
                 />
               </View>
             </View>

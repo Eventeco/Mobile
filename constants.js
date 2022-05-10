@@ -7,8 +7,6 @@ export const BASE_URL =
 export const searchQueryParams = {
   name: '',
   description: '',
-  type: '',
-  isDonationEnabled: false,
   issues: '',
   latitude: '',
   longitude: '',
