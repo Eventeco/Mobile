@@ -6,9 +6,11 @@ import Register from './screens/Register';
 import HomeNavigation from './navigation/HomeNavigation';
 import axios from './axios';
 import {useStateValue} from './StateProvider/StateProvider';
-import {SET_ISSUES, SET_USER} from './constants/reducer';
+import {SET_ISSUES, SET_LOCATION, SET_USER} from './constants/reducer';
 import SCREENS from './constants/screens';
 import SplashScreen from './screens/SplashScreen';
+import Geolocation from 'react-native-geolocation-service';
+import {requestLocationPermission} from './helper';
 
 const Stack = createNativeStackNavigator();
 
@@ -43,7 +45,35 @@ const App = () => {
         setLoading(false);
       }
     };
+
+    const getLocation = async () => {
+      Geolocation.getCurrentPosition(
+        position => {
+          dispatch({
+            type: SET_LOCATION,
+            data: {
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+            },
+          });
+        },
+        error => {
+          // See error code charts below.
+          console.log(error.code, error.message);
+        },
+        {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+      );
+    };
+
     getLoginStatus();
+
+    const askForLocation = async () => {
+      if (await requestLocationPermission()) {
+        getLocation();
+      }
+    };
+
+    askForLocation();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

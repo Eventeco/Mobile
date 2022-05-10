@@ -1,8 +1,9 @@
-import {SET_USER, SET_ISSUES} from '../constants/reducer';
+import {SET_USER, SET_ISSUES, SET_LOCATION} from '../constants/reducer';
 
 export const initialState = {
   user: null,
   issues: [],
+  userLocation: null,
 };
 
 const reducer = (state, action) => {
@@ -16,6 +17,11 @@ const reducer = (state, action) => {
       return {
         ...state,
         issues: action.data,
+      };
+    case SET_LOCATION:
+      return {
+        ...state,
+        userLocation: action.data,
       };
     default:
       return state;

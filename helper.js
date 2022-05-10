@@ -1,4 +1,4 @@
-import {Alert} from 'react-native';
+import {Alert, PermissionsAndroid} from 'react-native';
 import axios from './axios';
 import {SET_USER, SET_ISSUES} from './constants/reducer';
 import {format} from 'date-fns';
@@ -46,4 +46,23 @@ export const formatBigString = string => {
     return string.substring(0, 15) + '...';
   }
   return string;
+};
+
+export const requestLocationPermission = async () => {
+  try {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+      {
+        title: 'EventECO Location Permission',
+        message:
+          'EventECO needs access to your location so you can get accurate event suggestions.',
+        buttonNeutral: 'Ask Me Later',
+        buttonNegative: 'Cancel',
+        buttonPositive: 'OK',
+      },
+    );
+    return granted === PermissionsAndroid.RESULTS.GRANTED;
+  } catch (err) {
+    console.warn(err);
+  }
 };

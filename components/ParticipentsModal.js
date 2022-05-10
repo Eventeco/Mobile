@@ -2,14 +2,10 @@ import React, {useState, useEffect} from 'react';
 import {Modal, VStack, HStack, Text, Button, Image} from 'native-base';
 import EmptyImage from '../public/images/empty-profile-image.png';
 import {BASE_URL} from '../constants';
-import ReviewModal from './ReviewModal';
 import axios from '../axios';
 
 const ParticipentsModal = ({eventId, showModal, setShowModal, ...props}) => {
   const [participants, setParticipants] = useState([]);
-
-  const [reviewModal, setReviewModal] = useState(false);
-  const [reviewUser, setReviewUser] = useState(null);
 
   useEffect(() => {
     const fetchParticipants = async () => {
@@ -31,11 +27,6 @@ const ParticipentsModal = ({eventId, showModal, setShowModal, ...props}) => {
       {...props}>
       <Modal.Content maxWidth="400">
         <Modal.CloseButton />
-        <ReviewModal
-          showModal={reviewModal}
-          setShowModal={setReviewModal}
-          user={reviewUser}
-        />
         <Modal.Header>List of Participants</Modal.Header>
         <Text textAlign="center" fontWeight="medium" marginTop={2}>
           Total: {participants.length}
@@ -45,7 +36,7 @@ const ParticipentsModal = ({eventId, showModal, setShowModal, ...props}) => {
             {participants.map(item => (
               <VStack>
                 <HStack
-                  key={item.userid}
+                  key={item.id}
                   alignItems="center"
                   justifyContent="space-between">
                   <VStack>
@@ -75,26 +66,6 @@ const ParticipentsModal = ({eventId, showModal, setShowModal, ...props}) => {
                       {item.email}
                     </Text>
                   </VStack>
-                </HStack>
-                <HStack alignItems="center" justifyContent="flex-end">
-                  <Button height="7" padding="1" mt="1" colorScheme="green">
-                    <Text color="white" fontSize="xs" fontWeight="bold">
-                      Report User
-                    </Text>
-                  </Button>
-                  <Button
-                    onPress={() => {
-                      setReviewModal(true);
-                      setReviewUser(item);
-                    }}
-                    height="7"
-                    padding="1"
-                    mt="1"
-                    colorScheme="green">
-                    <Text color="white" fontSize="xs" fontWeight="bold">
-                      Rate User
-                    </Text>
-                  </Button>
                 </HStack>
               </VStack>
             ))}

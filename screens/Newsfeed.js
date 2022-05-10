@@ -8,6 +8,7 @@ import Header from '../components/Header';
 import EventsList from '../components/EventsList';
 import {useFocusEffect} from '@react-navigation/native';
 import {searchQueryParams} from '../constants';
+import {useStateValue} from '../StateProvider/StateProvider';
 
 const Newsfeed = () => {
   const style = useThemedStyles(styles);
@@ -16,18 +17,25 @@ const Newsfeed = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [queryParams, setQueryParams] = useState(searchQueryParams);
 
+  const [{userLocation}] = useStateValue();
+
   useFocusEffect(
     useCallback(() => {
       let isActive = true;
       const fetchEvents = async () => {
         setIsLoading(true);
+        const params = {
+          ...queryParams,
+          radius: queryParams.radius && queryParams.radius * 1000,
+          status: 'upcoming',
+        };
+        if (userLocation) {
+          params.userLatitude = userLocation.latitude;
+          params.userLongitude = userLocation.longitude;
+        }
         try {
           const result = await axios.get('/events', {
-            params: {
-              ...queryParams,
-              radius: queryParams.radius && queryParams.radius * 1000,
-              status: 'upcoming',
-            },
+            params: params,
           });
           if (isActive) {
             setEvents(result.data.data);
@@ -44,7 +52,7 @@ const Newsfeed = () => {
       return () => {
         isActive = false;
       };
-    }, [queryParams]),
+    }, [queryParams, userLocation]),
   );
 
   return (

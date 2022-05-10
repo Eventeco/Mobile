@@ -185,7 +185,13 @@ const ViewEvent = ({route, navigation}) => {
           <Text style={themedStyles.name}>{event.name}</Text>
           <View style={themedStyles.userDetails}>
             <HStack alignItems="center">
-              <Avatar path={`${BASE_URL}/s3/getImage/${user.profilepicpath}`} />
+              <Avatar
+                path={
+                  user.profilepicpath
+                    ? `${BASE_URL}/s3/getImage/${user.profilepicpath}`
+                    : false
+                }
+              />
               <Text style={themedStyles.userDetailsCreatorText}>
                 Created by{' '}
                 <Text style={themedStyles.userDetailsCreatorName}>
@@ -199,6 +205,7 @@ const ViewEvent = ({route, navigation}) => {
                 onPress={() => {
                   setShowModal(true);
                 }}>
+                <Text>{event.participantscount}</Text>
                 <Image
                   style={themedStyles.participantsIcon}
                   resizeMode="contain"

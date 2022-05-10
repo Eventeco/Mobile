@@ -7,7 +7,6 @@ import axios from '../axios';
 import {useStateValue} from '../StateProvider/StateProvider';
 import {SET_USER} from '../constants/reducer';
 import {launchImageLibrary} from 'react-native-image-picker';
-import Button from '../components/Button';
 import Header from '../components/Header';
 import TextInput from '../components/TextInput';
 import StaggerMenu from '../components/Stagger';
@@ -20,7 +19,7 @@ import Alert from '../components/Alert';
 const Profile = ({navigation}) => {
   const style = useThemedStyles(styles);
   const [{user}, dispatch] = useStateValue();
-  const [name, setName] = useState(user.firstname + ' ' + user.lastname);
+  const [name, setName] = useState(user.firstname);
   const [email, setEmail] = useState(user.email);
   const [username, setUsername] = useState(user.username);
   const [dob, setDOB] = useState(
@@ -78,9 +77,7 @@ const Profile = ({navigation}) => {
   useEffect(() => {
     try {
       axios.get(`/user/${user.id}`).then(response => {
-        setName(
-          response.data.data.firstname + ' ' + response.data.data.lastname,
-        );
+        setName(response.data.data.firstname);
         setEmail(response.data.data.email);
         setDOB(
           response.data.data.dateofbirth
@@ -112,8 +109,7 @@ const Profile = ({navigation}) => {
   const updateProfile = () => {
     try {
       const changes = {
-        firstname: name.split(' ')[0],
-        lastname: name.replace(name.split(' ')[0] + ' ', ''),
+        firstname: name,
         dateofbirth: dob,
         email: email,
         username: username,
@@ -262,8 +258,7 @@ const Profile = ({navigation}) => {
             title="Logout"
             colorScheme="red"
             width="40"
-            onPress={logoutHandler}
-          >
+            onPress={logoutHandler}>
             Logout
           </NativeButton>
         </HStack>
