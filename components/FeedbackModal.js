@@ -11,6 +11,7 @@ import {
   Avatar,
   Spacer,
 } from 'native-base';
+import {ActivityIndicator} from 'react-native';
 import {AirbnbRating} from 'react-native-ratings';
 import {BASE_URL} from '../constants';
 import axios from '../axios';
@@ -22,6 +23,8 @@ const FeedbackModal = ({event, showModal, setShowModal, ...props}) => {
   const [eventFeedback, setEventFeedback] = useState(null);
   const [feedbackCheck, setFeedbackCheck] = useState(false);
   const [{user: loggedInUser}] = useStateValue();
+  const [didPost, setDidPost] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (event) {
@@ -41,18 +44,21 @@ const FeedbackModal = ({event, showModal, setShowModal, ...props}) => {
       };
       fetchEventFeedback();
     }
-  }, [event, loggedInUser.id]);
+  }, [event, loggedInUser.id, didPost]);
 
   const postFeedback = async () => {
+    setIsLoading(true);
     try {
       await axios.post('/eventFeedbacks', {
         eventId: event.id,
         rating: review,
         comments: reason,
       });
-      setShowModal(false);
+      setDidPost(true);
     } catch (e) {
       console.log(e.response.data.message);
+    } finally {
+      setIsLoading(false);
     }
   };
   return (
@@ -65,7 +71,7 @@ const FeedbackModal = ({event, showModal, setShowModal, ...props}) => {
         <Modal.CloseButton />
         <Modal.Header>
           <Text fontSize="md" fontWeight="medium">
-            Event Feedback: {event.name}
+            Event Feedback
           </Text>
         </Modal.Header>
         <Modal.Body>
@@ -156,7 +162,12 @@ const FeedbackModal = ({event, showModal, setShowModal, ...props}) => {
               onPress={() => {
                 postFeedback();
               }}>
-              Submit Review
+              {/* Submit Review */}
+              {isLoading ? (
+                <ActivityIndicator size="small" color="white" />
+              ) : (
+                'Submit Review'
+              )}
             </Button>
           )}
         </Modal.Footer>
