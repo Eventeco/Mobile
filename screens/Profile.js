@@ -256,12 +256,18 @@ const Profile = ({navigation}) => {
           </VStack>
         </HStack>
       </VStack>
-      <Button
-        title="Logout"
-        styleForButtonContainer={style.btnContainer}
-        styleForButton={style.btn}
-        onPress={logoutHandler}
-      />
+      {!edit && (
+        <HStack justifyContent="center">
+          <NativeButton
+            title="Logout"
+            colorScheme="red"
+            width="40"
+            onPress={logoutHandler}
+          >
+            Logout
+          </NativeButton>
+        </HStack>
+      )}
       <Alert
         alertTitle={alertTitle}
         alertText={alertText}

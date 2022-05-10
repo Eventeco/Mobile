@@ -38,6 +38,7 @@ import {
 import LocationIcon from '../public/icons/location.png';
 import ConfirmationModal from '../components/ConfirmationModal';
 import NewAlert from '../components/Alert';
+import FeedbackModal from '../components/FeedbackModal';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -62,6 +63,8 @@ const ViewEvent = ({route, navigation}) => {
   const [suggestedEvents, setSuggestedEvents] = useState([]);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [deleteAlert, setDeleteAlert] = useState(false);
+  const [editAlert, setEditAlert] = useState(false);
+  const [feedbackModal, setFeedbackModal] = useState(false);
   const isEventCreator = event.creatorid === loggedInUser.id;
 
   useFocusEffect(
@@ -167,6 +170,11 @@ const ViewEvent = ({route, navigation}) => {
         setShowModal={setShowConfirmModal}
         actionOnConfirm={deleteEvent}
       />
+      <FeedbackModal
+        showModal={feedbackModal}
+        setShowModal={setFeedbackModal}
+        event={event}
+      />
       <ScrollView>
         <CustomCarousel
           data={images}
@@ -186,11 +194,6 @@ const ViewEvent = ({route, navigation}) => {
               </Text>
             </HStack>
             <HStack>
-              <Badge colorScheme="green">
-                <NativeText color="green.700">
-                  {event.participantscount || 0}
-                </NativeText>
-              </Badge>
               <TouchableOpacity
                 disabled={!isEventCreator}
                 onPress={() => {
@@ -273,29 +276,71 @@ const ViewEvent = ({route, navigation}) => {
             </View>
           )
         )}
-        {!isEventCreator ? (
-          <Button
-            title={!isParticipant ? 'JOIN EVENT' : 'ALREADY A PARTICIPANT'}
-            styleForButtonContainer={styleForButtonContainer}
-            styleForButton={styleForButton}
-            onPress={joinEventButtonHandler}
-            disabled={isParticipant}
-            isLoading={isParticipantDataLoading}
-          />
+        {!isEventCreator && event ? (
+          <>
+            {new Date(event.endtime) > new Date() ? (
+              <Button
+                title={!isParticipant ? 'JOIN EVENT' : 'ALREADY A PARTICIPANT'}
+                styleForButtonContainer={styleForButtonContainer}
+                styleForButton={styleForButton}
+                onPress={joinEventButtonHandler}
+                disabled={isParticipant}
+                isLoading={isParticipantDataLoading}
+              />
+            ) : (
+              <NativeBtn
+                onPress={() => setFeedbackModal(true)}
+                alignSelf="center"
+                width="2/3"
+                colorScheme="green">
+                <NativeText color="white" fontWeight="medium" fontSize="md">
+                  REVIEW EVENT
+                </NativeText>
+              </NativeBtn>
+            )}
+          </>
         ) : (
-          <View>
+          <View
+            flexDirection="row"
+            justifyContent="space-between"
+            alignSelf="center">
             <NewAlert
               isOpen={deleteAlert}
               onClose={() => setDeleteAlert(!deleteAlert)}
               alertTitle="Delete Failed"
               alertText="You cannot delete an event 5 hours from the starting date, or after the event has been completed."
             />
+            <NewAlert
+              isOpen={editAlert}
+              onClose={() => setEditAlert(!editAlert)}
+              alertTitle="Edit Failed"
+              alertText="You cannot edit an event after it has started."
+            />
+            {new Date(event.starttime) > new Date() ? (
+              <NativeBtn
+                onPress={() => navigation.navigate(SCREENS.EDIT_EVENT, {event})}
+                alignSelf="center"
+                colorScheme="green"
+                width="1/3"
+                mr="1">
+                EDIT EVENT
+              </NativeBtn>
+            ) : (
+              <NativeBtn
+                onPress={() => setEditAlert(true)}
+                colorScheme="gray"
+                width="1/3"
+                mr="1">
+                EDIT EVENT
+              </NativeBtn>
+            )}
             {(new Date(event.starttime) - new Date()) / 1000 > 18000 ? (
               <NativeBtn
                 onPress={() => setShowConfirmModal(true)}
                 colorScheme="red"
                 alignSelf="center"
-                width="2/3">
+                ml="1"
+                width="1/3">
                 DELETE EVENT
               </NativeBtn>
             ) : (
@@ -303,7 +348,8 @@ const ViewEvent = ({route, navigation}) => {
                 onPress={() => setDeleteAlert(true)}
                 colorScheme="gray"
                 alignSelf="center"
-                width="2/3">
+                ml="1"
+                width="1/3">
                 DELETE EVENT
               </NativeBtn>
             )}
@@ -391,6 +437,7 @@ const styles = theme =>
     },
     similarEventsContainer: {
       marginTop: 5,
+      marginBottom: 0,
     },
     similarEventsHeading: {
       fontSize: theme.typography.size.XL,

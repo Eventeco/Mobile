@@ -26,6 +26,7 @@ const Newsfeed = () => {
             params: {
               ...queryParams,
               radius: queryParams.radius && queryParams.radius * 1000,
+              status: 'upcoming',
             },
           });
           if (isActive) {
@@ -74,7 +75,7 @@ const styles = theme =>
     innerContainer: {
       paddingTop: 20,
       paddingHorizontal: 15,
-      marginBottom: 150,
+      marginBottom: 120,
     },
     eventsText: {
       fontSize: theme.typography.size.M,

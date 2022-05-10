@@ -2,10 +2,10 @@ import React from 'react';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import {GOOGLE_MAPS_API_KEY} from '@env';
 
-const GooglePlacesInput = ({setLocation}) => {
+const GooglePlacesInput = ({setLocation, location}) => {
   return (
     <GooglePlacesAutocomplete
-      placeholder="Enter the location"
+      placeholder= "Enter the location"
       fetchDetails={true}
       onPress={(data, details = null) => {
         setLocation({
