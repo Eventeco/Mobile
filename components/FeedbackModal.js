@@ -5,7 +5,6 @@ import {
   HStack,
   Text,
   Button,
-  Image,
   TextArea,
   Box,
   Heading,
@@ -15,38 +14,45 @@ import {
 import {AirbnbRating} from 'react-native-ratings';
 import {BASE_URL} from '../constants';
 import axios from '../axios';
+import {useStateValue} from '../StateProvider/StateProvider';
 
 const FeedbackModal = ({event, showModal, setShowModal, ...props}) => {
   const [review, setReview] = useState();
   const [reason, setReason] = useState('');
   const [eventFeedback, setEventFeedback] = useState(null);
-  const feedbackCheck = false;
+  const [feedbackCheck, setFeedbackCheck] = useState(false);
+  const [{user: loggedInUser}] = useStateValue();
 
   useEffect(() => {
     if (event) {
       const fetchEventFeedback = async () => {
         try {
           const res = await axios.get(`/eventFeedbacks/${event.id}`);
-          setEventFeedback(res.data.data);
-          console.log(res.data.data);
+          const feedbacks = res.data.data;
+          setEventFeedback(feedbacks);
+          feedbacks.forEach(feedback => {
+            if (feedback.user.id === loggedInUser.id) {
+              setFeedbackCheck(true);
+            }
+          });
         } catch (e) {
           console.log(e);
         }
       };
       fetchEventFeedback();
     }
-  }, [event]);
+  }, [event, loggedInUser.id]);
 
   const postFeedback = async () => {
     try {
-      const res = await axios.post(`/eventFeedbacks`, {
+      await axios.post('/eventFeedbacks', {
         eventId: event.id,
         rating: review,
         comments: reason,
       });
-      setShowModal(false)
+      setShowModal(false);
     } catch (e) {
-      console.log(e);
+      console.log(e.response.data.message);
     }
   };
   return (
@@ -69,7 +75,7 @@ const FeedbackModal = ({event, showModal, setShowModal, ...props}) => {
                 Reviews
               </Heading>
               {eventFeedback &&
-                eventFeedback.map(item => (
+                eventFeedback.map((item, i) => (
                   <Box
                     borderBottomWidth="1"
                     _dark={{
@@ -78,11 +84,14 @@ const FeedbackModal = ({event, showModal, setShowModal, ...props}) => {
                     borderColor="coolGray.200"
                     pl="4"
                     pr="5"
-                    py="2">
+                    py="2"
+                    key={i}>
                     <HStack space={3} justifyContent="space-between">
                       <Avatar
                         size="36px"
-                        source={{uri: `${BASE_URL}/s3/getImage/${item.user.profilepicpath}`}}
+                        source={{
+                          uri: `${BASE_URL}/s3/getImage/${item.user.profilepicpath}`,
+                        }}
                       />
                       <VStack>
                         <Text
@@ -91,7 +100,7 @@ const FeedbackModal = ({event, showModal, setShowModal, ...props}) => {
                           }}
                           color="coolGray.800"
                           bold>
-                          {item.user.firstname + " " + item.user.lastname}
+                          {item.user.firstname}
                         </Text>
                         <Text
                           color="coolGray.600"
@@ -102,7 +111,13 @@ const FeedbackModal = ({event, showModal, setShowModal, ...props}) => {
                         </Text>
                       </VStack>
                       <Spacer />
-                      <AirbnbRating size={12} isDisabled={true} defaultRating={item.rating} selectedColor="#5AD27C" showRating={false} />
+                      <AirbnbRating
+                        size={12}
+                        isDisabled={true}
+                        defaultRating={item.rating}
+                        selectedColor="#5AD27C"
+                        showRating={false}
+                      />
                     </HStack>
                   </Box>
                 ))}
@@ -130,11 +145,11 @@ const FeedbackModal = ({event, showModal, setShowModal, ...props}) => {
               flex="1"
               colorScheme="green"
               onPress={() => {
-                setShowModal(false)
+                setShowModal(false);
               }}>
               Close
             </Button>
-          ):(
+          ) : (
             <Button
               flex="1"
               colorScheme="green"

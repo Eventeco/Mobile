@@ -64,7 +64,7 @@ const ViewEvent = ({route, navigation}) => {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [deleteAlert, setDeleteAlert] = useState(false);
   const [editAlert, setEditAlert] = useState(false);
-  const [feedbackModal, setFeedbackModal] = useState(false)
+  const [feedbackModal, setFeedbackModal] = useState(false);
   const isEventCreator = event.creatorid === loggedInUser.id;
 
   useFocusEffect(
@@ -170,7 +170,11 @@ const ViewEvent = ({route, navigation}) => {
         setShowModal={setShowConfirmModal}
         actionOnConfirm={deleteEvent}
       />
-      <FeedbackModal showModal={feedbackModal} setShowModal={setFeedbackModal} event={event} />
+      <FeedbackModal
+        showModal={feedbackModal}
+        setShowModal={setFeedbackModal}
+        event={event}
+      />
       <ScrollView>
         <CustomCarousel
           data={images}
@@ -283,9 +287,15 @@ const ViewEvent = ({route, navigation}) => {
                 disabled={isParticipant}
                 isLoading={isParticipantDataLoading}
               />
-            ):(
-              <NativeBtn onPress={() => setFeedbackModal(true)} alignSelf="center" width="2/3" colorScheme="green">
-                <NativeText color="white" fontWeight="medium" fontSize="md">REVIEW EVENT</NativeText>
+            ) : (
+              <NativeBtn
+                onPress={() => setFeedbackModal(true)}
+                alignSelf="center"
+                width="2/3"
+                colorScheme="green">
+                <NativeText color="white" fontWeight="medium" fontSize="md">
+                  REVIEW EVENT
+                </NativeText>
               </NativeBtn>
             )}
           </>
@@ -427,7 +437,7 @@ const styles = theme =>
     },
     similarEventsContainer: {
       marginTop: 5,
-      marginBottom: 0
+      marginBottom: 0,
     },
     similarEventsHeading: {
       fontSize: theme.typography.size.XL,
