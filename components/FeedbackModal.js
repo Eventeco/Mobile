@@ -28,6 +28,7 @@ const FeedbackModal = ({event, showModal, setShowModal, ...props}) => {
 
   useEffect(() => {
     if (event) {
+      setFeedbackCheck(loggedInUser.id === event.creatorid);
       const fetchEventFeedback = async () => {
         try {
           const res = await axios.get(`/eventFeedbacks/${event.id}`);
@@ -112,7 +113,8 @@ const FeedbackModal = ({event, showModal, setShowModal, ...props}) => {
                           color="coolGray.600"
                           _dark={{
                             color: 'warmGray.200',
-                          }}>
+                          }}
+                          maxWidth={150}>
                           {item.comments}
                         </Text>
                       </VStack>

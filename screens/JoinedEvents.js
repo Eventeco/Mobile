@@ -80,7 +80,7 @@ const styles = theme =>
     innerContainer: {
       paddingTop: 20,
       paddingHorizontal: 15,
-      marginBottom: 150,
+      marginBottom: 50,
     },
     eventsText: {
       fontSize: theme.typography.size.M,
