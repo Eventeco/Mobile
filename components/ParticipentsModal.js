@@ -1,9 +1,17 @@
 import React, {useState, useEffect} from 'react';
-import {Modal, VStack, HStack, Text, Button} from 'native-base';
+import {Modal, VStack, HStack, Text, Button, Image} from 'native-base';
+import EmptyImage from '../public/images/empty-profile-image.png';
+import { Rating, AirbnbRating } from 'react-native-ratings';
+import { BASE_URL } from '../constants';
+import ReviewModal from './ReviewModal';
 import axios from '../axios';
 
 const ParticipentsModal = ({eventId, showModal, setShowModal, ...props}) => {
   const [participants, setParticipants] = useState([]);
+
+  const [reviewModal, setReviewModal] = useState(false)
+  const [reviewUser, setReviewUser] = useState(null)
+  
   useEffect(() => {
     const fetchParticipants = async () => {
       try {
@@ -13,9 +21,10 @@ const ParticipentsModal = ({eventId, showModal, setShowModal, ...props}) => {
         console.log(e);
       }
     };
-
     fetchParticipants();
   }, [eventId]);
+
+  console.log(participants)
 
   return (
     <Modal
@@ -25,6 +34,7 @@ const ParticipentsModal = ({eventId, showModal, setShowModal, ...props}) => {
       {...props}>
       <Modal.Content maxWidth="400">
         <Modal.CloseButton />
+        <ReviewModal showModal={reviewModal} setShowModal={setReviewModal} user={reviewUser} />
         <Modal.Header>List of Participants</Modal.Header>
         <Text textAlign="center" fontWeight="medium" marginTop={2}>
           Total: {participants.length}
@@ -32,13 +42,35 @@ const ParticipentsModal = ({eventId, showModal, setShowModal, ...props}) => {
         <Modal.Body>
           <VStack space={3}>
             {participants.map(item => (
-              <HStack
-                key={item.userid}
-                alignItems="center"
-                justifyContent="space-between">
-                <Text fontWeight="medium">{item.username}</Text>
-                <Text color="blueGray.400">{item.email}</Text>
-              </HStack>
+              <VStack>
+                <HStack
+                  key={item.userid}
+                  alignItems="center"
+                  justifyContent="space-between">
+                  <VStack>
+                    {item.profilepicpath ? (
+                      <Image alt="User Image" source={{ uri: `${BASE_URL}/s3/getImage/${item.profilepicpath}`}} style={{ width: 50, borderRadius: 50, height: 50}} />
+                    ): (
+                      <Image alt="User Image" source={EmptyImage} style={{ width: 50, borderRadius: 50, height: 50}} />  
+                    )}
+                  </VStack>
+                  <VStack>
+                    <Text fontWeight="medium">{item.firstname + " " + item.lastname}</Text>
+                    <Text color="blueGray.400" fontSize="xs">{item.email}</Text>
+                  </VStack>
+                </HStack>
+                <HStack alignItems="center" justifyContent="space-between">
+                  <Button height="7" padding="1" mt="1" colorScheme="green">
+                    <Text color="white" fontSize="xs" fontWeight="bold">Report User</Text>
+                  </Button>
+                  <Button onPress={() => {
+                    setReviewModal(true);
+                    setReviewUser(item)
+                  }} height="7" padding="1" mt="1" colorScheme="green">
+                    <Text color="white" fontSize="xs" fontWeight="bold">Rate User</Text>
+                  </Button>
+                </HStack>
+              </VStack>
             ))}
           </VStack>
         </Modal.Body>
