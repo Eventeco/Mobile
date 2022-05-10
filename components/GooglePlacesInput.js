@@ -1,8 +1,11 @@
 import React from 'react';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import {GOOGLE_MAPS_API_KEY} from '@env';
+import {useState} from 'react/cjs/react.development';
 
 const GooglePlacesInput = ({setLocation, locationText, setLocationText}) => {
+  const [rerenders, setRerenders] = useState(0);
+  console.log(rerenders);
   return (
     <GooglePlacesAutocomplete
       placeholder="Enter the location"
@@ -30,7 +33,14 @@ const GooglePlacesInput = ({setLocation, locationText, setLocationText}) => {
       }}
       textInputProps={{
         value: locationText,
-        onChangeText: text => setLocationText(text),
+        onChangeText: text => {
+          setRerenders(prevState => {
+            if (prevState !== 0) {
+              setLocationText(text);
+            }
+            return prevState + 1;
+          });
+        },
       }}
       debounce={200}
     />
