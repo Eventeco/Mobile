@@ -114,7 +114,7 @@ const FeedbackModal = ({event, showModal, setShowModal, ...props}) => {
                           _dark={{
                             color: 'warmGray.200',
                           }}
-                          maxWidth={150}>
+                          maxWidth={100}>
                           {item.comments}
                         </Text>
                       </VStack>
