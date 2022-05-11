@@ -1,5 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, View, Image, TouchableOpacity} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Image,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
 import useThemedStyles from '../hooks/useThemedStyles';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {DateTimePickerAndroid} from '@react-native-community/datetimepicker';
@@ -30,6 +36,7 @@ const Profile = ({navigation}) => {
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [alertTitle, setAlertTitle] = useState('');
   const [alertText, setAlertText] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const onChange = (_, selectedDate) => {
     const currentDate = selectedDate;
@@ -107,23 +114,28 @@ const Profile = ({navigation}) => {
   };
 
   const updateProfile = () => {
-    try {
-      const changes = {
-        firstname: name,
-        dateofbirth: dob,
-        email: email,
-        username: username,
-      };
+    setLoading(true);
+    const changes = {
+      firstname: name,
+      dateofbirth: dob,
+      email: email,
+      username: username,
+    };
 
-      if (profileImage && profileImage.base64) {
-        changes.base64 = profileImage.base64;
-      }
-      axios.patch('/user', changes).then(() => {
-        setEdit(!edit);
-      });
-    } catch (e) {
-      console.log(e.response.data);
+    if (profileImage && profileImage.base64) {
+      changes.base64 = profileImage.base64;
     }
+    axios
+      .patch('/user', changes)
+      .then(() => {
+        setEdit(!edit);
+      })
+      .catch(e => {
+        console.log(e);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
@@ -173,7 +185,11 @@ const Profile = ({navigation}) => {
                 height="10">
                 <HStack>
                   <Text color="white" fontWeight="medium">
-                    Save Changes
+                    {loading ? (
+                      <ActivityIndicator size="small" />
+                    ) : (
+                      'Save Changes'
+                    )}
                   </Text>
                 </HStack>
               </NativeButton>
@@ -210,21 +226,23 @@ const Profile = ({navigation}) => {
             />
           </VStack>
         </HStack>
-        <HStack mt="2">
-          <VStack>
-            <Text color="green.600" fontWeight="medium">
-              Username
-            </Text>
-            <TextInput
-              value={username}
-              placeholder={''}
-              width={250}
-              height="10"
-              isDisabled={true}
-              onChangeText={text => setUsername(text)}
-            />
-          </VStack>
-        </HStack>
+        {!edit && (
+          <HStack mt="2">
+            <VStack>
+              <Text color="green.600" fontWeight="medium">
+                Username
+              </Text>
+              <TextInput
+                value={username}
+                placeholder={''}
+                width={250}
+                height="10"
+                isDisabled={true}
+                onChangeText={text => setUsername(text)}
+              />
+            </VStack>
+          </HStack>
+        )}
         <HStack mt="2">
           <VStack>
             <Text color="green.600" fontWeight="medium">
