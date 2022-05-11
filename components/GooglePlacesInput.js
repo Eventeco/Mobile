@@ -30,7 +30,11 @@ const GooglePlacesInput = ({setLocation, locationText, setLocationText}) => {
       }}
       textInputProps={{
         value: locationText,
-        onChangeText: text => setLocationText(text),
+        onChangeText: text => {
+          if (text.length > 0) {
+            setLocationText(text);
+          }
+        },
       }}
       debounce={200}
     />

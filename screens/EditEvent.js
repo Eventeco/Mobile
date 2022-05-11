@@ -313,7 +313,7 @@ const EditEvent = ({navigation, route}) => {
 
   return (
     <SafeAreaView>
-      <Header />
+      <Header showBackButton />
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <ScrollView
           style={style.pageContainer}

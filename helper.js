@@ -2,6 +2,8 @@ import {Alert, PermissionsAndroid} from 'react-native';
 import axios from './axios';
 import {SET_USER, SET_ISSUES} from './constants/reducer';
 import {format} from 'date-fns';
+import {Platform} from 'react-native';
+import Geolocation from 'react-native-geolocation-service';
 
 export const formatTimestamp = timestamp => {
   const formattedDate = format(new Date(timestamp), 'EEEE, LLLL d, H:mm OOOO');
@@ -50,18 +52,23 @@ export const formatBigString = string => {
 
 export const requestLocationPermission = async () => {
   try {
-    const granted = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-      {
-        title: 'EventECO Location Permission',
-        message:
-          'EventECO needs access to your location so you can get accurate event suggestions.',
-        buttonNeutral: 'Ask Me Later',
-        buttonNegative: 'Cancel',
-        buttonPositive: 'OK',
-      },
-    );
-    return granted === PermissionsAndroid.RESULTS.GRANTED;
+    if (Platform.OS === 'android') {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        {
+          title: 'EventECO Location Permission',
+          message:
+            'EventECO needs access to your location so you can get accurate event suggestions.',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+      return granted === PermissionsAndroid.RESULTS.GRANTED;
+    } else if (Platform.OS === 'ios') {
+      const granted = await Geolocation.requestAuthorization();
+      return granted === 'granted';
+    }
   } catch (err) {
     console.warn(err);
   }
